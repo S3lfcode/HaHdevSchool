@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8402ED072992D8C20099FBB7 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402ED062992D8C20099FBB7 /* ApiClient.swift */; };
+		8402ED092992D9530099FBB7 /* Profile.json in Resources */ = {isa = PBXBuildFile; fileRef = 8402ED082992D9530099FBB7 /* Profile.json */; };
+		8402ED0D2992DA380099FBB7 /* ProfileResponceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402ED0C2992DA380099FBB7 /* ProfileResponceData.swift */; };
+		8402ED0F2992DACF0099FBB7 /* ApiErrorData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402ED0E2992DACF0099FBB7 /* ApiErrorData.swift */; };
+		8402ED112992DB6B0099FBB7 /* ResponceBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402ED102992DB6B0099FBB7 /* ResponceBody.swift */; };
+		8402ED132992E31F0099FBB7 /* Assembly + ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402ED122992E31F0099FBB7 /* Assembly + ApiClient.swift */; };
 		849158B42986E24000368BAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B32986E24000368BAE /* AppDelegate.swift */; };
 		849158B62986E24000368BAE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B52986E24000368BAE /* SceneDelegate.swift */; };
 		849158B82986E24000368BAE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B72986E24000368BAE /* ViewController.swift */; };
@@ -25,6 +31,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8402ED062992D8C20099FBB7 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
+		8402ED082992D9530099FBB7 /* Profile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Profile.json; sourceTree = "<group>"; };
+		8402ED0C2992DA380099FBB7 /* ProfileResponceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponceData.swift; sourceTree = "<group>"; };
+		8402ED0E2992DACF0099FBB7 /* ApiErrorData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiErrorData.swift; sourceTree = "<group>"; };
+		8402ED102992DB6B0099FBB7 /* ResponceBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponceBody.swift; sourceTree = "<group>"; };
+		8402ED122992E31F0099FBB7 /* Assembly + ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly + ApiClient.swift"; sourceTree = "<group>"; };
 		849158B02986E24000368BAE /* HaHdevSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HaHdevSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		849158B32986E24000368BAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		849158B52986E24000368BAE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,6 +67,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8402ED052992D8620099FBB7 /* ApiClient */ = {
+			isa = PBXGroup;
+			children = (
+				8402ED062992D8C20099FBB7 /* ApiClient.swift */,
+			);
+			path = ApiClient;
+			sourceTree = "<group>";
+		};
 		849158A72986E24000368BAE = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +94,7 @@
 		849158B22986E24000368BAE /* HaHdevSchool */ = {
 			isa = PBXGroup;
 			children = (
+				8402ED052992D8620099FBB7 /* ApiClient */,
 				84F4CE4C29896F5D00BB5D31 /* App */,
 				84F4CE4F29896F8200BB5D31 /* UI */,
 				84F4CE4E29896F7500BB5D31 /* Common */,
@@ -95,6 +116,9 @@
 			isa = PBXGroup;
 			children = (
 				84A57FE2298ABD0300A8B201 /* Profile.swift */,
+				8402ED0C2992DA380099FBB7 /* ProfileResponceData.swift */,
+				8402ED0E2992DACF0099FBB7 /* ApiErrorData.swift */,
+				8402ED102992DB6B0099FBB7 /* ResponceBody.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -113,6 +137,7 @@
 			children = (
 				84A57FE9298AC60800A8B201 /* Assembly + dataStrorage.swift */,
 				84A57FEC298B88F400A8B201 /* Assembly.swift */,
+				8402ED122992E31F0099FBB7 /* Assembly + ApiClient.swift */,
 			);
 			path = Assembly;
 			sourceTree = "<group>";
@@ -132,6 +157,7 @@
 				849158BC2986E24100368BAE /* Assets.xcassets */,
 				849158BE2986E24100368BAE /* LaunchScreen.storyboard */,
 				849158C12986E24200368BAE /* Info.plist */,
+				8402ED082992D9530099FBB7 /* Profile.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -224,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8402ED092992D9530099FBB7 /* Profile.json in Resources */,
 				849158C02986E24200368BAE /* LaunchScreen.storyboard in Resources */,
 				849158BD2986E24100368BAE /* Assets.xcassets in Resources */,
 				849158BB2986E24000368BAE /* Main.storyboard in Resources */,
@@ -237,14 +264,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8402ED0F2992DACF0099FBB7 /* ApiErrorData.swift in Sources */,
 				849158C92986E3D000368BAE /* TimeFromLastLaunch.swift in Sources */,
 				84BD60A02989A97F00015137 /* String + toDate.swift in Sources */,
 				84BD609E298985D300015137 /* Date + toString.swift in Sources */,
 				84A57FE6298AC2CA00A8B201 /* DataStorage.swift in Sources */,
 				84A57FEA298AC60800A8B201 /* Assembly + dataStrorage.swift in Sources */,
+				8402ED132992E31F0099FBB7 /* Assembly + ApiClient.swift in Sources */,
 				84A57FE3298ABD0300A8B201 /* Profile.swift in Sources */,
+				8402ED0D2992DA380099FBB7 /* ProfileResponceData.swift in Sources */,
 				849158B82986E24000368BAE /* ViewController.swift in Sources */,
 				849158B42986E24000368BAE /* AppDelegate.swift in Sources */,
+				8402ED112992DB6B0099FBB7 /* ResponceBody.swift in Sources */,
+				8402ED072992D8C20099FBB7 /* ApiClient.swift in Sources */,
 				84A57FE8298AC36000A8B201 /* UserDefaultsStorage.swift in Sources */,
 				84A57FEF298BA74100A8B201 /* Profile + CustomDebugStringConvertible.swift in Sources */,
 				84A57FED298B88F400A8B201 /* Assembly.swift in Sources */,

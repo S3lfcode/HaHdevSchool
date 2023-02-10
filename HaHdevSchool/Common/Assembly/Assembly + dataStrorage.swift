@@ -19,7 +19,7 @@ extension Assembly {
     private var encoder: JSONEncoder {
         JSONEncoder()
     }
-    private var decoder: JSONDecoder {
+    var decoder: JSONDecoder {
         JSONDecoder()
     }
 }

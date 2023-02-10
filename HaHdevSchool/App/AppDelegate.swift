@@ -25,26 +25,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         // MARK: (Задание 3)
-        //ЗАДАНИЕ:
-        //1. Проверить наличие профиля в UserDefaults
-        //2. Если такого профиля нет, то создать его и сохранить (+синхронизировать userDefaults)
-        //3. Если профиль в юзер дефолтс есть, то вывести его через print с помощью CustomDebugStringConvertible
+//        
+//        enum ProfileKey: String {
+//            case UserProfile
+//        }
+//        
+//        let storage = Assembly().dataStorage
+//        let userKey = ProfileKey.UserProfile.rawValue
+//        let man = Profile(id: 777, name: "Владимир")
+//        
+//        if let profile = storage.value(key: userKey) as Profile? {
+//            print(String(reflecting: profile))
+//        } else {
+//            print("Это первый вход, профиль не был создан")
+//            storage.save(value: man, key: userKey)
+//        }
+        //Result<T,E>
+        // MARK: (Задание 4)
+        let assembly = Assembly()
+        lazy var apiClient = assembly.apiClient
         
-        enum ProfileKey: String {
-            case UserProfile
+        print("Start load profile \(Thread.isMainThread)")
+        
+        apiClient.profile {
+            result in
+            print("\(String(describing: result)) \(Thread.isMainThread)")
         }
         
-        let storage = Assembly().dataStorage
-        let userKey = ProfileKey.UserProfile.rawValue
-        let man = Profile(id: 777, name: "Владимир")
-        
-        if let profile = storage.value(key: userKey) as Profile? {
-            print(String(reflecting: profile))
-        } else {
-            print("Это первый вход, профиль не был создан")
-            storage.save(value: man, key: userKey)
-        }
-        
+        print("End load profile \(Thread.isMainThread)")
         return true
     }
 

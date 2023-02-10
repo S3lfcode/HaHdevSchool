@@ -9,7 +9,7 @@ import Foundation
 
 struct Profile: Codable {
     
-    typealias ID = Int
+    typealias ID = String
     
     let id: ID
     let name: String
