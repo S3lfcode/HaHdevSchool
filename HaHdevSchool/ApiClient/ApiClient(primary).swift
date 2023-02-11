@@ -18,10 +18,6 @@ class ApiClient {
     func profile(completion: @escaping (ResponceBody<ProfileResponceData>?) -> () ) {
         
         DispatchQueue.global(qos: .userInteractive).async {
-//            [weak self] in
-//            guard let self = self else {
-//                return
-//            }
             
             print("Start background job \(Thread.isMainThread)")
             

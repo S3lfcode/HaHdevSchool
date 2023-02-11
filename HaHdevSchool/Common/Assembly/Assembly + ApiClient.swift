@@ -9,7 +9,25 @@ import Foundation
 
 extension Assembly {
     
-    var apiClient: ApiClient {
-        ApiClient.init(decoder: decoder)
+    var customDecoder: JSONDecoder {
+        let customDecoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        customDecoder.dateDecodingStrategy = .formatted(dateFormatter)
+        return customDecoder
     }
+    
+    var apiClient: ApiClient {
+        ApiClient.init(decoder: customDecoder)
+    }
+    
+    var apiClientV2: ApiClientV2 {
+        return ApiClientV2.init(decoder: customDecoder)
+    }
+    
+    var apiclientV3: ApiClientV3 {
+        return ApiClientV3.init(decoder: customDecoder)
+    }
+    
 }

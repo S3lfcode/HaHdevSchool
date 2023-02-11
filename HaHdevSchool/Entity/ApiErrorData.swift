@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct ApiErrorData: Decodable {
+struct ApiErrorData: Codable {
     let message: String?
 }

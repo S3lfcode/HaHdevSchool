@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResponceBody<ApiData: Decodable>: Decodable {
+struct ResponceBody<ApiData: Codable>: Codable {
     let data: ApiData?
     let error: ApiErrorData?
 }

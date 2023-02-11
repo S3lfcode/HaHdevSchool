@@ -9,7 +9,16 @@ import Foundation
 extension Profile: CustomStringConvertible {
     
     var description: String {
-        return("Профиль №\(id) - Имя: \(name) ")
+        return
+"""
+\n--------------------------------------------------
+|\tПрофиль: №\(id)
+|\tИмя: \(name)
+|\tФамилия: \(lastName)
+|\tДата рождения: \(birthday.toCustomDateString(format: "dd/MM/yyyy"))
+--------------------------------------------------\n
+"""
+        
     }
     
 }
