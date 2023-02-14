@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ApiClientV3 {
     
@@ -31,7 +32,7 @@ class ApiClientV3 {
                 return
             }
             
-            if !url.isFileURL {
+            if !url.isFileURL || !UIApplication.shared.canOpenURL(url) {
                 completion(.failure(CustomError.invalidURL))
             }
             

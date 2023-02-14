@@ -67,7 +67,7 @@ func task4() {
     apiClientV3.profile(url: internetUrl, expecting: [User].self) { result in
         switch(result) {
         case .success(let users):
-            print("\n ---> Test API request form URL (ApiClientV3 \n\(users)")
+            print("\n ---> Test API request form URL (ApiClientV3)\n\(users)")
         case .failure(let error):
             print(error)
         }
