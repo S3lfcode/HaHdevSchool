@@ -47,8 +47,8 @@ func task4() {
     lazy var apiClientV3 = assembly.apiclientV3
     apiClientV3.profile(url: currentUrl, expecting: ResponceBody<ProfileResponceData>.self) { result in
         switch result {
-        case .success(let result):
-            print("\n ---> \"ApiClientV3\" Результат загрузки из \"JSON\" файла: \n\(result)")
+        case .success(let data):
+            print("\n ---> \"ApiClientV3\" Результат загрузки из \"JSON\" файла: \n\(data)")
         case .failure(let error):
             print("Error: \(error)")
         }
@@ -56,10 +56,20 @@ func task4() {
 //Load data with URLSession extension ------->
     URLSession.shared.profile(url: currentUrl, expecting: ResponceBody<ProfileResponceData>.self) { result in
         switch result {
-        case .success(let result):
-            print("\n ---> \"extensionURLSession\" Результат загрузки из \"JSON\" файла: \n\(result)")
+        case .success(let data):
+            print("\n ---> \"extensionURLSession\" Результат загрузки из \"JSON\" файла: \n\(data)")
         case .failure(let error):
             print("Error: \(error)")
+        }
+    }
+//Test API request data from a URL on the internet (with the help ApiClientV3)
+    let internetUrl = URL(string: "https://jsonplaceholder.typicode.com/users")
+    apiClientV3.profile(url: internetUrl, expecting: [User].self) { result in
+        switch(result) {
+        case .success(let users):
+            print("\n ---> Test API request form URL (ApiClientV3 \n\(users)")
+        case .failure(let error):
+            print(error)
         }
     }
 }

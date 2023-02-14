@@ -19,6 +19,11 @@
 		844C1A5B2997A2310094F412 /* Task2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844C1A5A2997A2310094F412 /* Task2.swift */; };
 		844C1A5D2997A2530094F412 /* Task3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844C1A5C2997A2530094F412 /* Task3.swift */; };
 		844C1A5F2997A25C0094F412 /* Task4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844C1A5E2997A25C0094F412 /* Task4.swift */; };
+		8479AF1D299B5A17001EED09 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF1C299B5A17001EED09 /* User.swift */; };
+		8479AF1F299B5AB1001EED09 /* ResponseAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF1E299B5AB1001EED09 /* ResponseAddress.swift */; };
+		8479AF21299B5B51001EED09 /* ResponseGeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF20299B5B51001EED09 /* ResponseGeo.swift */; };
+		8479AF23299B5BDA001EED09 /* ResponseCompany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF22299B5BDA001EED09 /* ResponseCompany.swift */; };
+		8479AF25299B6364001EED09 /* User + CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF24299B6364001EED09 /* User + CustomStringConvertible.swift */; };
 		849158B42986E24000368BAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B32986E24000368BAE /* AppDelegate.swift */; };
 		849158B62986E24000368BAE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B52986E24000368BAE /* SceneDelegate.swift */; };
 		849158B82986E24000368BAE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B72986E24000368BAE /* ViewController.swift */; };
@@ -48,6 +53,11 @@
 		844C1A5A2997A2310094F412 /* Task2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task2.swift; sourceTree = "<group>"; };
 		844C1A5C2997A2530094F412 /* Task3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task3.swift; sourceTree = "<group>"; };
 		844C1A5E2997A25C0094F412 /* Task4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task4.swift; sourceTree = "<group>"; };
+		8479AF1C299B5A17001EED09 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		8479AF1E299B5AB1001EED09 /* ResponseAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseAddress.swift; sourceTree = "<group>"; };
+		8479AF20299B5B51001EED09 /* ResponseGeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseGeo.swift; sourceTree = "<group>"; };
+		8479AF22299B5BDA001EED09 /* ResponseCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseCompany.swift; sourceTree = "<group>"; };
+		8479AF24299B6364001EED09 /* User + CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User + CustomStringConvertible.swift"; sourceTree = "<group>"; };
 		849158B02986E24000368BAE /* HaHdevSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HaHdevSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		849158B32986E24000368BAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		849158B52986E24000368BAE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -114,6 +124,17 @@
 			path = Homework;
 			sourceTree = "<group>";
 		};
+		8479AF1B299B59E6001EED09 /* Users(by URL) */ = {
+			isa = PBXGroup;
+			children = (
+				8479AF1C299B5A17001EED09 /* User.swift */,
+				8479AF1E299B5AB1001EED09 /* ResponseAddress.swift */,
+				8479AF20299B5B51001EED09 /* ResponseGeo.swift */,
+				8479AF22299B5BDA001EED09 /* ResponseCompany.swift */,
+			);
+			path = "Users(by URL)";
+			sourceTree = "<group>";
+		};
 		849158A72986E24000368BAE = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +168,7 @@
 		84A57FE1298ABCDC00A8B201 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				8479AF1B299B59E6001EED09 /* Users(by URL) */,
 				84A57FE2298ABD0300A8B201 /* Profile.swift */,
 				8402ED102992DB6B0099FBB7 /* ResponceBody.swift */,
 				8402ED0C2992DA380099FBB7 /* ProfileResponceData.swift */,
@@ -219,6 +241,7 @@
 				84BD609D298985D300015137 /* Date + toString.swift */,
 				84BD609F2989A97F00015137 /* String + toDate.swift */,
 				84A57FEE298BA74100A8B201 /* Profile + CustomDebugStringConvertible.swift */,
+				8479AF24299B6364001EED09 /* User + CustomStringConvertible.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -304,6 +327,7 @@
 				84A57FE6298AC2CA00A8B201 /* DataStorage.swift in Sources */,
 				84A57FEA298AC60800A8B201 /* Assembly + dataStrorage.swift in Sources */,
 				8402ED132992E31F0099FBB7 /* Assembly + ApiClient.swift in Sources */,
+				8479AF25299B6364001EED09 /* User + CustomStringConvertible.swift in Sources */,
 				84A57FE3298ABD0300A8B201 /* Profile.swift in Sources */,
 				8402ED0D2992DA380099FBB7 /* ProfileResponceData.swift in Sources */,
 				849158B82986E24000368BAE /* ViewController.swift in Sources */,
@@ -312,11 +336,15 @@
 				8402ED112992DB6B0099FBB7 /* ResponceBody.swift in Sources */,
 				8402ED072992D8C20099FBB7 /* ApiClient(primary).swift in Sources */,
 				844C1A5B2997A2310094F412 /* Task2.swift in Sources */,
+				8479AF21299B5B51001EED09 /* ResponseGeo.swift in Sources */,
+				8479AF1F299B5AB1001EED09 /* ResponseAddress.swift in Sources */,
 				84A57FE8298AC36000A8B201 /* UserDefaultsStorage.swift in Sources */,
+				8479AF23299B5BDA001EED09 /* ResponseCompany.swift in Sources */,
 				844C1A5D2997A2530094F412 /* Task3.swift in Sources */,
 				84A57FEF298BA74100A8B201 /* Profile + CustomDebugStringConvertible.swift in Sources */,
 				84A57FED298B88F400A8B201 /* Assembly.swift in Sources */,
 				849158B62986E24000368BAE /* SceneDelegate.swift in Sources */,
+				8479AF1D299B5A17001EED09 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
