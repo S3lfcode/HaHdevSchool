@@ -14,4 +14,8 @@ extension Assembly {
         Task4(apiClient: apiClient, storage: dataStorage)
     }
     
+    var task5: Task5 {
+        Task5(bootstrapDataProvider: bootstrapDataProvider)
+    }
+    
 }
