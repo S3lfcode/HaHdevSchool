@@ -8,6 +8,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private lazy var task2 = assembly.task2
     private lazy var task3 = assembly.task3
     private lazy var task4 = assembly.task4
+    private lazy var task5 = assembly.task5
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -18,7 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //task3.homework()
         
         // MARK: (Задание 4) Работа с API
-        task4.homework()
+        //task4.homework()
+        
+        // MARK: (Задание 5) Работа с DispatchGroup
+        task5.homework()
         
         return true
     }
