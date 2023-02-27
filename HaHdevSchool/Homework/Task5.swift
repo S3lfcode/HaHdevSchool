@@ -1,7 +1,7 @@
 import Foundation
 
 class Task5 {
-    
+
     private let bootstrapDataProvider: BootstrapDataProvider
     
     init(bootstrapDataProvider: BootstrapDataProvider) {
@@ -9,6 +9,7 @@ class Task5 {
     }
     
     func homework() {
+        print("~ Задание 5:")
         bootstrapDataProvider.doubleRequest(model: ProfileWithCity()) { result in
             print(result)
         }
