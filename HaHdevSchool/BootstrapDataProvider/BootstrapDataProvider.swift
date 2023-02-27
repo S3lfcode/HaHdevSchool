@@ -10,9 +10,9 @@ class BootstrapDataProvider {
         self.group = group
     }
     
-    func doubleRequest (
-        model: ProfileWithCity,
-        completion: @escaping (ProfileWithCity) -> Void
+    func doubleRequest<Model: IntermediateModel> (
+        model: Model,
+        completion: @escaping (Model) -> Void
     ) {
         var intermediateModel = model
         

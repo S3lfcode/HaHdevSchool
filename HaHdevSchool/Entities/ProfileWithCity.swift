@@ -1,6 +1,6 @@
 import Foundation
 
-struct ProfileWithCity {
+struct ProfileWithCity: IntermediateModel {
    
     var profile: Profile?
     var city: City?

@@ -27,6 +27,7 @@
 		8458114A29ACEF3100870870 /* Assembly+DispatchGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8458114929ACEF3100870870 /* Assembly+DispatchGroup.swift */; };
 		8458114C29ACEF7000870870 /* Assembly + BootstrapDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8458114B29ACEF7000870870 /* Assembly + BootstrapDataProvider.swift */; };
 		8458114E29ACEFDC00870870 /* Task5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8458114D29ACEFDC00870870 /* Task5.swift */; };
+		8458115029ACF54A00870870 /* IntermediateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8458114F29ACF54A00870870 /* IntermediateModel.swift */; };
 		8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */; };
 		849158B42986E24000368BAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B32986E24000368BAE /* AppDelegate.swift */; };
 		849158B62986E24000368BAE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B52986E24000368BAE /* SceneDelegate.swift */; };
@@ -62,6 +63,7 @@
 		8458114929ACEF3100870870 /* Assembly+DispatchGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+DispatchGroup.swift"; sourceTree = "<group>"; };
 		8458114B29ACEF7000870870 /* Assembly + BootstrapDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly + BootstrapDataProvider.swift"; sourceTree = "<group>"; };
 		8458114D29ACEFDC00870870 /* Task5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task5.swift; sourceTree = "<group>"; };
+		8458114F29ACF54A00870870 /* IntermediateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntermediateModel.swift; sourceTree = "<group>"; };
 		8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+Coding.swift"; sourceTree = "<group>"; };
 		849158B02986E24000368BAE /* HaHdevSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HaHdevSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		849158B32986E24000368BAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				8458113429AC735E00870870 /* BootstrapDataProvider.swift */,
+				8458114F29ACF54A00870870 /* IntermediateModel.swift */,
 			);
 			path = BootstrapDataProvider;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				84A57FEA298AC60800A8B201 /* Assembly+DataStrorage.swift in Sources */,
 				8402ED132992E31F0099FBB7 /* Assembly+ApiClient.swift in Sources */,
 				84A57FE3298ABD0300A8B201 /* Profile.swift in Sources */,
+				8458115029ACF54A00870870 /* IntermediateModel.swift in Sources */,
 				8458114E29ACEFDC00870870 /* Task5.swift in Sources */,
 				8458114829ACDD7900870870 /* ProfileWithCity.swift in Sources */,
 				849158B82986E24000368BAE /* ViewController.swift in Sources */,
