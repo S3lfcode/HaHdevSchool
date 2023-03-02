@@ -10,7 +10,7 @@ class Task5 {
     
     func homework() {
         print("~ Задание 5:")
-        bootstrapDataProvider.doubleRequest(model: ProfileWithCity()) { result in
+        bootstrapDataProvider.doubleRequest { result in
             print(result)
         }
     }

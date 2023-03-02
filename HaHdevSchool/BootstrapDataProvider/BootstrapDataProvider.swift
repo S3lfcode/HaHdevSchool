@@ -2,35 +2,31 @@ import Foundation
 
 class BootstrapDataProvider {
     
-    private let apiClient: ApiClient
-    private let group: DispatchGroup
-    
-    init(apiClient: ApiClient, group: DispatchGroup) {
-        self.apiClient = apiClient
-        self.group = group
+    enum Error: Swift.Error {
+        case unknown
     }
     
-    func doubleRequest<Model: IntermediateModel> (
-        model: Model,
-        completion: @escaping (Model) -> Void
+    private let apiClient: ApiClient
+    
+    init(apiClient: ApiClient) {
+        self.apiClient = apiClient
+    }
+    
+    func doubleRequest (
+        completion: @escaping (Result<(profile: Profile?, city: City?), Swift.Error>) -> Void
     ) {
-        var intermediateModel = model
+        let group = DispatchGroup()
+        
+        var profileResult: Result<ResponseBody<ProfileResponseData>, ApiClient.Error>?
+        var cityResult: Result<ResponseBody<CityResponseData>, ApiClient.Error>?
         
         group.enter()
         apiClient.request(
             url: Bundle.main.url(forResource: "Profile", withExtension: "json"),
             expecting: ProfileResponseData.self
-        ) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            switch result {
-            case .success(let responseData):
-                intermediateModel.profile = responseData.data?.profile
-            case .failure(let error):
-                print("ApiError: \(error)")
-            }
-            self.group.leave()
+        ) { result in
+            profileResult = result
+            group.leave()
         }
         
         
@@ -38,21 +34,27 @@ class BootstrapDataProvider {
         apiClient.request(
             url: Bundle.main.url(forResource: "City", withExtension: "json"),
             expecting: CityResponseData.self
-        ) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            switch result {
-            case .success(let responseData):
-                intermediateModel.city = responseData.data?.city
-            case .failure(let error):
-                print("ApiError: \(error)")
-            }
-            self.group.leave()
+        ) { result in
+            cityResult = result
+            group.leave()
         }
         
+        
         group.notify(queue: .main) {
-            completion(intermediateModel)
+            guard let profileResult = profileResult, let cityResult = cityResult else {
+                return
+            }
+
+            switch (profileResult, cityResult) {
+            case (.success(let profileResponse), .success(let cityResponse)):
+                completion(.success((profile: profileResponse.data?.profile, city: cityResponse.data?.city)))
+            case (.failure(let error), _):
+                completion(.failure(error))
+            case (_, .failure(let error)):
+                completion(.failure(error))
+            default:
+                completion(.failure(Error.unknown))
+            }
         }
     }
 }
