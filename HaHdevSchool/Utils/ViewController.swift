@@ -124,8 +124,11 @@ extension ViewController: UITextFieldDelegate {
         
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
+        let mask = "+X (XXX) XXX-XX-XX"
+        if newString.count > mask.count { return false }
+        
         textField.text = phoneFormatter(
-            mask: "+X (XXX) XXX-XX-XX",
+            mask: mask,
             number: newString)
         
         if string.count == 0 {
