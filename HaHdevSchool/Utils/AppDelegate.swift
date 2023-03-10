@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //task4.homework()
         
         // MARK: (Задание 5) Работа с DispatchGroup
-        task5.homework()
+        //task5.homework()
         
         return true
     }
