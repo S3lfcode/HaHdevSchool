@@ -47,6 +47,7 @@ class ViewController: UIViewController {
             height: labelSize.height)
         titleLabel.layer.masksToBounds = true
         titleLabel.layer.cornerRadius = Constants.cornerRadius
+        titleLabel.layer.borderWidth = 1
         
         phoneTextField.frame = .init(
             x: Constants.padding,
@@ -71,7 +72,8 @@ class ViewController: UIViewController {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .white
+        label.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.7)
+        label.layer.borderColor = CGColor(red: 50/255, green: 50/255, blue: 255/255, alpha: 0.3)
         label.font = .systemFont(ofSize: 30, weight: .bold)
         label.textColor = .black
         label.numberOfLines = 5
@@ -92,7 +94,7 @@ class ViewController: UIViewController {
     
     lazy var loginButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor(red: 50/255, green: 50/255, blue: 255/255, alpha: 0.8)
         button.setTitle("Вход", for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
@@ -103,13 +105,13 @@ class ViewController: UIViewController {
 extension ViewController: UITextFieldDelegate {
     
     private func phoneFormatter(mask: String, number: String) -> String {
-        let phoneNum = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        var result = "  "
-        var index = phoneNum.startIndex
-        for char in mask where index < phoneNum.endIndex {
+        let onlyNumbers = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        var result = ""
+        var index = onlyNumbers.startIndex
+        for char in mask where index < onlyNumbers.endIndex {
             if char == "X" {
-                result.append(phoneNum[index])
-                index = phoneNum.index(after: index)
+                result.append(onlyNumbers[index])
+                index = onlyNumbers.index(after: index)
             } else {
                 result.append(char)
             }
@@ -122,9 +124,26 @@ extension ViewController: UITextFieldDelegate {
         
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
-        textField.text = phoneFormatter(mask: "+X (XXX) XXX-XX-XX", number: newString)
+        textField.text = phoneFormatter(
+            mask: "+X (XXX) XXX-XX-XX",
+            number: newString)
+        
+        if string.count == 0 {
+            guard let deletePosition = textField.position(
+                from: textField.beginningOfDocument,
+                offset: range.location) else { return false }
+            
+            textField.selectedTextRange = textField.textRange(from: deletePosition, to: deletePosition)
+        } else {
+            guard let finalText = textField.text else { return false }
+            
+            guard let insertPosition = textField.position(
+                from: textField.beginningOfDocument,
+                offset: range.location + range.length + finalText.count - text.count) else { return false }
+            
+            textField.selectedTextRange = textField.textRange(from: insertPosition, to: insertPosition)
+        }
         
         return false
     }
-    
 }
