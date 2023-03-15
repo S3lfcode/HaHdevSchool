@@ -190,7 +190,7 @@ extension ViewController: UITextFieldDelegate {
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
         let mask = "+X (XXX) XXX-XX-XX"
-        if newString.count > mask.count { return false }
+        if newString.count == mask.count+1 { return false } 
         
         textField.text = phoneFormatter(
             mask: mask,
@@ -205,9 +205,18 @@ extension ViewController: UITextFieldDelegate {
         } else {
             guard let finalText = textField.text else { return false }
             
+            let charArray = Array(finalText)
+            var location = 0
+            for index in range.location+range.length..<charArray.count {
+                if charArray[index].isNumber{
+                    location = index+1
+                    break
+                }
+            }
+            
             guard let insertPosition = textField.position(
                 from: textField.beginningOfDocument,
-                offset: range.location + range.length + finalText.count - text.count) else { return false }
+                offset: location) else { return false }
             
             textField.selectedTextRange = textField.textRange(from: insertPosition, to: insertPosition)
         }
