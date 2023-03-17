@@ -32,7 +32,6 @@ class ViewController: UIViewController {
                 phoneTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
                 phoneTextField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 10),
                 phoneTextField.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -10),
-                phoneTextField.heightAnchor.constraint(equalToConstant: 50),
                 
                 loginButton.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: 30),
                 loginButton.centerXAnchor.constraint(equalTo: phoneTextField.centerXAnchor),
@@ -41,18 +40,29 @@ class ViewController: UIViewController {
             ]
         )
         
-        // MARK: Регистрация на уведомления клавиатуры
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.keyboardWillShow),
             name: UIResponder.keyboardWillShowNotification,
-            object: nil)
+            object: nil
+        )
         
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.keyboardWillHide),
             name: UIResponder.keyboardWillHideNotification,
-            object: nil)
+            object: nil
+        )
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     enum Constants {
@@ -79,7 +89,7 @@ class ViewController: UIViewController {
         label.font = .systemFont(ofSize: 30, weight: .bold)
         label.textColor = .black
         label.numberOfLines = 0
-        label.text = "Авторизация\n\"текст\"\n\"текст\""
+        label.text = "Авторизация"
         label.textAlignment = .center
         label.layer.masksToBounds = true
         label.layer.cornerRadius = Constants.cornerRadius
@@ -89,15 +99,15 @@ class ViewController: UIViewController {
         return label
     }()
     
-    lazy var phoneTextField: UITextField = {
-        let textField = UITextField()
+    lazy var phoneTextField: MaterialTextField = {
+        let textField = MaterialTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .white
-        textField.font = .systemFont(ofSize: 25, weight: .medium)
-        textField.textColor = .black
-        textField.attributedPlaceholder = .init(string: "  Телефон", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 190/255, green: 179/255, blue: 167/255, alpha: 0.5)])
-        textField.layer.cornerRadius = Constants.cornerRadius
-        textField.delegate = self
+//        textField.font = .systemFont(ofSize: 25, weight: .medium)
+//        textField.textColor = .black
+//        textField.attributedPlaceholder = .init(string: "  Телефон", attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 190/255, green: 179/255, blue: 167/255, alpha: 0.5)])
+//        textField.layer.masksToBounds = true
+//        textField.layer.cornerRadius = Constants.cornerRadius
+        //textField.delegate = self
         return textField
     }()
     
@@ -114,12 +124,9 @@ class ViewController: UIViewController {
         return button
     }()
     
-    // MARK: Действия на открытие и закрытие клавиатуры
     @objc func keyboardWillShow(_ notification: NSNotification) {
         guard let constraint = self.containerViewCenterYConstant else { return }
-        if phoneTextField.isEditing {
             moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: true)
-        }
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -127,11 +134,6 @@ class ViewController: UIViewController {
         moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: false)
     }
     
-}
-
-extension ViewController: UITextFieldDelegate {
-    
-    // MARK: Анимация view с клавиатурой
     func moveViewWithKeyboard(notification: NSNotification, viewConstraint: NSLayoutConstraint, keyboardWillShow: Bool) {
         
         let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
@@ -163,64 +165,62 @@ extension ViewController: UITextFieldDelegate {
         }.startAnimation()
 
     }
-    
-    // MARK: Выход из textField по нажатию "return"
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        phoneTextField.endEditing(true)
-    }
-    
-    private func phoneFormatter(mask: String, number: String) -> String {
-        let onlyNumbers = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        var result = ""
-        var index = onlyNumbers.startIndex
-        for char in mask where index < onlyNumbers.endIndex {
-            if char == "X" {
-                result.append(onlyNumbers[index])
-                index = onlyNumbers.index(after: index)
-            } else {
-                result.append(char)
-            }
-        }
-        return result
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let text = textField.text else {return false}
-        
-        let newString = (text as NSString).replacingCharacters(in: range, with: string)
-        
-        let mask = "+X (XXX) XXX-XX-XX"
-        if newString.count == mask.count+1 { return false } 
-        
-        textField.text = phoneFormatter(
-            mask: mask,
-            number: newString)
-        
-        if string.count == 0 {
-            guard let deletePosition = textField.position(
-                from: textField.beginningOfDocument,
-                offset: range.location) else { return false }
-            
-            textField.selectedTextRange = textField.textRange(from: deletePosition, to: deletePosition)
-        } else {
-            guard let finalText = textField.text else { return false }
-            
-            let charArray = Array(finalText)
-            var location = 0
-            for index in range.location+range.length..<charArray.count {
-                if charArray[index].isNumber{
-                    location = index+1
-                    break
-                }
-            }
-            
-            guard let insertPosition = textField.position(
-                from: textField.beginningOfDocument,
-                offset: location) else { return false }
-            
-            textField.selectedTextRange = textField.textRange(from: insertPosition, to: insertPosition)
-        }
-        
-        return false
-    }
 }
+
+//extension ViewController: UITextFieldDelegate {
+//
+//    private func phoneFormatter(mask: String, number: String) -> String {
+//        let onlyNumbers = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+//        var result = ""
+//        var index = onlyNumbers.startIndex
+//        for char in mask where index < onlyNumbers.endIndex {
+//            if char == "X" {
+//                result.append(onlyNumbers[index])
+//                index = onlyNumbers.index(after: index)
+//            } else {
+//                result.append(char)
+//            }
+//        }
+//        return result
+//    }
+//
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        guard let text = textField.text else {return false}
+//
+//        let newString = (text as NSString).replacingCharacters(in: range, with: string)
+//
+//        let mask = "+X (XXX) XXX-XX-XX"
+//        if newString.count == mask.count+1 { return false }
+//
+//        textField.text = phoneFormatter(
+//            mask: mask,
+//            number: newString)
+//
+//        if string.count == 0 {
+//            guard let deletePosition = textField.position(
+//                from: textField.beginningOfDocument,
+//                offset: range.location) else { return false }
+//
+//            textField.selectedTextRange = textField.textRange(from: deletePosition, to: deletePosition)
+//        } else {
+//            guard let finalText = textField.text else { return false }
+//
+//            let charArray = Array(finalText)
+//            var location = 0
+//            for index in range.location+range.length..<charArray.count {
+//                if charArray[index].isNumber{
+//                    location = index+1
+//                    break
+//                }
+//            }
+//
+//            guard let insertPosition = textField.position(
+//                from: textField.beginningOfDocument,
+//                offset: location) else { return false }
+//
+//            textField.selectedTextRange = textField.textRange(from: insertPosition, to: insertPosition)
+//        }
+//
+//        return false
+//    }
+//}
