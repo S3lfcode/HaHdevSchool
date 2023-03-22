@@ -2,63 +2,71 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // MARK: Вывод значения скрол view
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        print("[ScrollView] frame \(scrollView.frame), bounds \(scrollView.bounds), contentSize \(scrollView.contentSize), stackView frame \(stackView.frame)")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(red: 252/255, green: 232/255, blue: 232/255, alpha: 1)
         
-        view.addSubview(containerView)
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // MARK: ??
+        view.addSubview(scrollView)
         
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(phoneTextField)
-        containerView.addSubview(loginButton)
+        scrollView.contentInset = .init(
+            top: Constants.headerView + 64,
+            left: Constants.padding,
+            bottom: 500,
+            right: Constants.padding
+        )
+        scrollView.addSubview(stackView)
         
-        let containerViewCenterYConstant = containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        self.containerViewCenterYConstant = containerViewCenterYConstant
+        view.addSubview(headerView)
+        
+        let headerViewHeightConstraint = headerView.heightAnchor.constraint(equalToConstant: Constants.headerView)
+        self.headerViewHeightConstraint = headerViewHeightConstraint
+        
         
         NSLayoutConstraint.activate(
             [
-                containerView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor),
-                containerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
-                containerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-                containerView.bottomAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
+                headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                // MARK: trailing, leading
+                headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                headerViewHeightConstraint,
                 
-                containerViewCenterYConstant,
+                stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+                stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
                 
-                titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-                titleLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 10),
-                titleLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -10),
-                
-                phoneTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-                phoneTextField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 10),
-                phoneTextField.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -10),
-                
-                loginButton.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: 30),
-                loginButton.centerXAnchor.constraint(equalTo: phoneTextField.centerXAnchor),
-                loginButton.widthAnchor.constraint(equalTo: phoneTextField.widthAnchor, multiplier: 0.5),
-                loginButton.heightAnchor.constraint(equalToConstant: 50)
+                stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
             ]
         )
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-        
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(self.keyboardWillShow),
+//            name: UIResponder.keyboardWillShowNotification,
+//            object: nil
+//        )
+//        
+//        NotificationCenter.default.addObserver(
+//            self,
+//            selector: #selector(self.keyboardWillHide),
+//            name: UIResponder.keyboardWillHideNotification,
+//            object: nil
+//        )
+//        
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -67,17 +75,45 @@ class ViewController: UIViewController {
     
     enum Constants {
         static let padding: CGFloat = 16
-        static let space: CGFloat = 30
         static let cornerRadius: CGFloat = 20
+        static let headerView: CGFloat = 300
     }
     
-    private var containerViewCenterYConstant: NSLayoutConstraint?
+    private var stackViewCenterConstraint: NSLayoutConstraint?
     
-    lazy var containerView: UIView = {
-        let view = UIView()
+    private var headerViewHeightConstraint: NSLayoutConstraint?
+    
+    private var stackViewSubviews: [UIView] {
+        [
+            titleLabel,
+            phoneTextField,
+            loginButton
+        ]
+    }
+    
+    lazy var scrollView: UIScrollView = {
+        let view = UIScrollView(frame: view.bounds)
+        view.backgroundColor = UIColor(red: 244/255, green: 200/255, blue: 200/255, alpha: 1.0)
+        view.contentInsetAdjustmentBehavior = .never
+        view.delegate = self
+        return view
+    }()
+    
+    lazy var stackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: stackViewSubviews)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(red: 244/255, green: 200/255, blue: 200/255, alpha: 1.0)
-        view.layer.cornerRadius = Constants.cornerRadius
+        view.axis = .vertical
+        view.distribution = .fill
+        view.alignment = .fill
+        view.spacing = 30
+        return view
+    }()
+    
+    lazy var headerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
         return view
     }()
     
@@ -93,9 +129,6 @@ class ViewController: UIViewController {
         label.textAlignment = .center
         label.layer.masksToBounds = true
         label.layer.cornerRadius = Constants.cornerRadius
-        label.layer.borderWidth = 1
-        //        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        //        label.setContentHuggingPriority(.defaultLow, for: .vertical)
         return label
     }()
     
@@ -113,50 +146,60 @@ class ViewController: UIViewController {
         button.setTitleColor(UIColor.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
         button.layer.cornerRadius = Constants.cornerRadius
-        //        button.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        //        button.setContentHuggingPriority(.defaultHigh, for: .vertical)
         return button
     }()
     
-    @objc func keyboardWillShow(_ notification: NSNotification) {
-        guard let constraint = self.containerViewCenterYConstant else { return }
-            moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: true)
-    }
-    
-    @objc func keyboardWillHide(_ notification: NSNotification) {
-        guard let constraint = self.containerViewCenterYConstant else { return }
-        moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: false)
-    }
-    
-    func moveViewWithKeyboard(notification: NSNotification, viewConstraint: NSLayoutConstraint, keyboardWillShow: Bool) {
-        
-        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
-        let curveKey = UIResponder.keyboardAnimationCurveUserInfoKey
-        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-        
-        guard let userInfo = notification.userInfo,
-            let keyboardDuration = (userInfo[durationKey] as? NSNumber)?.doubleValue,
-            let curveValue = (userInfo[curveKey] as? NSNumber)?.intValue,
-            let keyboardCurve = UIView.AnimationCurve(rawValue: curveValue),
-            let keyboardSize = (userInfo[frameKey] as? NSValue)?.cgRectValue
-            else { return }
-        
-        if keyboardWillShow {
-            view.backgroundColor = .gray
-            
-            let distanceTextFieldToBottom = view.bounds.maxY - (containerView.frame.minY + phoneTextField.frame.maxY)
-            if keyboardSize.height < distanceTextFieldToBottom { return }
-            
-            viewConstraint.constant = containerView.frame.midY - (containerView.bounds.midY - (containerView.bounds.maxY - phoneTextField.frame.maxY)) - keyboardSize.height
-        } else {
-            view.backgroundColor = UIColor(red: 252/255, green: 232/255, blue: 232/255, alpha: 1)
-            viewConstraint.constant = 0
-        }
-        
-        UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-            guard let self = self else { return }
-            self.view.layoutIfNeeded()
-        }.startAnimation()
+//    @objc func keyboardWillShow(_ notification: NSNotification) {
+//        guard let constraint = self.containerViewCenterYConstant else { return }
+//            moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: true)
+//    }
+//
+//    @objc func keyboardWillHide(_ notification: NSNotification) {
+//        guard let constraint = self.containerViewCenterYConstant else { return }
+//        moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: false)
+//    }
+//
+//    func moveViewWithKeyboard(notification: NSNotification, viewConstraint: NSLayoutConstraint, keyboardWillShow: Bool) {
+//
+//        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
+//        let curveKey = UIResponder.keyboardAnimationCurveUserInfoKey
+//        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
+//
+//        guard let userInfo = notification.userInfo,
+//            let keyboardDuration = (userInfo[durationKey] as? NSNumber)?.doubleValue,
+//            let curveValue = (userInfo[curveKey] as? NSNumber)?.intValue,
+//            let keyboardCurve = UIView.AnimationCurve(rawValue: curveValue),
+//            let keyboardSize = (userInfo[frameKey] as? NSValue)?.cgRectValue
+//            else { return }
+//
+//        if keyboardWillShow {
+//            view.backgroundColor = .gray
+//
+//            let distanceTextFieldToBottom = view.bounds.maxY - (containerView.frame.minY + phoneTextField.frame.maxY)
+//            if keyboardSize.height < distanceTextFieldToBottom { return }
+//
+//            viewConstraint.constant = containerView.frame.midY - (containerView.bounds.midY - (containerView.bounds.maxY - phoneTextField.frame.maxY)) - keyboardSize.height
+//        } else {
+//            view.backgroundColor = UIColor(red: 252/255, green: 232/255, blue: 232/255, alpha: 1)
+//            viewConstraint.constant = 0
+//        }
+//
+//        UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+//            guard let self = self else { return }
+//            self.view.layoutIfNeeded()
+//        }.startAnimation()
+//
+//    }
+}
 
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let diff = scrollView.contentInset.top + scrollView.contentOffset.y
+        let newValue = Constants.headerView - diff
+        
+        // >=20 и headreView
+        headerViewHeightConstraint?.constant = min(max(newValue, 20), Constants.headerView)
+        
+        view.layoutIfNeeded()
     }
 }
