@@ -50,28 +50,45 @@ class ViewController: UIViewController {
         
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(self.keyboardWillShow),
-//            name: UIResponder.keyboardWillShowNotification,
-//            object: nil
-//        )
-//        
+    override func viewWillAppear(_ animated: Bool) {
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillShowNotification),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
 //        NotificationCenter.default.addObserver(
 //            self,
 //            selector: #selector(self.keyboardWillHide),
 //            name: UIResponder.keyboardWillHideNotification,
 //            object: nil
 //        )
-//        
-//    }
+        
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    @objc
+        private func keyboardWillShowNotification(_ notification: Notification) {
+            let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 1
+            let keyboardRect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? CGRect(x: 0, y: 0, width: 0, height: 260)
+            let verticalContentInset = UIEdgeInsets(
+                top: 0,
+                left: 0,
+                bottom: keyboardRect.height / 2,
+                right: 0
+            )
+            
+            UIView.animate(withDuration: animationDuration, delay: 5) {
+                self.scrollView.verticalScrollIndicatorInsets = verticalContentInset
+                self.view.layoutIfNeeded()
+            }
+        }
     
     enum Constants {
         static let padding: CGFloat = 16
