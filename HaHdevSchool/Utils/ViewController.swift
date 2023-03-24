@@ -136,7 +136,7 @@ class ViewController: UIViewController {
     lazy var appleButton: MaterialSocialMediaView = {
         let button = MaterialSocialMediaView()
         button.configure(
-            image: UIImage(named: "Auth/SocialMedia/Apple"),
+            image: UIImage(named: "Auth/SocialMedia/apple"),
             color: UIColor(named: "Colors/Grayscale/black")
         )
         return button
@@ -146,7 +146,7 @@ class ViewController: UIViewController {
         let button = MaterialSocialMediaView()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/VK"),
-            color: UIColor(named: "Colors/Primary/Social/socialLight")
+            color: UIColor(named: "Colors/Primary/social/socialLight")
         )
         return button
     }()
@@ -155,7 +155,7 @@ class ViewController: UIViewController {
         let button = MaterialSocialMediaView()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/Odnoklassniki"),
-            color: UIColor(named: "Colors/Primary/Social/socialLight")
+            color: UIColor(named: "Colors/Primary/social/socialLight")
         )
         return button
     }()
@@ -164,7 +164,7 @@ class ViewController: UIViewController {
         let button = MaterialSocialMediaView()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/Facebook"),
-            color: UIColor(named: "Colors/Primary/Social/socialLight")
+            color: UIColor(named: "Colors/Primary/social/socialLight")
         )
         return button
     }()
