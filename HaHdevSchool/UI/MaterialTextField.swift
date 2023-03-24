@@ -14,8 +14,10 @@ class MaterialTextField: UIView {
         
         addSubview(textField)
         addSubview(placeholderLabel)
-        addSubview(separatorView)
         addSubview(errorLabel)
+        
+        layer.borderWidth = 1
+        layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
     }
     
     required init?(coder: NSCoder) {
@@ -24,10 +26,9 @@ class MaterialTextField: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         textField.frame = textFieldFrame(state: state)
         placeholderLabel.frame = placeholderLabelFrame(state: state)
-        separatorView.frame = separatorViewFrame(state: state)
         errorLabel.frame = errorLabelFrame(state: state)
         
         if bounds.height != errorLabel.frame.maxY {
@@ -36,17 +37,15 @@ class MaterialTextField: UIView {
     }
     
     private enum Constants {
-        static let space: CGFloat = 10
         static let textFieldHeight: CGFloat = 50
-        static let separatorHeight: CGFloat = 2
     }
     
     func textFieldFrame(state: State) -> CGRect {
         .init(
-            x: 0,
-            y: Constants.space,
-            width: bounds.width,
-            height: Constants.textFieldHeight)
+            x: 16,
+            y: 0,
+            width: bounds.width-16,
+            height: bounds.height)
     }
     
     private var textIsEditing: Bool = false
@@ -55,30 +54,22 @@ class MaterialTextField: UIView {
         let size = placeholderLabel.sizeThatFits(.init(width: bounds.height, height: 0))
         
         if textIsEditing {
+            placeholderLabel.font = UIFont(name: "GothamSSm-Book", size: 12)
             return .init(
-                x: 10,
-                y: 0,
-                width: size.width+10,
+                x: 16,
+                y: 5,
+                width: bounds.width,
                 height: size.height
             )
         }
-        
+        placeholderLabel.font = UIFont(name: "GothamSSm-Book", size: 14)
         return .init(
-            x: 10,
-            y: Constants.textFieldHeight/4+Constants.space,
-            width: size.width+10,
+            x: 16,
+            y: bounds.height/3,
+            width: bounds.width,
             height: size.height
         )
         
-    }
-    
-    func separatorViewFrame(state: State) -> CGRect {
-        .init(
-            x: 10,
-            y: Constants.textFieldHeight+Constants.space-7,
-            width: bounds.width-20,
-            height: Constants.separatorHeight
-        )
     }
     
     func errorLabelFrame(state: State) -> CGRect {
@@ -86,7 +77,7 @@ class MaterialTextField: UIView {
         
         return .init(
             x: 0,
-            y: Constants.textFieldHeight + Constants.separatorHeight + Constants.space,
+            y: Constants.textFieldHeight+10,
             width: bounds.width,
             height: size.height
         )
@@ -106,23 +97,17 @@ class MaterialTextField: UIView {
         self.state = state
         switch state {
         case .`default`:
-            separatorView.backgroundColor = .darkGray
+            layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
             errorLabel.alpha = 0
             errorLabel.text = nil
-            placeholderLabel.textColor = .black
-            placeholderLabel.alpha = 0.5
         case .active:
-            separatorView.backgroundColor = .blue
+            layer.borderColor = UIColor(named: "Colors/Primary/blue")?.cgColor
             errorLabel.alpha = 0
             errorLabel.text = nil
-            placeholderLabel.textColor = .blue
-            placeholderLabel.alpha = 1
         case .error(let message):
-            separatorView.backgroundColor = .red
+            layer.borderColor = UIColor(named: "Colors/Primary/red")?.cgColor
             errorLabel.alpha = 1
             errorLabel.text = message
-            placeholderLabel.textColor = .red
-            placeholderLabel.alpha = 1
         }
         setNeedsLayout()
     }
@@ -133,33 +118,24 @@ class MaterialTextField: UIView {
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.backgroundColor = .white
-        textField.layer.masksToBounds = true
-        textField.layer.cornerRadius = 10
+        textField.backgroundColor = UIColor(named: "Colors/Phone/background")
+        textField.font = UIFont(name: "GothamSSm-Book", size: 14)
         textField.delegate = self
         return textField
     }()
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .white
-        label.text = "Телефон"
-        label.textAlignment = .center
-        label.alpha = 0.5
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = 10
+        label.textColor = UIColor(named: "Colors/Phone/placeholder")
+        label.text = "Номер телефона"
+        label.font = UIFont(name: "GothamSSm-Book", size: 14)
         return label
-    }()
-    
-    private lazy var separatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .darkGray
-        return view
     }()
     
     private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.font = UIFont(name: "GothamSSm-Book", size: 14)
         label.textColor = .red
         return label
     }()
@@ -172,8 +148,15 @@ extension MaterialTextField: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
     }
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard let text = textField.text else {return}
+        for char in text {
+            if !char.isNumber && char != " " {
+                update(state: .error(message: "Можно вводить только цифры"), animated: true)
+                return
+            }
+        }
         update(state: .active, animated: true)
     }
     
@@ -183,7 +166,6 @@ extension MaterialTextField: UITextFieldDelegate {
     
     private func phoneFormatter(mask: String, number: String) -> String {
         let onlyNumbers = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        //let onlyNumbers = number
         var result = ""
         var index = onlyNumbers.startIndex
         for char in mask where index < onlyNumbers.endIndex {
@@ -215,7 +197,7 @@ extension MaterialTextField: UITextFieldDelegate {
             update(state: .active, animated: true)
         }
         
-        let mask = "+X (XXX) XXX-XX-XX"
+        let mask = "XXX XXX XX XX"
         if newString.count == mask.count+1 { return false }
         
         let newText = phoneFormatter(
