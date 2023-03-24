@@ -2,98 +2,46 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    // MARK: Вывод значения скрол view
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        print("[ScrollView] frame \(scrollView.frame), bounds \(scrollView.bounds), contentSize \(scrollView.contentSize), stackView frame \(stackView.frame)")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 252/255, green: 232/255, blue: 232/255, alpha: 1)
+        view.backgroundColor = UIColor(named: "Colors/white")
         
-        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // MARK: ??
-        view.addSubview(scrollView)
+        view.addSubview(logoImageView)
+        view.addSubview(containerView)
+        view.addSubview(socialMediaContainer)
         
-        scrollView.contentInset = .init(
-            top: Constants.headerView + 64,
-            left: Constants.padding,
-            bottom: 500,
-            right: Constants.padding
-        )
-        scrollView.addSubview(stackView)
+        let containerViewTopAnchorYConstraint = containerView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor)
+        self.containerViewTopAnchorYConstraint = containerViewTopAnchorYConstraint
         
-        view.addSubview(headerView)
-        
-        let headerViewHeightConstraint = headerView.heightAnchor.constraint(equalToConstant: Constants.headerView)
-        self.headerViewHeightConstraint = headerViewHeightConstraint
-        
+        let logoImageViewTopAnchorYConstraint = logoImageView.topAnchor.constraint(equalTo: view.topAnchor)
+        self.logoImageViewTopAnchorYConstraint = logoImageViewTopAnchorYConstraint
         
         NSLayoutConstraint.activate(
             [
-                headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                // MARK: trailing, leading
-                headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                headerViewHeightConstraint,
+                logoImageViewTopAnchorYConstraint,
+                logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 
-                stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-                stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-                stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                containerViewTopAnchorYConstraint,
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.horizontal),
+                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Margin.horizontal),
                 
-                stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
+                socialMediaContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+                socialMediaContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+                
             ]
         )
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillShowNotification),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(self.keyboardWillHide),
-//            name: UIResponder.keyboardWillHideNotification,
-//            object: nil
-//        )
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc
-        private func keyboardWillShowNotification(_ notification: Notification) {
-            let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 1
-            let keyboardRect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? CGRect(x: 0, y: 0, width: 0, height: 260)
-            let verticalContentInset = UIEdgeInsets(
-                top: 0,
-                left: 0,
-                bottom: keyboardRect.height / 2,
-                right: 0
-            )
-            
-            UIView.animate(withDuration: animationDuration, delay: 5) {
-                self.scrollView.verticalScrollIndicatorInsets = verticalContentInset
-                self.view.layoutIfNeeded()
-            }
-        }
+    private var containerViewTopAnchorYConstraint: NSLayoutConstraint?
+    private var logoImageViewTopAnchorYConstraint: NSLayoutConstraint?
     
     enum Constants {
+        enum Margin {
+            static let horizontal: CGFloat = 30
+        }
         static let padding: CGFloat = 16
-        static let cornerRadius: CGFloat = 20
-        static let headerView: CGFloat = 300
     }
     
     private var stackViewCenterConstraint: NSLayoutConstraint?
@@ -103,120 +51,203 @@ class ViewController: UIViewController {
     private var stackViewSubviews: [UIView] {
         [
             titleLabel,
-            phoneTextField,
+            phoneContainerStackView,
             loginButton
         ]
     }
     
-    lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: view.bounds)
-        view.backgroundColor = UIColor(red: 244/255, green: 200/255, blue: 200/255, alpha: 1.0)
-        view.contentInsetAdjustmentBehavior = .never
-        view.delegate = self
-        return view
+    lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "Auth/Logo")
+        return imageView
     }()
     
-    lazy var stackView: UIStackView = {
-        let view = UIStackView(arrangedSubviews: stackViewSubviews)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 244/255, green: 200/255, blue: 200/255, alpha: 1.0)
-        view.axis = .vertical
-        view.distribution = .fill
-        view.alignment = .fill
-        view.spacing = 30
-        return view
-    }()
-    
-    lazy var headerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
-        return view
+    lazy var containerView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: stackViewSubviews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = 30
+        return stackView
     }()
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.7)
-        label.layer.borderColor = CGColor(red: 50/255, green: 50/255, blue: 255/255, alpha: 0.3)
-        label.font = .systemFont(ofSize: 30, weight: .bold)
-        label.textColor = .black
+        label.text = "ВХОД ИЛИ\nРЕГИСТРАЦИЯ"
+        label.textColor = UIColor(named: "Colors/Grayscale/black")
+        label.font = UIFont(name: "GothamSSm-BlackItalic", size: 26)
         label.numberOfLines = 0
-        label.text = "Авторизация"
-        label.textAlignment = .center
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = Constants.cornerRadius
         return label
     }()
+    
+    lazy var numberCodeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "+7"
+        label.textAlignment = .center
+        label.textColor = UIColor(named: "Colors/Phone/placeholder")
+        label.backgroundColor = UIColor(named: "Colors/Phone/background")
+        label.font = UIFont(name: "GothamSSm-Book", size: 14)
+        label.heightAnchor.constraint(equalToConstant: 56).isActive = true
+        label.widthAnchor.constraint(equalToConstant: 45).isActive = true
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 6
+        return label
+    }()
+    
     
     lazy var phoneTextField: MaterialTextField = {
         let textField = MaterialTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = UIColor(named: "Colors/Phone/background")
+        textField.layer.cornerRadius = 8
         return textField
+    }()
+    
+    private var stackPhoneSubviews: [UIView] {
+        [
+            numberCodeLabel,
+            phoneTextField
+        ]
+    }
+    
+    lazy var phoneContainerStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: stackPhoneSubviews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.spacing = 9
+        return stackView
     }()
     
     lazy var loginButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(red: 50/255, green: 50/255, blue: 255/255, alpha: 0.8)
-        button.setTitle("Вход", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
-        button.layer.cornerRadius = Constants.cornerRadius
+        button.backgroundColor = UIColor(named: "Colors/Primary/blue")
+        button.setTitle("Получить код", for: .normal)
+        button.setTitleColor(UIColor(named: "Colors/white"), for: .normal)
+        button.titleLabel?.font = UIFont(name: "GothamSSm-Medium", size: 15)
+        button.layer.cornerRadius = 8
+        button.heightAnchor.constraint(equalToConstant: 42).isActive = true
         return button
     }()
     
-//    @objc func keyboardWillShow(_ notification: NSNotification) {
-//        guard let constraint = self.containerViewCenterYConstant else { return }
-//            moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: true)
-//    }
-//
-//    @objc func keyboardWillHide(_ notification: NSNotification) {
-//        guard let constraint = self.containerViewCenterYConstant else { return }
-//        moveViewWithKeyboard(notification: notification, viewConstraint: constraint, keyboardWillShow: false)
-//    }
-//
-//    func moveViewWithKeyboard(notification: NSNotification, viewConstraint: NSLayoutConstraint, keyboardWillShow: Bool) {
-//
-//        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
-//        let curveKey = UIResponder.keyboardAnimationCurveUserInfoKey
+    lazy var appleButton: MaterialSocialMediaView = {
+        let button = MaterialSocialMediaView()
+        button.configure(
+            image: UIImage(named: "Auth/SocialMedia/Apple"),
+            color: UIColor(named: "Colors/Grayscale/black")
+        )
+        return button
+    }()
+    
+    lazy var vkButton: MaterialSocialMediaView = {
+        let button = MaterialSocialMediaView()
+        button.configure(
+            image: UIImage(named: "Auth/SocialMedia/VK"),
+            color: UIColor(named: "Colors/Primary/Social/socialLight")
+        )
+        return button
+    }()
+    
+    lazy var odnoklassnikiButton: MaterialSocialMediaView = {
+        let button = MaterialSocialMediaView()
+        button.configure(
+            image: UIImage(named: "Auth/SocialMedia/Odnoklassniki"),
+            color: UIColor(named: "Colors/Primary/Social/socialLight")
+        )
+        return button
+    }()
+    
+    lazy var facebookButton: MaterialSocialMediaView = {
+        let button = MaterialSocialMediaView()
+        button.configure(
+            image: UIImage(named: "Auth/SocialMedia/Facebook"),
+            color: UIColor(named: "Colors/Primary/Social/socialLight")
+        )
+        return button
+    }()
+    
+    private var stackSocialMediaSubviews: [UIView] {
+        [
+        appleButton,
+        vkButton,
+        odnoklassnikiButton,
+        facebookButton
+        ]
+    }
+    
+    lazy var socialMediaContainer: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: stackSocialMediaSubviews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.widthAnchor.constraint(equalToConstant: 220).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 46).isActive = true
+        stackView.axis = .horizontal
+        stackView.spacing = 12
+        return stackView
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
+    }
+    
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
+    }
+    
+    func moveViewWithKeyboard(notification: NSNotification, keyboardWillShow: Bool) {
+        
+        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
+        let curveKey = UIResponder.keyboardAnimationCurveUserInfoKey
 //        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-//
-//        guard let userInfo = notification.userInfo,
-//            let keyboardDuration = (userInfo[durationKey] as? NSNumber)?.doubleValue,
-//            let curveValue = (userInfo[curveKey] as? NSNumber)?.intValue,
-//            let keyboardCurve = UIView.AnimationCurve(rawValue: curveValue),
+        
+        guard let userInfo = notification.userInfo,
+              let keyboardDuration = (userInfo[durationKey] as? NSNumber)?.doubleValue,
+              let curveValue = (userInfo[curveKey] as? NSNumber)?.intValue,
+              let keyboardCurve = UIView.AnimationCurve(rawValue: curveValue)
 //            let keyboardSize = (userInfo[frameKey] as? NSValue)?.cgRectValue
-//            else { return }
-//
-//        if keyboardWillShow {
-//            view.backgroundColor = .gray
-//
-//            let distanceTextFieldToBottom = view.bounds.maxY - (containerView.frame.minY + phoneTextField.frame.maxY)
-//            if keyboardSize.height < distanceTextFieldToBottom { return }
-//
-//            viewConstraint.constant = containerView.frame.midY - (containerView.bounds.midY - (containerView.bounds.maxY - phoneTextField.frame.maxY)) - keyboardSize.height
-//        } else {
-//            view.backgroundColor = UIColor(red: 252/255, green: 232/255, blue: 232/255, alpha: 1)
-//            viewConstraint.constant = 0
-//        }
-//
-//        UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-//            guard let self = self else { return }
-//            self.view.layoutIfNeeded()
-//        }.startAnimation()
-//
-//    }
-}
-
-extension ViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let diff = scrollView.contentInset.top + scrollView.contentOffset.y
-        let newValue = Constants.headerView - diff
+        else { return }
         
-        // >=20 и headreView
-        headerViewHeightConstraint?.constant = min(max(newValue, 20), Constants.headerView)
+        guard let containerConstraint = self.containerViewTopAnchorYConstraint else { return }
+        guard let logoConstraint = self.logoImageViewTopAnchorYConstraint else {return}
         
-        view.layoutIfNeeded()
+        if keyboardWillShow {
+            containerConstraint.constant = -150 + view.safeAreaInsets.top
+            logoConstraint.constant = -50
+            logoImageView.alpha = 0.5
+        } else {
+            containerConstraint.constant = 0
+            logoConstraint.constant = 0
+            logoImageView.alpha = 1
+        }
+        
+        UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
+            guard let self = self else { return }
+            self.view.layoutIfNeeded()
+        }.startAnimation()
+        
     }
 }
