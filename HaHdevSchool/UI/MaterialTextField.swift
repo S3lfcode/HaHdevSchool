@@ -26,7 +26,7 @@ class MaterialTextField: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         textField.frame = textFieldFrame(state: state)
         placeholderLabel.frame = placeholderLabelFrame(state: state)
         errorLabel.frame = errorLabelFrame(state: state)
@@ -41,7 +41,16 @@ class MaterialTextField: UIView {
     }
     
     func textFieldFrame(state: State) -> CGRect {
-        .init(
+        if textIsEditing {
+            return .init(
+                x: 16,
+                y: 27,
+                width: bounds.width-16,
+                height: bounds.height-36
+            )
+        }
+        
+        return .init(
             x: 16,
             y: 0,
             width: bounds.width-16,
@@ -57,7 +66,7 @@ class MaterialTextField: UIView {
             placeholderLabel.font = UIFont(name: "GothamSSm-Book", size: 12)
             return .init(
                 x: 16,
-                y: 5,
+                y: 9,
                 width: bounds.width,
                 height: size.height
             )
@@ -148,7 +157,7 @@ extension MaterialTextField: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
     }
-
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         guard let text = textField.text else {return}
         for char in text {
@@ -213,10 +222,10 @@ extension MaterialTextField: UITextFieldDelegate {
             update(state: .error(message: "Заполните поле"), animated: true)
         }
         
-        if string.count == 0 {
+        if string.count == 0 || text.count > newText.count {
             guard let deletePosition = textField.position(
                 from: textField.beginningOfDocument,
-                offset: range.location) else { return false }
+                offset: range.location+string.count) else { return false }
             
             textField.selectedTextRange = textField.textRange(from: deletePosition, to: deletePosition)
         } else {
@@ -228,7 +237,6 @@ extension MaterialTextField: UITextFieldDelegate {
                     break
                 }
             }
-            
             guard let insertPosition = textField.position(
                 from: textField.beginningOfDocument,
                 offset: location) else { return false }
