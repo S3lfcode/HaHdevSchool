@@ -170,7 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				849158B22986E24000368BAE /* HaHdevSchool */,
-				8412542C29CCD1BC00664879 /* Font */,
 				849158B12986E24000368BAE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -186,6 +185,7 @@
 		849158B22986E24000368BAE /* HaHdevSchool */ = {
 			isa = PBXGroup;
 			children = (
+				8412542C29CCD1BC00664879 /* Font */,
 				848EB46129C2179C0039D48D /* UI */,
 				8458113329AC733100870870 /* BootstrapDataProvider */,
 				844C1A592997A21D0094F412 /* Homework */,
