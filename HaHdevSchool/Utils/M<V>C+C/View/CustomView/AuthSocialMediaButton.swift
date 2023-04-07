@@ -1,12 +1,16 @@
 import UIKit
 
-class MaterialSocialMediaView: UIButton {
+class AuthSocialMediaButton: UIButton {
+    
+    enum Constants {
+        static let side: CGFloat = 46
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(socialMediaImageView)
-        layer.cornerRadius = 23
+        layer.cornerRadius = Constants.side/2
     }
     
     required init?(coder: NSCoder) {
@@ -21,7 +25,10 @@ class MaterialSocialMediaView: UIButton {
     }
     
     override var intrinsicContentSize: CGSize {
-        .init(width: 46, height: 46)
+        .init(
+            width: Constants.side,
+            height: Constants.side
+        )
     }
     
     private lazy var socialMediaImageView: UIImageView = {

@@ -1,41 +1,69 @@
 import UIKit
 
-class ViewController: UIViewController {
+protocol AuthView: UIView {
+    var containerViewTopAnchorYConstraint: NSLayoutConstraint? {get}
+    var logoImageViewTopAnchorYConstraint: NSLayoutConstraint? {get}
+    var logoImageView: UIImageView {get}
+    var loginButton: UIButton {get}
+    var phoneTextField: AuthTextField {get}
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    var onVerificationAction: ((String) -> Void)? { get set }
+    func updateTextFieldState(state: AuthTextField.Status, animated: Bool)
+    func startAnimation()
+    func stopAnimation()
+}
+
+class AuthViewImp: UIView, AuthView{
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-        view.backgroundColor = UIColor(named: "Colors/white")
+        backgroundColor = UIColor(named: "Colors/white")
         
-        view.addSubview(logoImageView)
-        view.addSubview(containerView)
-        view.addSubview(socialMediaContainer)
+        setupView()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupView() {
+        addSubview(logoImageView)
+        addSubview(containerView)
+        addSubview(socialMediaContainer)
+        addSubview(loadingImageView)
+    }
+    
+    func setupConstraints() {
         
         let containerViewTopAnchorYConstraint = containerView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor)
         self.containerViewTopAnchorYConstraint = containerViewTopAnchorYConstraint
         
-        let logoImageViewTopAnchorYConstraint = logoImageView.topAnchor.constraint(equalTo: view.topAnchor)
+        let logoImageViewTopAnchorYConstraint = logoImageView.topAnchor.constraint(equalTo: topAnchor)
         self.logoImageViewTopAnchorYConstraint = logoImageViewTopAnchorYConstraint
         
         NSLayoutConstraint.activate(
             [
                 logoImageViewTopAnchorYConstraint,
-                logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 
                 containerViewTopAnchorYConstraint,
-                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Margin.horizontal),
-                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.Margin.horizontal),
+                containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
+                containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal),
                 
-                socialMediaContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-                socialMediaContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+                socialMediaContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
+                socialMediaContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
                 
+                loadingImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+                loadingImageView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
         )
-        
     }
     
-    private var containerViewTopAnchorYConstraint: NSLayoutConstraint?
-    private var logoImageViewTopAnchorYConstraint: NSLayoutConstraint?
+    var containerViewTopAnchorYConstraint: NSLayoutConstraint?
+    var logoImageViewTopAnchorYConstraint: NSLayoutConstraint?
     
     enum Constants {
         enum Margin {
@@ -43,10 +71,6 @@ class ViewController: UIViewController {
         }
         static let padding: CGFloat = 16
     }
-    
-    private var stackViewCenterConstraint: NSLayoutConstraint?
-    
-    private var headerViewHeightConstraint: NSLayoutConstraint?
     
     private var stackViewSubviews: [UIView] {
         [
@@ -97,10 +121,8 @@ class ViewController: UIViewController {
         return label
     }()
     
-    
     lazy var phoneTextField: AuthTextField = {
         let textField = AuthTextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
@@ -128,6 +150,7 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont(name: "GothamSSm-Medium", size: 15)
         button.layer.cornerRadius = 8
         button.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        button.addTarget(self, action: #selector(didVerification), for: .touchUpInside)
         return button
     }()
     
@@ -169,10 +192,10 @@ class ViewController: UIViewController {
     
     private var stackSocialMediaSubviews: [UIView] {
         [
-        appleButton,
-        vkButton,
-        odnoklassnikiButton,
-        facebookButton
+            appleButton,
+            vkButton,
+            odnoklassnikiButton,
+            facebookButton
         ]
     }
     
@@ -180,81 +203,56 @@ class ViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: stackSocialMediaSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.widthAnchor.constraint(equalToConstant: 220).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 46).isActive = true
         stackView.axis = .horizontal
         stackView.spacing = 12
         return stackView
     }()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
+    lazy var loadingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "Auth/Loading")
+        imageView.isHidden = true
+        return imageView
+    }()
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    @objc func keyboardWillShow(_ notification: NSNotification) {
-        moveViewWithKeyboard(notification: notification, keyboardWillShow: true)
-    }
-    
-    @objc func keyboardWillHide(_ notification: NSNotification) {
-        moveViewWithKeyboard(notification: notification, keyboardWillShow: false)
-    }
-    
-    func moveViewWithKeyboard(notification: NSNotification, keyboardWillShow: Bool) {
+    func startAnimation() {
+        loadingImageView.isHidden = false
         
-        let durationKey = UIResponder.keyboardAnimationDurationUserInfoKey
-        let curveKey = UIResponder.keyboardAnimationCurveUserInfoKey
-//        let frameKey = UIResponder.keyboardFrameEndUserInfoKey
-        
-        guard let userInfo = notification.userInfo,
-              let keyboardDuration = (userInfo[durationKey] as? NSNumber)?.doubleValue,
-              let curveValue = (userInfo[curveKey] as? NSNumber)?.intValue,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: curveValue)
-//            let keyboardSize = (userInfo[frameKey] as? NSValue)?.cgRectValue
-        else { return }
-        
-        guard let containerConstraint = self.containerViewTopAnchorYConstraint else { return }
-        guard let logoConstraint = self.logoImageViewTopAnchorYConstraint else {return}
-        
-        if keyboardWillShow {
-            containerConstraint.constant = -150 + view.safeAreaInsets.top
-            logoConstraint.constant = -50
-            logoImageView.alpha = 0.5
-        } else {
-            containerConstraint.constant = 0
-            logoConstraint.constant = 0
-            logoImageView.alpha = 1
+        var turnByDegree = 0
+        var duration = 0
+        for _ in 0...5 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(duration)) {
+                self.layoutIfNeeded()
+                self.loadingImageView.transform = .init(rotationAngle: CGFloat(turnByDegree))
+                turnByDegree -= 18
+                self.setNeedsLayout()
+            }
+            duration += 500
         }
-        
-        UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-            guard let self = self else { return }
-            self.view.layoutIfNeeded()
-        }.startAnimation()
-        
     }
+    
+    func stopAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
+            self.loadingImageView.isHidden = true
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
+    
+    var onVerificationAction: ((String) -> Void)?
+    
+    // MARK: ButtonAction
+    @objc func didVerification() {
+        guard let phoneText = phoneTextField.textField.text else {return}
+        
+        // MARK: Сюда крутилку
+        self.onVerificationAction?(phoneText)
+    }
+    
+    // MARK: UpdateTextFieldState
+    func updateTextFieldState(state: AuthTextField.Status, animated: Bool) {
+        phoneTextField.update(status: state, animated: animated)
+    }
+    
 }

@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
-class MaterialTextField: UIView {
+class AuthTextField: UIControl {
     
-    enum State {
+    enum Status {
         case `default`
         case active
         case error(message: String)
@@ -16,8 +16,13 @@ class MaterialTextField: UIView {
         addSubview(placeholderLabel)
         addSubview(errorLabel)
         
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = UIColor(named: "Colors/Phone/background")
+        layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
+        
+        addTarget(self, action: #selector(didEditing), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -27,9 +32,9 @@ class MaterialTextField: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        textField.frame = textFieldFrame(state: state)
-        placeholderLabel.frame = placeholderLabelFrame(state: state)
-        errorLabel.frame = errorLabelFrame(state: state)
+        textField.frame = textFieldFrame()
+        placeholderLabel.frame = placeholderLabelFrame()
+        errorLabel.frame = errorLabelFrame()
         
         if bounds.height != errorLabel.frame.maxY {
             invalidateIntrinsicContentSize()
@@ -40,7 +45,11 @@ class MaterialTextField: UIView {
         static let textFieldHeight: CGFloat = 50
     }
     
-    func textFieldFrame(state: State) -> CGRect {
+    @objc func didEditing() {
+        textField.becomeFirstResponder()
+    }
+    
+    private func textFieldFrame() -> CGRect {
         if textIsEditing {
             return .init(
                 x: 16,
@@ -57,9 +66,7 @@ class MaterialTextField: UIView {
             height: bounds.height)
     }
     
-    private var textIsEditing: Bool = false
-    
-    func placeholderLabelFrame(state: State) -> CGRect {
+    private func placeholderLabelFrame() -> CGRect {
         let size = placeholderLabel.sizeThatFits(.init(width: bounds.height, height: 0))
         
         if textIsEditing {
@@ -81,7 +88,7 @@ class MaterialTextField: UIView {
         
     }
     
-    func errorLabelFrame(state: State) -> CGRect {
+    private func errorLabelFrame() -> CGRect {
         let size = errorLabel.sizeThatFits(.init(width: bounds.width, height: 0))
         
         return .init(
@@ -92,19 +99,20 @@ class MaterialTextField: UIView {
         )
     }
     
-    private(set) var state: State = .default
+    var textIsEditing: Bool = false
+    private(set) var status: Status = .default
     
-    func update(state: State, animated: Bool) {
+    func update(status: Status, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
-            self.update(state: state)
+            self.update(status: status)
             self.layoutIfNeeded()
             self.superview?.layoutIfNeeded()
         }
     }
     
-    private func update(state: State) {
-        self.state = state
-        switch state {
+    private func update(status: Status) {
+        self.status = status
+        switch status {
         case .`default`:
             layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
             errorLabel.alpha = 0
@@ -125,7 +133,7 @@ class MaterialTextField: UIView {
         .init(width: UIView.noIntrinsicMetric, height: errorLabel.frame.maxY)
     }
     
-    private lazy var textField: UITextField = {
+    lazy var textField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = UIColor(named: "Colors/Phone/background")
         textField.font = UIFont(name: "GothamSSm-Book", size: 14)
@@ -133,7 +141,7 @@ class MaterialTextField: UIView {
         return textField
     }()
     
-    private lazy var placeholderLabel: UILabel = {
+    lazy var placeholderLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "Colors/Phone/placeholder")
         label.text = "Номер телефона"
@@ -141,18 +149,16 @@ class MaterialTextField: UIView {
         return label
     }()
     
-    private lazy var errorLabel: UILabel = {
+    lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
         label.textColor = .red
         return label
-    }()
-    
-    
+    }()    
 }
 
-extension MaterialTextField: UITextFieldDelegate {
+extension AuthTextField: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -162,15 +168,15 @@ extension MaterialTextField: UITextFieldDelegate {
         guard let text = textField.text else {return}
         for char in text {
             if !char.isNumber && char != " " {
-                update(state: .error(message: "Можно вводить только цифры"), animated: true)
+                update(status: .error(message: "Можно вводить только цифры"), animated: true)
                 return
             }
         }
-        update(state: .active, animated: true)
+        update(status: .active, animated: true)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        update(state: .default, animated: true)
+        update(status: .default, animated: true)
     }
     
     private func phoneFormatter(mask: String, number: String) -> String {
@@ -194,32 +200,32 @@ extension MaterialTextField: UITextFieldDelegate {
         
         if textIsEditing == false && !newString.isEmpty {
             self.textIsEditing = true
-            update(state: .active, animated: true)
-        }
-        
-        for char in string {
-            if !char.isNumber {
-                update(state: .error(message: "Можно вводить только цифры"), animated: true)
-                textField.text = newString
-                return false
-            }
-            update(state: .active, animated: true)
+            update(status: .active, animated: true)
         }
         
         let mask = "XXX XXX XX XX"
-        if newString.count == mask.count+1 { return false }
+        if newString.count > mask.count && string.count > 0 { return false }
+        
+        for char in string {
+            if !char.isNumber {
+                update(status: .error(message: "Можно вводить только цифры"), animated: true)
+                textField.text = newString
+                return false
+            }
+            update(status: .active, animated: true)
+        }
         
         let newText = phoneFormatter(
             mask: mask,
             number: newString)
         
-        update(state: .active, animated: true)
+        update(status: .active, animated: true)
         
         textField.text = newText
         
         if textIsEditing == true && newText.isEmpty {
             self.textIsEditing = false
-            update(state: .error(message: "Заполните поле"), animated: true)
+            update(status: .error(message: "Заполните поле"), animated: true)
         }
         
         if string.count == 0 || text.count > newText.count {
