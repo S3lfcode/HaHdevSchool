@@ -1,11 +1,13 @@
 import Foundation
 import UIKit
 
-protocol VerificationView: UIView {
-    func updateTimer(text: String)
-}
-
 class VerificationViewImp: UIView, VerificationView {
+    
+    var groundToken: Any?
+    var appDidEnterBackgroundDate: Date?
+    
+    private var timer: Timer?
+    private var timeLeft = 40
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -14,12 +16,35 @@ class VerificationViewImp: UIView, VerificationView {
         
         setupView()
         setupConstraints()
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(onTimerFires), userInfo: nil, repeats: true)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
         
     }
+    
+    @objc func onTimerFires() {
+        
+        timeLeft -= 1
+        
+        switch timeLeft {
+        case timeLeft where timeLeft>=10:
+            updateState(text: "00:\(timeLeft)")
+            break
+        case timeLeft where timeLeft>0 && timeLeft<10:
+            updateState(text: "00:0\(timeLeft)")
+            break
+        case timeLeft where timeLeft <= 0:
+            timer?.invalidate()
+            updateState(text: "00:00")
+            timer = nil
+            break
+        default:
+            break
+        }
+    }
+    
     func setupView() {
         addSubview(backButton)
         addSubview(stackView)
@@ -38,7 +63,7 @@ class VerificationViewImp: UIView, VerificationView {
                 stackViewTopAnchor,
                 stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
                 stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal)
-
+                
             ]
         )
     }
@@ -62,7 +87,8 @@ class VerificationViewImp: UIView, VerificationView {
             titleLabel,
             phoneInfoLabel,
             verificationTextField,
-            resendingStackView
+            resendingStackView,
+            resendingButton,
         ]
     }
     
@@ -74,6 +100,7 @@ class VerificationViewImp: UIView, VerificationView {
         stackView.alignment = .fill
         stackView.spacing = 30
         stackView.setCustomSpacing(14, after: titleLabel)
+        stackView.setCustomSpacing(10, after: resendingStackView)
         return stackView
     }()
     
@@ -118,24 +145,46 @@ class VerificationViewImp: UIView, VerificationView {
         return label
     }()
     
-    func updateTimer(text: String) {
+    func updateState(text: String) {
         resendingTimerLabel.text = text
+        if resendingTimerLabel.text == "00:00" {
+            resendingButton.isHidden = false
+        }
     }
     
     private var stackResendingSubviews: [UIView]  {
         [
-        resendingTextLabel,
-        resendingTimerLabel
+            resendingTextLabel,
+            resendingTimerLabel
         ]
     }
     
     lazy var resendingStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackResendingSubviews)
-        
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.spacing = 2
         return stackView
     }()
     
+    lazy var resendingButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(named: "Colors/white")
+        button.setTitle("Отправить код повторно", for: .normal)
+        button.setTitleColor(UIColor(named: "Colors/Primary/blue"), for: .normal)
+        button.titleLabel?.font = UIFont(name: "GothamSSm-Book", size: 14)
+        button.titleLabel?.textAlignment = .center
+        button.isHidden = true
+        return button
+    }()
 }
+
+extension VerificationViewImp: ApplicationGroundView {
+    func apply(secondsPassed: Int) {
+        timeLeft -= secondsPassed
+    }
+}
+
+
+
+

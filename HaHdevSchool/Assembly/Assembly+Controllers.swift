@@ -8,9 +8,7 @@ extension Assembly {
     }
     
     var navigationController: UINavigationController {
-        let navVC = UINavigationController()
-        //navVC.editButtonItem.customView = UIImageView(image: .init(named: "Auth/BackButton"))
-        return navVC
+        UINavigationController()
     }
     
     func authController() -> AuthController<AuthViewImp> {
@@ -18,6 +16,6 @@ extension Assembly {
     }
     
     func verificationController() -> VerificationController<VerificationViewImp> {
-        VerificationController<VerificationViewImp>(authProvider: authProvider)
+        VerificationController<VerificationViewImp>()
     }
 }
