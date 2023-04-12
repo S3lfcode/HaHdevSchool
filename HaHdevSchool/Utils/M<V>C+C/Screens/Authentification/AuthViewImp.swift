@@ -246,7 +246,7 @@ extension AuthViewImp: KeybordableView {
     func apply(keyboardHeight: CGFloat, keyboardWillShow: Bool) {
         
         if keyboardWillShow {
-            containerViewTopAnchorYConstraint?.constant = -keyboardHeight/2
+            containerViewTopAnchorYConstraint?.constant = -keyboardHeight/4
             logoImageViewTopAnchorYConstraint?.constant = -keyboardHeight/10
             logoImageView.alpha = 0.5
         } else {
