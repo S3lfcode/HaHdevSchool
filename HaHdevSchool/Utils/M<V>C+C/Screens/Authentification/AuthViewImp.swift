@@ -1,20 +1,9 @@
 import UIKit
 
-protocol AuthView: UIView {
-    var containerViewTopAnchorYConstraint: NSLayoutConstraint? {get}
-    var logoImageViewTopAnchorYConstraint: NSLayoutConstraint? {get}
-    var logoImageView: UIImageView {get}
-    var loginButton: UIButton {get}
-    var phoneTextField: AuthTextField {get}
+class AuthViewImp: UIView, AuthView {
     
-    
-    var onVerificationAction: ((String) -> Void)? { get set }
-    func updateTextFieldState(state: AuthTextField.Status, animated: Bool)
-    func startAnimation()
-    func stopAnimation()
-}
-
-class AuthViewImp: UIView, AuthView{
+    var keyboardToken: Any?
+    var onVerificationAction: ((String?) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -216,43 +205,56 @@ class AuthViewImp: UIView, AuthView{
         return imageView
     }()
     
-    func startAnimation() {
+    func loadingAnimation(time: Double) {
         loadingImageView.isHidden = false
         
-        var turnByDegree = 0
-        var duration = 0
-        for _ in 0...5 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(duration)) {
-                self.layoutIfNeeded()
-                self.loadingImageView.transform = .init(rotationAngle: CGFloat(turnByDegree))
-                turnByDegree -= 18
-                self.setNeedsLayout()
+        UIView.animateKeyframes(withDuration: 1, delay: 0, options: [.repeat], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi/2)
             }
-            duration += 500
-        }
-    }
-    
-    func stopAnimation() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
-            self.loadingImageView.isHidden = true
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
-        }
-    }
-    
-    var onVerificationAction: ((String) -> Void)?
-    
-    // MARK: ButtonAction
-    @objc func didVerification() {
-        guard let phoneText = phoneTextField.textField.text else {return}
+
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi*1.5)
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi*2)
+            }
+        })
         
-        // MARK: Сюда крутилку
-        self.onVerificationAction?(phoneText)
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+            self.loadingImageView.isHidden = true
+        }
     }
     
-    // MARK: UpdateTextFieldState
-    func updateTextFieldState(state: AuthTextField.Status, animated: Bool) {
-        phoneTextField.update(status: state, animated: animated)
+    @objc func didVerification() {
+        self.onVerificationAction?(phoneTextField.textField.text)
     }
     
+    func updateStatus(error: String, animated: Bool) {
+        phoneTextField.update(status: .error(message: error), animated: animated)
+    }
+    
+}
+
+extension AuthViewImp: KeybordableView {
+    
+    func apply(keyboardHeight: CGFloat, keyboardWillShow: Bool) {
+        
+        if keyboardWillShow {
+            containerViewTopAnchorYConstraint?.constant = -keyboardHeight/2
+            logoImageViewTopAnchorYConstraint?.constant = -keyboardHeight/10
+            logoImageView.alpha = 0.5
+        } else {
+            containerViewTopAnchorYConstraint?.constant = 0
+            logoImageViewTopAnchorYConstraint?.constant = 0
+            logoImageView.alpha = 1
+        }
+        
+        layoutIfNeeded()
+    }
 }

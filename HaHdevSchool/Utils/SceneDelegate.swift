@@ -3,23 +3,29 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
     
-    let assembly = Assembly()
-    lazy var navigationController = assembly.navigationController
-    
-    lazy var appCoordinator = AppCoordinator(assembly: assembly, root: navigationController)
-    
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-
-        guard let windowScene = scene as? UIWindowScene else { return }
-        let window = UIWindow(windowScene: windowScene)
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        guard let windowScene = scene as? UIWindowScene else {
+            return
+        }
         
+        let assembly = Assembly()
+        let navigationController = assembly.navigationController
+        
+        let appCoordinator = AppCoordinator(assembly: assembly, root: navigationController)
         appCoordinator.start()
         
+        let window = UIWindow(windowScene: windowScene)
         window.rootViewController = appCoordinator.root
         window.makeKeyAndVisible()
         
         self.window = window
+        self.appCoordinator = appCoordinator
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

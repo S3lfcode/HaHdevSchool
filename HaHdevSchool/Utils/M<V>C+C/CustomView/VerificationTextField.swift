@@ -1,8 +1,5 @@
 import Foundation
 import UIKit
-//protocol VarificationTextField {
-//    var onTextFieldEditing: ((UITextField, NSRange, String) -> Void)? { get set }
-//}
 
 class VerificationTextField: UIView {
 
@@ -16,31 +13,51 @@ class VerificationTextField: UIView {
         dotStackView.centerXAnchor.constraint(equalTo: textFieldStackView.centerXAnchor).isActive = true
         dotStackView.centerYAnchor.constraint(equalTo: textFieldStackView.centerYAnchor).isActive = true
         
-        firstTextField.becomeFirstResponder()
+        textFieldViewContainer[0].becomeFirstResponder()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var firstTextField: UITextField = {
-        return textFieldConfigure()
+    lazy var textFieldViewContainer: [UITextField] = {
+        var container: [UITextField] = []
+        for index in 0...3 {
+            container.append(UITextField())
+            textFieldConfigure(textField: container[index])
+        }
+        return container
     }()
     
-    lazy var secondTextField: UITextField = {
-        return textFieldConfigure()
+    lazy var textFieldStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: textFieldViewContainer)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.frame.size.width = 142
+        stackView.axis = .horizontal
+        stackView.spacing = 12
+        return stackView
     }()
     
-    lazy var thirdTextField: UITextField = {
-        return textFieldConfigure()
+    lazy var imageViewContainer = {
+        var container: [UIView] = []
+        for _ in 0...3 {
+            let imageView = UIImageView()
+            imageView.image = UIImage(named: "Auth/VerificationPlaceholder")
+            container.append(imageView)
+        }
+        return container
     }()
     
-    lazy var fourthTextField: UITextField = {
-        return textFieldConfigure()
+    lazy var dotStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: imageViewContainer)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.frame.size.width = 142
+        stackView.axis = .horizontal
+        stackView.spacing = 35
+        return stackView
     }()
     
-    func textFieldConfigure() -> UITextField {
-        let textField = UITextField()
+    func textFieldConfigure(textField: UITextField) {
         textField.font = UIFont(name: "GothamSSm-Book", size: 40)
         textField.keyboardType = .asciiCapableNumberPad
         textField.attributedPlaceholder = NSAttributedString(
@@ -50,81 +67,16 @@ class VerificationTextField: UIView {
         textField.textAlignment = .center
         textField.tintColor = UIColor.clear
         textField.delegate = self
-        return textField
     }
-    
-    private var stackTextFieldSubviews: [UITextField] {
-        [
-            firstTextField,
-            secondTextField,
-            thirdTextField,
-            fourthTextField
-        ]
-    }
-    
-    lazy var textFieldStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: stackTextFieldSubviews)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.frame.size.width = 142
-        stackView.axis = .horizontal
-        stackView.spacing = 12
-        return stackView
-    }()
-    
-    lazy var firstDotImageView: UIImageView = {
-        return dotImageConfigure()
-    }()
-    
-    lazy var secondDotImageView: UIImageView = {
-        return dotImageConfigure()
-    }()
-    
-    lazy var thirdDotImageView: UIImageView = {
-        return dotImageConfigure()
-    }()
-    
-    lazy var fourthDotImageView: UIImageView = {
-        return dotImageConfigure()
-    }()
-    
-    func dotImageConfigure() -> UIImageView {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "Auth/VerificationPlaceholder")
-        return imageView
-    }
-    
-    private var stackDotViewSubviews: [UIView] {
-        [
-            firstDotImageView,
-            secondDotImageView,
-            thirdDotImageView,
-            fourthDotImageView
-        ]
-    }
-    
-    lazy var dotStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: stackDotViewSubviews)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.frame.size.width = 142
-        stackView.axis = .horizontal
-        stackView.spacing = 35
-        return stackView
-    }()
-    
-    // MARK: замыкание на эдит
-    var onTextFieldEditing: ((UITextField, NSRange, String) -> Void)?
+
 }
 
 extension VerificationTextField: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        //onTextFieldEditing?(textField, range, string)
-        
-        let textFieldContainer = stackTextFieldSubviews
-        let dotContainer = stackDotViewSubviews
-        
-        
+        let textFieldContainer = textFieldViewContainer
+        let dotContainer = imageViewContainer
         
         let currentIndex = textFieldContainer.lastIndex { $0.text == textField.text }
         guard var currentIndex = currentIndex else { return false }
