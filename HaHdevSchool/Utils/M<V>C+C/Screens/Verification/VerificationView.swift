@@ -1,5 +1,10 @@
 import UIKit
 
-protocol VerificationView: UIView, ApplicationGroundViewInput{
-    func updateState(text: String)
+enum State {
+    case info(text: String)
+    case seconds(num: Int)
+}
+
+protocol VerificationView: UIView{
+    func updateState(state: State)
 }

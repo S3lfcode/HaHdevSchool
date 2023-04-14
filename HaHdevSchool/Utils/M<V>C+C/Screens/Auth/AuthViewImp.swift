@@ -22,7 +22,6 @@ class AuthViewImp: UIView, AuthView {
         addSubview(logoImageView)
         addSubview(containerView)
         addSubview(socialMediaContainer)
-        addSubview(loadingImageView)
     }
     
     func setupConstraints() {
@@ -43,10 +42,8 @@ class AuthViewImp: UIView, AuthView {
                 containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal),
                 
                 socialMediaContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-                socialMediaContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
+                socialMediaContainer.centerXAnchor.constraint(equalTo: centerXAnchor)
                 
-                loadingImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-                loadingImageView.centerXAnchor.constraint(equalTo: centerXAnchor)
             ]
         )
     }
@@ -140,6 +137,10 @@ class AuthViewImp: UIView, AuthView {
         button.layer.cornerRadius = 8
         button.heightAnchor.constraint(equalToConstant: 42).isActive = true
         button.addTarget(self, action: #selector(didVerification), for: .touchUpInside)
+        button.addSubview(loadingImageView)
+        loadingImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+        loadingImageView.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
+        
         return button
     }()
     
@@ -201,34 +202,54 @@ class AuthViewImp: UIView, AuthView {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Auth/Loading")
-        imageView.isHidden = true
+        imageView.alpha = 0
+        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
         return imageView
     }()
     
-    func loadingAnimation(time: Double) {
-        loadingImageView.isHidden = false
+    func displayLoading(enable: Bool) {
+        
+        if !enable {
+            phoneTextField.isUserInteractionEnabled = true
+            phoneTextField.textField.isUserInteractionEnabled = true
+            loginButton.isUserInteractionEnabled = true
+            UIView.animate(withDuration: 0.5) {
+                self.loadingImageView.alpha = 0
+                self.loginButton.titleLabel?.alpha = 1
+            }
+            return
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.loginButton.titleLabel?.alpha = 0
+        }
+        UIView.animate(withDuration: 0.2, delay: 0.3) {
+            self.loadingImageView.alpha = 1
+        }
+        
+        phoneTextField.isUserInteractionEnabled = false
+        phoneTextField.textField.isUserInteractionEnabled = false
+        loginButton.isUserInteractionEnabled = false
+
         
         UIView.animateKeyframes(withDuration: 1, delay: 0, options: [.repeat], animations: {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                 self.loadingImageView.transform = .init(rotationAngle: Double.pi/2)
             }
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
                 self.loadingImageView.transform = .init(rotationAngle: Double.pi)
             }
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
                 self.loadingImageView.transform = .init(rotationAngle: Double.pi*1.5)
             }
-
+            
             UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25) {
                 self.loadingImageView.transform = .init(rotationAngle: Double.pi*2)
             }
         })
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-            self.loadingImageView.isHidden = true
-        }
     }
     
     @objc func didVerification() {

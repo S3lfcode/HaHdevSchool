@@ -6,59 +6,17 @@ class VerificationViewImp: UIView, VerificationView {
     var groundToken: Any?
     var appDidEnterBackgroundDate: Date?
     
-    private var timer: Timer?
-    private var timeLeft = 40
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = UIColor(named: "Colors/white")
         
-        setupView()
-        setupConstraints()
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(onTimerFires), userInfo: nil, repeats: true)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-        
-    }
-    
-    @objc func onTimerFires() {
-        
-        timeLeft -= 1
-        
-        switch timeLeft {
-        case timeLeft where timeLeft>=10:
-            updateState(text: "00:\(timeLeft)")
-            break
-        case timeLeft where timeLeft>0 && timeLeft<10:
-            updateState(text: "00:0\(timeLeft)")
-            break
-        case timeLeft where timeLeft <= 0:
-            timer?.invalidate()
-            updateState(text: "00:00")
-            timer = nil
-            break
-        default:
-            break
-        }
-    }
-    
-    func setupView() {
-        addSubview(backButton)
         addSubview(stackView)
-    }
-    
-    func setupConstraints() {
         
         let stackViewTopAnchor = stackView.topAnchor.constraint(equalTo: topAnchor, constant: 158)
         
-        
         NSLayoutConstraint.activate(
             [
-                backButton.topAnchor.constraint(equalTo: topAnchor, constant: 57),
-                backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 19),
                 
                 stackViewTopAnchor,
                 stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
@@ -68,19 +26,17 @@ class VerificationViewImp: UIView, VerificationView {
         )
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+        
+    }
+    
     enum Constants {
         enum Margin {
             static let horizontal: CGFloat = 30
         }
         static let padding: CGFloat = 16
     }
-    
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "Auth/BackButton"), for: .normal)
-        return button
-    }()
     
     private var stackViewSubviews: [UIView] {
         [
@@ -129,7 +85,8 @@ class VerificationViewImp: UIView, VerificationView {
     
     lazy var resendingTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Получить новый код можно через"
+        label.text = "  Получить новый код можно через"
+        label.textAlignment = .right
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
         return label
@@ -137,18 +94,34 @@ class VerificationViewImp: UIView, VerificationView {
     
     lazy var resendingTimerLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        label.text = "00:40"
+        label.text = " 00:00"
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         return label
     }()
     
-    func updateState(text: String) {
-        resendingTimerLabel.text = text
-        if resendingTimerLabel.text == "00:00" {
-            resendingButton.isHidden = false
+    func updateState(state: State) {
+        switch state {
+        case .info(let text):
+            phoneInfoLabel.text = "Мы отправили код на номер\n+7 \(text)"
+            break
+        case .seconds(let seconds):
+            
+            switch seconds {
+            case seconds where seconds>=10:
+                resendingTimerLabel.text = " 00:\(seconds)"
+                break
+            case seconds where seconds>0 && seconds<10:
+                resendingTimerLabel.text = " 00:0\(seconds)"
+                break
+            case seconds where seconds <= 0:
+                resendingTimerLabel.text = " 00:00"
+                break
+            default:
+                break
+            }
+            
+            break
         }
     }
     
@@ -163,7 +136,6 @@ class VerificationViewImp: UIView, VerificationView {
         let stackView = UIStackView(arrangedSubviews: stackResendingSubviews)
         stackView.axis = .horizontal
         stackView.distribution = .fill
-        stackView.spacing = 2
         return stackView
     }()
     
@@ -178,13 +150,3 @@ class VerificationViewImp: UIView, VerificationView {
         return button
     }()
 }
-
-extension VerificationViewImp: ApplicationGroundView {
-    func apply(secondsPassed: Int) {
-        timeLeft -= secondsPassed
-    }
-}
-
-
-
-

@@ -12,10 +12,10 @@ extension Assembly {
     }
     
     func authController() -> AuthController<AuthViewImp> {
-        AuthController<AuthViewImp>(authProvider: authProvider)
+        .init(authProvider: authProvider)
     }
     
-    func verificationController() -> VerificationController<VerificationViewImp> {
-        VerificationController<VerificationViewImp>()
+    func verificationController(phone: String, seconds: Int) -> VerificationController<VerificationViewImp> {
+        .init(phone: phone, seconds: seconds)
     }
 }

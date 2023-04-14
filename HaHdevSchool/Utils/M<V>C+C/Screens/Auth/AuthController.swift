@@ -1,13 +1,15 @@
 import UIKit
 
 final class AuthController<View: AuthView>: BaseViewController<View> {
+    typealias Completion = () -> Void
+    
     struct InputForm {
         var phone: String?
     }
     
     private var inputForm = InputForm(phone: "")
     
-    var onVerification: ((String?) -> ())?
+    var onVerification: ((_  phone: String?, _ completion: @escaping Completion) -> Void)?
     
     private let authProvider: AuthProvider
     
@@ -24,6 +26,8 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.tintColor = .black
         
         rootView.onVerificationAction = { [weak self] phone in
             self?.verify(phone: phone)
@@ -64,10 +68,13 @@ private extension AuthController {
             return
         }
         
-        rootView.loadingAnimation(time: 3)
+        rootView.displayLoading(enable: true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            self.onVerification?(phone)
+            self.onVerification?(phone) {
+                print("Complete onVerification")
+            }
+            self.rootView.displayLoading(enable: false)
         }
     }
 }
