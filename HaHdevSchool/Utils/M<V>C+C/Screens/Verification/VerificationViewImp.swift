@@ -14,8 +14,20 @@ class VerificationViewImp: UIView, VerificationView {
         
         backgroundColor = UIColor(named: "Colors/white")
         
-        setupView()
-        setupConstraints()
+        addSubview(stackView)
+        
+        let stackViewTopAnchor = stackView.topAnchor.constraint(equalTo: topAnchor, constant: 158)
+
+        NSLayoutConstraint.activate(
+            [
+                
+                stackViewTopAnchor,
+                stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
+                stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal)
+                
+            ]
+        )
+        
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(onTimerFires), userInfo: nil, repeats: true)
     }
     
@@ -29,43 +41,20 @@ class VerificationViewImp: UIView, VerificationView {
         timeLeft -= 1
         
         switch timeLeft {
-        case timeLeft where timeLeft>=10:
-            updateState(text: "00:\(timeLeft)")
+        case timeLeft where timeLeft >= 10:
+            updateState(text: " 00:\(timeLeft)")
             break
         case timeLeft where timeLeft>0 && timeLeft<10:
-            updateState(text: "00:0\(timeLeft)")
+            updateState(text: " 00:0\(timeLeft)")
             break
         case timeLeft where timeLeft <= 0:
             timer?.invalidate()
-            updateState(text: "00:00")
+            updateState(text: " 00:00")
             timer = nil
             break
         default:
             break
         }
-    }
-    
-    func setupView() {
-        addSubview(backButton)
-        addSubview(stackView)
-    }
-    
-    func setupConstraints() {
-        
-        let stackViewTopAnchor = stackView.topAnchor.constraint(equalTo: topAnchor, constant: 158)
-        
-        
-        NSLayoutConstraint.activate(
-            [
-                backButton.topAnchor.constraint(equalTo: topAnchor, constant: 57),
-                backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 19),
-                
-                stackViewTopAnchor,
-                stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
-                stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal)
-                
-            ]
-        )
     }
     
     enum Constants {
@@ -74,13 +63,6 @@ class VerificationViewImp: UIView, VerificationView {
         }
         static let padding: CGFloat = 16
     }
-    
-    lazy var backButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "Auth/BackButton"), for: .normal)
-        return button
-    }()
     
     private var stackViewSubviews: [UIView] {
         [
@@ -129,7 +111,8 @@ class VerificationViewImp: UIView, VerificationView {
     
     lazy var resendingTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Получить новый код можно через"
+        label.text = "  Получить новый код можно через"
+        label.textAlignment = .right
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
         return label
@@ -137,9 +120,7 @@ class VerificationViewImp: UIView, VerificationView {
     
     lazy var resendingTimerLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        label.text = "00:40"
+        label.text = " 00:40"
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         return label
@@ -147,7 +128,7 @@ class VerificationViewImp: UIView, VerificationView {
     
     func updateState(text: String) {
         resendingTimerLabel.text = text
-        if resendingTimerLabel.text == "00:00" {
+        if resendingTimerLabel.text == " 00:00" {
             resendingButton.isHidden = false
         }
     }
@@ -163,7 +144,6 @@ class VerificationViewImp: UIView, VerificationView {
         let stackView = UIStackView(arrangedSubviews: stackResendingSubviews)
         stackView.axis = .horizontal
         stackView.distribution = .fill
-        stackView.spacing = 2
         return stackView
     }()
     

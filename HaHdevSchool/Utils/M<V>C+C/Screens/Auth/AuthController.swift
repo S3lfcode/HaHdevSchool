@@ -64,10 +64,11 @@ private extension AuthController {
             return
         }
         
-        rootView.loadingAnimation(time: 3)
+        rootView.displayLoading(enable: true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             self.onVerification?(phone)
+            self.rootView.displayLoading(enable: false)
         }
     }
 }

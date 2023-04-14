@@ -7,27 +7,27 @@ class AuthCoordinator: Coordinator {
         self.root = root
     }
     
-    let assembly: Assembly
-    let root: UINavigationController
+    private let assembly: Assembly
+    private let root: UINavigationController
     
     weak var parentCoordinator: Coordinator?
     var childs: [Coordinator] = []
     
     func start() {
-        let authController = assembly.authController()
+        let controller = assembly.authController()
         
-        authController.onVerification = { [weak self] phone in
-            guard let self = self else {
+        controller.onVerification = { [weak self] phone in
+            guard let self = self, let phone = phone else {
                 return
             }
             
             print("Отправлено смс для верификации номера:\n +7 \(String(describing: phone))")
             
-            let verificationCoordinator = VerificationCoordinator(assembly: self.assembly, root: self.root)
+            let coordinator = self.assembly.verificationCoordinator(context: .init(phone: phone, seconds: 40))
             
-            self.switchTo(coordinator: verificationCoordinator)
+            self.switchTo(coordinator: coordinator)
         }
         
-        root.pushViewController(authController, animated: !root.viewControllers.isEmpty)
+        root.pushViewController(controller, animated: !root.viewControllers.isEmpty)
     }
 }

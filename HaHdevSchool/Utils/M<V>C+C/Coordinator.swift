@@ -1,8 +1,6 @@
 import UIKit
 
 protocol Coordinator: AnyObject {
-    var assembly: Assembly { get }
-    var root: UINavigationController { get }
     var parentCoordinator: Coordinator? { get set }
     var childs: [Coordinator] { get set }
     

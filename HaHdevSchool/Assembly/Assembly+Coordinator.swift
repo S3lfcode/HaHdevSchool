@@ -11,8 +11,10 @@ extension Assembly {
         AuthCoordinator(assembly: self, root: navigationController)
     }
     
-    func verificationCoordinator() -> VerificationCoordinator {
-        VerificationCoordinator(assembly: self, root: navigationController)
+    func verificationCoordinator(
+        context: VerificationCoordinator.Context
+    ) -> VerificationCoordinator {
+        .init(assembly: self, root: navigationController, context: context)
     }
 
 }

@@ -7,8 +7,8 @@ class AppCoordinator: Coordinator {
         self.root = root
     }
 
-    let assembly: Assembly
-    let root: UINavigationController
+    private let assembly: Assembly
+    private let root: UINavigationController
     
     weak var parentCoordinator: Coordinator?
     var childs: [Coordinator] = []

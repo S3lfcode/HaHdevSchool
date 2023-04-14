@@ -1,21 +1,30 @@
 import UIKit
 
 class VerificationCoordinator: Coordinator {
-    
-    init(assembly: Assembly, root: UINavigationController) {
-        self.assembly = assembly
-        self.root = root
+    struct Context {
+        let phone: String
+        let seconds: Int
     }
     
-    let assembly: Assembly
-    let root: UINavigationController
+    init(assembly: Assembly, root: UINavigationController, context: Context) {
+        self.assembly = assembly
+        self.root = root
+        self.context = context
+    }
+    
+    private let assembly: Assembly
+    private let root: UINavigationController
+    private let context: Context
     
     weak var parentCoordinator: Coordinator?
     var childs: [Coordinator] = []
     
     func start() {
-        let verificationController = assembly.verificationController()
+        let verificationController = assembly.verificationController(
+            phone: context.phone,
+            seconds: context.seconds
+        )
         
-        self.root.pushViewController(verificationController, animated: true)
+        root.pushViewController(verificationController, animated: true)
     }
 }

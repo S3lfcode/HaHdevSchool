@@ -201,13 +201,13 @@
 		845F3A6829E672D00085F892 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				845F3A6929E672DE0085F892 /* Authentification */,
+				845F3A6929E672DE0085F892 /* Auth */,
 				845F3A6A29E673280085F892 /* Verification */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
 		};
-		845F3A6929E672DE0085F892 /* Authentification */ = {
+		845F3A6929E672DE0085F892 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
 				845F3A6429E545930085F892 /* AuthView.swift */,
@@ -215,7 +215,7 @@
 				845F3A3B29D8237A0085F892 /* AuthController.swift */,
 				845F3A4129D827A20085F892 /* AuthCoordinator.swift */,
 			);
-			path = Authentification;
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		845F3A6A29E673280085F892 /* Verification */ = {
