@@ -42,11 +42,10 @@
 		845F3A5529DD466D0085F892 /* VerificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A5429DD466D0085F892 /* VerificationCoordinator.swift */; };
 		845F3A5E29DD9F610085F892 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A5D29DD9F610085F892 /* AppCoordinator.swift */; };
 		845F3A6029DDB09A0085F892 /* VerificationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A5F29DDB09A0085F892 /* VerificationTextField.swift */; };
-		845F3A6329E5254D0085F892 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6229E5254D0085F892 /* Coordinator.swift */; };
+		845F3A6329E5254D0085F892 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6229E5254D0085F892 /* BaseCoordinator.swift */; };
 		845F3A6529E545930085F892 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6429E545930085F892 /* AuthView.swift */; };
 		845F3A6729E5E74A0085F892 /* KeyboardableViewInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */; };
 		845F3A6D29E6749C0085F892 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6C29E6749C0085F892 /* VerificationView.swift */; };
-		845F3A7029E6B8010085F892 /* ApplicationGround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6F29E6B8010085F892 /* ApplicationGround.swift */; };
 		8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */; };
 		848EB46329C217BD0039D48D /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848EB46229C217BD0039D48D /* AuthTextField.swift */; };
 		849158B42986E24000368BAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B32986E24000368BAE /* AppDelegate.swift */; };
@@ -96,11 +95,10 @@
 		845F3A5429DD466D0085F892 /* VerificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationCoordinator.swift; sourceTree = "<group>"; };
 		845F3A5D29DD9F610085F892 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		845F3A5F29DDB09A0085F892 /* VerificationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationTextField.swift; sourceTree = "<group>"; };
-		845F3A6229E5254D0085F892 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		845F3A6229E5254D0085F892 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		845F3A6429E545930085F892 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardableViewInput.swift; sourceTree = "<group>"; };
 		845F3A6C29E6749C0085F892 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
-		845F3A6F29E6B8010085F892 /* ApplicationGround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationGround.swift; sourceTree = "<group>"; };
 		8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+Coding.swift"; sourceTree = "<group>"; };
 		848EB46229C217BD0039D48D /* AuthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		849158B02986E24000368BAE /* HaHdevSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HaHdevSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,11 +176,10 @@
 			children = (
 				845F3A6829E672D00085F892 /* Screens */,
 				845F3A6129DEF8C70085F892 /* CustomView */,
-				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
-				845F3A6F29E6B8010085F892 /* ApplicationGround.swift */,
-				845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */,
-				845F3A6229E5254D0085F892 /* Coordinator.swift */,
+				845F3A6229E5254D0085F892 /* BaseCoordinator.swift */,
 				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
+				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
+				845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */,
 				845F3A3F29D827220085F892 /* AuthProvider.swift */,
 			);
 			path = "M<V>C+C";
@@ -420,7 +417,7 @@
 				845F3A4F29DC9F130085F892 /* VerificationViewImp.swift in Sources */,
 				849158B42986E24000368BAE /* AppDelegate.swift in Sources */,
 				845F3A4929D82F090085F892 /* Assembly+Coordinator.swift in Sources */,
-				845F3A6329E5254D0085F892 /* Coordinator.swift in Sources */,
+				845F3A6329E5254D0085F892 /* BaseCoordinator.swift in Sources */,
 				845F3A4229D827A20085F892 /* AuthCoordinator.swift in Sources */,
 				8458114A29ACEF3100870870 /* Assembly+DispatchGroup.swift in Sources */,
 				8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */,
@@ -428,7 +425,6 @@
 				848EB46329C217BD0039D48D /* AuthTextField.swift in Sources */,
 				8402ED112992DB6B0099FBB7 /* ResponseBody.swift in Sources */,
 				845F3A4529D828420085F892 /* Assembly+Controllers.swift in Sources */,
-				845F3A7029E6B8010085F892 /* ApplicationGround.swift in Sources */,
 				844C1A5B2997A2310094F412 /* Task2.swift in Sources */,
 				8458113D29AC853800870870 /* CityResponseData.swift in Sources */,
 				84A57FE8298AC36000A8B201 /* UserDefaultsStorage.swift in Sources */,

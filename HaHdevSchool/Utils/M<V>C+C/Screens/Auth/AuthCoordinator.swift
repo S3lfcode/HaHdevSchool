@@ -1,33 +1,43 @@
 import UIKit
 
-class AuthCoordinator: Coordinator {    
+final class AuthCoordinator: RootableCoordinator {
     
-    init(assembly: Assembly, root: UINavigationController) {
+    init(assembly: Assembly) {
         self.assembly = assembly
-        self.root = root
     }
     
     private let assembly: Assembly
-    private let root: UINavigationController
     
-    weak var parentCoordinator: Coordinator?
-    var childs: [Coordinator] = []
+    var root: UINavigationController?
     
-    func start() {
+    weak var parentCoordinator: BaseCoordinator?
+    var childs: [BaseCoordinator] = []
+    
+    func make() -> UIViewController? {
         let controller = assembly.authController()
-        
-        controller.onVerification = { [weak self] phone in
+
+        controller.onVerification = { [weak self] phone, completion in
             guard let self = self, let phone = phone else {
                 return
             }
             
             print("Отправлено смс для верификации номера:\n +7 \(String(describing: phone))")
             
-            let coordinator = self.assembly.verificationCoordinator(context: .init(phone: phone, seconds: 40))
+            let coordinator = self.assembly.verificationCoordinator(
+                context: .init(
+                    phone: phone,
+                    seconds: 41) { operationToken in
+                        
+                        //Тут нужно вызвать что-то, что вызовет root.popViewcontroller
+//                        self.backTo(coordinator: self)
+                        //TODO: !!
+                        completion()
+                    }
+            )
             
-            self.switchTo(coordinator: coordinator)
+            self.start(coordinator: coordinator, on: self.root, animated: true)
         }
         
-        root.pushViewController(controller, animated: !root.viewControllers.isEmpty)
+        return controller
     }
 }

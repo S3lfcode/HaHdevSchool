@@ -4,17 +4,17 @@ import UIKit
 extension Assembly {
         
     func appCoordinator() -> AppCoordinator {
-        AppCoordinator(assembly: self, root: navigationController)
+        AppCoordinator(assembly: self)
     }
     
     func authCoordinator() -> AuthCoordinator {
-        AuthCoordinator(assembly: self, root: navigationController)
+        AuthCoordinator(assembly: self)
     }
     
     func verificationCoordinator(
         context: VerificationCoordinator.Context
     ) -> VerificationCoordinator {
-        .init(assembly: self, root: navigationController, context: context)
+        .init(assembly: self, context: context)
     }
 
 }

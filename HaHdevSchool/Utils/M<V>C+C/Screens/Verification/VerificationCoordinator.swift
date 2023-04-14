@@ -1,30 +1,38 @@
 import UIKit
 
-class VerificationCoordinator: Coordinator {
+final class VerificationCoordinator: RootableCoordinator {
+    
+    
     struct Context {
         let phone: String
         let seconds: Int
+        let finishFlow: (_ operationToken: String) -> Void
     }
     
-    init(assembly: Assembly, root: UINavigationController, context: Context) {
+    init(assembly: Assembly, context: Context) {
         self.assembly = assembly
-        self.root = root
         self.context = context
     }
     
     private let assembly: Assembly
-    private let root: UINavigationController
     private let context: Context
     
-    weak var parentCoordinator: Coordinator?
-    var childs: [Coordinator] = []
+    var root: UINavigationController?
     
-    func start() {
-        let verificationController = assembly.verificationController(
+    weak var parentCoordinator: BaseCoordinator?
+    var childs: [BaseCoordinator] = []
+    
+    func make() -> UIViewController? {
+        let controller = assembly.verificationController(
             phone: context.phone,
             seconds: context.seconds
         )
         
-        root.pushViewController(verificationController, animated: true)
+        controller.onComplete = context.finishFlow
+//        controller.onComplete = { [weak self] operationToken in
+//            self?.context.finishFlow(operationToken)
+//        }
+        
+        return controller
     }
 }

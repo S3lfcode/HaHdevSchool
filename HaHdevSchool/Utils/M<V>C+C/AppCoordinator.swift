@@ -1,23 +1,27 @@
 import UIKit
 
-class AppCoordinator: Coordinator {
+final class AppCoordinator: BaseCoordinator {
     
-    init(assembly: Assembly, root: UINavigationController) {
+    init(assembly: Assembly) {
         self.assembly = assembly
-        self.root = root
     }
 
     private let assembly: Assembly
-    private let root: UINavigationController
     
-    weak var parentCoordinator: Coordinator?
-    var childs: [Coordinator] = []
+    weak var parentCoordinator: BaseCoordinator?
+    var childs: [BaseCoordinator] = []
     
     
-    func start() {
-        let authCoordinator = AuthCoordinator(assembly: assembly, root: root)
+    func make() -> UIViewController? {
+        let navigationController = assembly.navigationController
         
-        switchTo(coordinator: authCoordinator)
+        start(
+            coordinator: assembly.authCoordinator(),
+            on: navigationController,
+            animated: false
+        )
+        
+        return navigationController
     }
     
 

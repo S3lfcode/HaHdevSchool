@@ -7,6 +7,10 @@ extension Assembly {
         AuthProviderImp()
     }
     
+    var navigationController: UINavigationController {
+        UINavigationController()
+    }
+    
     func authController() -> AuthController<AuthViewImp> {
         .init(authProvider: authProvider)
     }
