@@ -33,7 +33,7 @@ extension BaseCoordinator {
         else {
             return
         }
-
+        
         addChild(coordinator: coordinator)
         
         coordinator.root = navigationController
@@ -41,13 +41,32 @@ extension BaseCoordinator {
         let animated = !navigationController.viewControllers.isEmpty && animated
         navigationController.pushViewController(controller, animated: animated)
     }
-
+    
 }
 
 //extension RootableCoordinator where Root == UINavigationController {
-//    func backTo(coordinator: BaseCoordinator?) {
+//    func backTo(coordinator: BaseCoordinator?, animated: Bool) {
+//        guard
+//            let coordinator = coordinator,
+//            let root = root
+//        else {
+//            return
+//        }
 //        
-//        coordinator.
-//        root?.popToViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+//        let depth = coordinator.depth()
+//        let newStack = root.viewControllers.prefix(max(root.viewControllers.count - depth, 1))
+//        
+//        root.setViewControllers(Array(newStack), animated: animated)
+//    }
+//}
+//
+//extension BaseCoordinator {
+//    func depth() -> Int {
+//        
+//        let maxDepth = childs
+//            .compactMap{ $0.depth() }
+//            .max(by: >) ?? 0
+//        
+//        return maxDepth + 1
 //    }
 //}

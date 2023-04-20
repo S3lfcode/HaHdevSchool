@@ -1,19 +1,18 @@
 import UIKit
 
-final class AuthCoordinator: RootableCoordinator {
+final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Any> {
     
-    init(assembly: Assembly) {
-        self.assembly = assembly
+    struct Context {
+        let phone: String
+        let seconds: Int
+        let finishFlow: (_ operationToken: String) -> Void
     }
     
-    private let assembly: Assembly
+    override init(assembly: Assembly) {
+        super.init(assembly: assembly)
+    }
     
-    var root: UINavigationController?
-    
-    weak var parentCoordinator: BaseCoordinator?
-    var childs: [BaseCoordinator] = []
-    
-    func make() -> UIViewController? {
+    override func make() -> UIViewController? {
         let controller = assembly.authController()
 
         controller.onVerification = { [weak self] phone, completion in
@@ -26,17 +25,40 @@ final class AuthCoordinator: RootableCoordinator {
             let coordinator = self.assembly.verificationCoordinator(
                 context: .init(
                     phone: phone,
-                    seconds: 41) { operationToken in
-                        
-                        //Тут нужно вызвать что-то, что вызовет root.popViewcontroller
-//                        self.backTo(coordinator: self)
-                        //TODO: !!
+                    seconds: 41) { [weak self] operationToken in
+                        guard let self = self else {
+                            return
+                        }
+//                        self.backTo(coordinator: self, animated: true)
                         completion()
                     }
             )
             
+            
             self.start(coordinator: coordinator, on: self.root, animated: true)
         }
+        
+        ///////////////
+        let coordinator = self.assembly.verificationCoordinator(
+            context: .init(
+                phone: "323432",
+                seconds: 41) { [weak self] operationToken in
+                    guard let self = self else {
+                        return
+                    }
+//                        self.backTo(coordinator: self, animated: true)
+//                    completion()
+                }
+        )
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            self.start(coordinator: coordinator, on: self.root, animated: true)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+4) {
+            self.backTo(coordinator: self, animated: true)
+        }
+        ///////////////
         
         return controller
     }

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class VerificationViewImp: UIView, VerificationView {
+final class VerificationViewImp: UIView, VerificationView {
     
     var groundToken: Any?
     var appDidEnterBackgroundDate: Date?

@@ -57,6 +57,7 @@
 		84A57FE8298AC36000A8B201 /* UserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A57FE7298AC36000A8B201 /* UserDefaultsStorage.swift */; };
 		84A57FEA298AC60800A8B201 /* Assembly+DataStrorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A57FE9298AC60800A8B201 /* Assembly+DataStrorage.swift */; };
 		84A57FED298B88F400A8B201 /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A57FEC298B88F400A8B201 /* Assembly.swift */; };
+		C368DBEB29F15D3800C4DE31 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C368DBEA29F15D3800C4DE31 /* Coordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		84A57FE7298AC36000A8B201 /* UserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorage.swift; sourceTree = "<group>"; };
 		84A57FE9298AC60800A8B201 /* Assembly+DataStrorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+DataStrorage.swift"; sourceTree = "<group>"; };
 		84A57FEC298B88F400A8B201 /* Assembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assembly.swift; sourceTree = "<group>"; };
+		C368DBEA29F15D3800C4DE31 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			children = (
 				845F3A6829E672D00085F892 /* Screens */,
 				845F3A6129DEF8C70085F892 /* CustomView */,
+				C368DBEA29F15D3800C4DE31 /* Coordinator.swift */,
 				845F3A6229E5254D0085F892 /* BaseCoordinator.swift */,
 				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
 				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
@@ -422,6 +425,7 @@
 				8458114A29ACEF3100870870 /* Assembly+DispatchGroup.swift in Sources */,
 				8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */,
 				845F3A4729D828970085F892 /* AuthViewImp.swift in Sources */,
+				C368DBEB29F15D3800C4DE31 /* Coordinator.swift in Sources */,
 				848EB46329C217BD0039D48D /* AuthTextField.swift in Sources */,
 				8402ED112992DB6B0099FBB7 /* ResponseBody.swift in Sources */,
 				845F3A4529D828420085F892 /* Assembly+Controllers.swift in Sources */,

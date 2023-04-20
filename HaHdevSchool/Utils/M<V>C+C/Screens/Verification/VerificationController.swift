@@ -47,7 +47,7 @@ final class VerificationController<View: VerificationView>: BaseViewController<V
         )
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         NotificationCenter.default.removeObserver(

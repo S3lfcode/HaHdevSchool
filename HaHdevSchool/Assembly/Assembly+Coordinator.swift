@@ -12,7 +12,7 @@ extension Assembly {
     }
     
     func verificationCoordinator(
-        context: VerificationCoordinator.Context
+        context: AuthCoordinator.Context
     ) -> VerificationCoordinator {
         .init(assembly: self, context: context)
     }

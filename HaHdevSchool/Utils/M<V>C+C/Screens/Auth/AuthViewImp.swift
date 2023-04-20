@@ -1,6 +1,6 @@
 import UIKit
 
-class AuthViewImp: UIView, AuthView {
+final class AuthViewImp: UIView, AuthView {
     
     var keyboardToken: Any?
     var onVerificationAction: ((String?) -> Void)?

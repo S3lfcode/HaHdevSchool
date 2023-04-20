@@ -15,7 +15,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         let assembly = Assembly()
-        let navigationController = assembly.navigationController
         
         let appCoordinator = assembly.appCoordinator()
         let rootController = appCoordinator.make()
