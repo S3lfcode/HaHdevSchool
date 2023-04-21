@@ -10,3 +10,9 @@ class BaseViewController<View: UIView>: UIViewController {
         self.view = View()
     }
 }
+
+extension BaseViewController: ContainerViewController where View: ContainerView {
+    var hostView: View {
+        rootView
+    }
+}

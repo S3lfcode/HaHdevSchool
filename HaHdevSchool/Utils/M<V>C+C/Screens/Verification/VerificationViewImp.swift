@@ -17,7 +17,6 @@ final class VerificationViewImp: UIView, VerificationView {
         
         NSLayoutConstraint.activate(
             [
-                
                 stackViewTopAnchor,
                 stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.Margin.horizontal),
                 stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.Margin.horizontal)
@@ -105,7 +104,7 @@ final class VerificationViewImp: UIView, VerificationView {
         case .info(let text):
             phoneInfoLabel.text = "Мы отправили код на номер\n+7 \(text)"
             break
-        case .seconds(let seconds):
+        case .timer(let seconds):
             
             switch seconds {
             case seconds where seconds>=10:

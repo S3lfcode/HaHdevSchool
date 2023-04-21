@@ -1,8 +1,7 @@
 import UIKit
 
 protocol AuthView: UIView, KeyboardableViewInput {
-    var onVerificationAction: ((_ phone: String?) -> Void)? { get set }
-    
-    func updateStatus(error: String, animated: Bool)
+    var onVerificationAction: (() -> Void)? { get set }
+
     func displayLoading(enable: Bool)
 }

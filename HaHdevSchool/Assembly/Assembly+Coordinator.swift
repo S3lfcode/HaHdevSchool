@@ -16,5 +16,10 @@ extension Assembly {
     ) -> VerificationCoordinator {
         .init(assembly: self, context: context)
     }
-
+    
+    func phoneTextFieldCoordinator(
+        context: AuthCoordinator.PhoneContext
+    ) -> PhoneTextFieldCoordinator {
+        .init(assembly: self, context: context)
+    }
 }

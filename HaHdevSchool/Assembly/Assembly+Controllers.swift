@@ -18,4 +18,8 @@ extension Assembly {
     func verificationController(phone: String, seconds: Int) -> VerificationController<VerificationViewImp> {
         .init(phone: phone, seconds: seconds)
     }
+    
+    func phoneTextFieldController() -> PhoneTextFieldController<PhoneTextFieldViewImp> {
+        .init()
+    }
 }

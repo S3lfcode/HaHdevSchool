@@ -2,7 +2,7 @@ import UIKit
 
 enum State {
     case info(text: String)
-    case seconds(num: Int)
+    case timer(num: Int)
 }
 
 protocol VerificationView: UIView{

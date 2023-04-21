@@ -3,7 +3,7 @@ import UIKit
 final class AuthViewImp: UIView, AuthView {
     
     var keyboardToken: Any?
-    var onVerificationAction: ((String?) -> Void)?
+    var onVerificationAction: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -107,21 +107,25 @@ final class AuthViewImp: UIView, AuthView {
         return label
     }()
     
-    lazy var phoneTextField: AuthTextField = {
-        let textField = AuthTextField()
-        return textField
+    //MARK: ContainerView for textfield
+    lazy var phoneContainer: UIControl = {
+        let view = UIControl()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     private var stackPhoneSubviews: [UIView] {
         [
             numberCodeLabel,
-            phoneTextField
+            phoneContainer
         ]
     }
     
     lazy var phoneContainerStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackPhoneSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = .fill
+        stackView.alignment = .fill
         stackView.axis = .horizontal
         stackView.spacing = 9
         return stackView
@@ -211,8 +215,8 @@ final class AuthViewImp: UIView, AuthView {
     func displayLoading(enable: Bool) {
         
         if !enable {
-            phoneTextField.isUserInteractionEnabled = true
-            phoneTextField.textField.isUserInteractionEnabled = true
+            phoneContainer.isUserInteractionEnabled = true
+            //            phoneTextField.textField.isUserInteractionEnabled = true
             loginButton.isUserInteractionEnabled = true
             UIView.animate(withDuration: 0.5) {
                 self.loadingImageView.alpha = 0
@@ -228,10 +232,10 @@ final class AuthViewImp: UIView, AuthView {
             self.loadingImageView.alpha = 1
         }
         
-        phoneTextField.isUserInteractionEnabled = false
-        phoneTextField.textField.isUserInteractionEnabled = false
+        phoneContainer.isUserInteractionEnabled = false
+        //        phoneTextField.textField.isUserInteractionEnabled = false
         loginButton.isUserInteractionEnabled = false
-
+        
         
         UIView.animateKeyframes(withDuration: 1, delay: 0, options: [.repeat], animations: {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
@@ -253,13 +257,9 @@ final class AuthViewImp: UIView, AuthView {
     }
     
     @objc func didVerification() {
-        self.onVerificationAction?(phoneTextField.textField.text)
+       //MARK: Действие, сообщаемое котроллером
+       self.onVerificationAction?()
     }
-    
-    func updateStatus(error: String, animated: Bool) {
-        phoneTextField.update(status: .error(message: error), animated: animated)
-    }
-    
 }
 
 extension AuthViewImp: KeybordableView {
@@ -278,4 +278,44 @@ extension AuthViewImp: KeybordableView {
         
         layoutIfNeeded()
     }
+}
+
+extension AuthViewImp: ContainerView {
+    
+    enum ContainerID {
+        case phone
+    }
+    
+    func addSubview(view: UIView, by id: AuthViewImp.ContainerID) {
+        let container = container(by: id)
+        
+        container.addSubview(view)
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate(
+            [
+                view.topAnchor.constraint(equalTo: container.topAnchor),
+                view.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+                view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+                view.trailingAnchor.constraint(equalTo: container.trailingAnchor)
+            ]
+        )
+    }
+    
+    func removeSubview(view: UIView, by id: AuthViewImp.ContainerID) {
+        let container = container(by: id)
+        container.subviews.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+    
+    private func container(by id: AuthViewImp.ContainerID) -> UIView {
+        switch id {
+        case .phone:
+            return phoneContainer
+        }
+    }
+    
+    
 }
