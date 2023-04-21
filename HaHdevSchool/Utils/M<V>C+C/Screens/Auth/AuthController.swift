@@ -7,7 +7,7 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
         var phone: String?
     }
     
-    private var inputForm = InputForm(phone: "")
+    var inputForm = InputForm(phone: "")
     
     var onVerification: ((_  phone: String?, _ completion: @escaping Completion) -> Void)?
     
@@ -29,8 +29,9 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
         
         navigationController?.navigationBar.tintColor = .black
         
-        rootView.onVerificationAction = { [weak self] phone in
-            self?.verify(phone: phone)
+        rootView.onVerificationAction = { [weak self] in
+            //MARK: Действие, сообщаемое координатором
+            self?.verify(phone: self?.inputForm.phone)
         }
     }
     
@@ -50,21 +51,22 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
 // MARK: Verification logic
 private extension AuthController {
     
-    func validate(text: String?) -> String? {
+    func validate(text: String?) -> Bool {
         guard let text = text, !text.isEmpty else {
-            return "Заполните поле"
+            return false
         }
         
         guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
-            return "Неверный формат номера"
+            return false
         }
         
-        return nil
+        return true
     }
     
+    //MARK: NEEDS CHANGE
     func verify(phone: String?) {
-        if let error = validate(text: phone) {
-            rootView.updateStatus(error: error, animated: true)
+        
+        if !validate(text: phone) {
             return
         }
         

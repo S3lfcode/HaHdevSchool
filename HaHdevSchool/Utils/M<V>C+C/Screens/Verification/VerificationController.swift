@@ -47,7 +47,7 @@ final class VerificationController<View: VerificationView>: BaseViewController<V
         )
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         NotificationCenter.default.removeObserver(
@@ -62,7 +62,7 @@ final class VerificationController<View: VerificationView>: BaseViewController<V
         )
     }
     
-    // MARK: Logic
+    // MARK: Timer logic
     
     @objc func applicationDidEnterBackground(_ notification: NotificationCenter) {
         appDidEnterBackgroundDate = Date()
@@ -85,7 +85,7 @@ final class VerificationController<View: VerificationView>: BaseViewController<V
             return
         }
         
-        rootView.updateState(state: .seconds(num: seconds))
+        rootView.updateState(state: .timer(num: seconds))
         
     }
 }
