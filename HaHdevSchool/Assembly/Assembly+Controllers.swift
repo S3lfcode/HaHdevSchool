@@ -1,14 +1,20 @@
 import Foundation
 import UIKit
 
+//MARK: Navigations
+extension Assembly {
+    
+    var navigationController: UINavigationController {
+        .init()
+    }
+    
+}
+
+//MARK: Screens
 extension Assembly {
     
     var authProvider: AuthProvider {
         AuthProviderImp()
-    }
-    
-    var navigationController: UINavigationController {
-        UINavigationController()
     }
     
     func authController() -> AuthController<AuthViewImp> {
@@ -19,7 +25,17 @@ extension Assembly {
         .init(phone: phone, seconds: seconds)
     }
     
+    func catalogController() -> CatalogController<CatalogViewImp> {
+        .init()
+    }
+    
+}
+
+//MARK: Components
+extension Assembly {
+    
     func phoneTextFieldController() -> PhoneTextFieldController<PhoneTextFieldViewImp> {
         .init()
     }
+    
 }

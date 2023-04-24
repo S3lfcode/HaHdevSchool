@@ -1,6 +1,6 @@
 import UIKit
 
-final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Any> {
+final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void> {
     
     struct Context {
         let phone: String
@@ -19,12 +19,20 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Any> 
     override func make() -> UIViewController? {
         let controller = assembly.authController()
         
+        //MARK: TestCatalog-----
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+1){
+            let catalogCoordinator = self.assembly.catalogCoordinator()
+            self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
+        }
+        
         //----------
         let phoneCoordinator = assembly.phoneTextFieldCoordinator(
             context: .init(
                 action: {
                     [weak controller] phone, update in
                     controller?.inputForm.phone = phone
+                    update()
                 }
             )
         )
@@ -34,6 +42,7 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Any> 
             on: controller,
             containerId: .phone
         )
+        //MARK: Test removeContent function
         //        DispatchQueue.main.asyncAfter(deadline: .now()+4){
         //            self.removeContent(coordinator: phoneCoordinator,
         //                          on: controller,
@@ -66,6 +75,7 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Any> 
             self.start(coordinator: verificationCoordinator, on: self.root, animated: true)
         }
         
+        //MARK: Test backTo function -----
         ///////////////
         //        let coordinator = self.assembly.verificationCoordinator(
         //            context: .init(

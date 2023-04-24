@@ -26,9 +26,7 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.navigationBar.tintColor = .black
-        
+
         rootView.onVerificationAction = { [weak self] in
             //MARK: Действие, сообщаемое координатором
             self?.verify(phone: self?.inputForm.phone)
