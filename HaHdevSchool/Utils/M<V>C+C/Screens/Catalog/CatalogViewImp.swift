@@ -182,8 +182,8 @@ extension CatalogViewImp {
         )
         settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
         navItem.rightBarButtonItem = settingsButton
-        
-        navItem.titleView = UIImageView(image: UIImage(named: "Catalog/TestSearch"))
+    
+        navItem.titleView = MaterialSearchView.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width, height: 36)))
     }
     
 }

@@ -47,7 +47,6 @@
 		845F3A6729E5E74A0085F892 /* KeyboardableViewInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */; };
 		845F3A6D29E6749C0085F892 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F3A6C29E6749C0085F892 /* VerificationView.swift */; };
 		8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */; };
-		848EB46329C217BD0039D48D /* AuthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848EB46229C217BD0039D48D /* AuthTextField.swift */; };
 		849158B42986E24000368BAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B32986E24000368BAE /* AppDelegate.swift */; };
 		849158B62986E24000368BAE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849158B52986E24000368BAE /* SceneDelegate.swift */; };
 		849158BD2986E24100368BAE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 849158BC2986E24100368BAE /* Assets.xcassets */; };
@@ -61,6 +60,7 @@
 		C313F1DB29F2AEF600EEA0E6 /* PhoneTextFieldViewImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313F1DA29F2AEF600EEA0E6 /* PhoneTextFieldViewImp.swift */; };
 		C313F1DD29F2AF0500EEA0E6 /* PhoneTextFieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313F1DC29F2AF0500EEA0E6 /* PhoneTextFieldController.swift */; };
 		C313F1DF29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313F1DE29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift */; };
+		C34A40D029F92C8800E5895D /* MaterialSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */; };
 		C368DBEB29F15D3800C4DE31 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C368DBEA29F15D3800C4DE31 /* Coordinator.swift */; };
 		C386E86829F51FA1001D9FCF /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386E86729F51FA1001D9FCF /* ProductCell.swift */; };
 		C386E86B29F51FCE001D9FCF /* CatalogCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386E86A29F51FCE001D9FCF /* CatalogCoordinator.swift */; };
@@ -111,7 +111,6 @@
 		845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardableViewInput.swift; sourceTree = "<group>"; };
 		845F3A6C29E6749C0085F892 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		8479AF2729A0BC4C001EED09 /* Assembly+Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+Coding.swift"; sourceTree = "<group>"; };
-		848EB46229C217BD0039D48D /* AuthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTextField.swift; sourceTree = "<group>"; };
 		849158B02986E24000368BAE /* HaHdevSchool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HaHdevSchool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		849158B32986E24000368BAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		849158B52986E24000368BAE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +126,7 @@
 		C313F1DA29F2AEF600EEA0E6 /* PhoneTextFieldViewImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldViewImp.swift; sourceTree = "<group>"; };
 		C313F1DC29F2AF0500EEA0E6 /* PhoneTextFieldController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldController.swift; sourceTree = "<group>"; };
 		C313F1DE29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldCoordinator.swift; sourceTree = "<group>"; };
+		C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialSearchView.swift; sourceTree = "<group>"; };
 		C368DBEA29F15D3800C4DE31 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		C386E86729F51FA1001D9FCF /* ProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
 		C386E86A29F51FCE001D9FCF /* CatalogCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCoordinator.swift; sourceTree = "<group>"; };
@@ -351,7 +351,6 @@
 				C313F1D729F2AEB200EEA0E6 /* PhoneTextField */,
 				845F3A5F29DDB09A0085F892 /* VerificationTextField.swift */,
 				8412543129CD6B5C00664879 /* AuthSocialMediaButton.swift */,
-				848EB46229C217BD0039D48D /* AuthTextField.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -372,6 +371,7 @@
 			isa = PBXGroup;
 			children = (
 				C386E86729F51FA1001D9FCF /* ProductCell.swift */,
+				C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -484,7 +484,6 @@
 				8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */,
 				845F3A4729D828970085F892 /* AuthViewImp.swift in Sources */,
 				C368DBEB29F15D3800C4DE31 /* Coordinator.swift in Sources */,
-				848EB46329C217BD0039D48D /* AuthTextField.swift in Sources */,
 				8402ED112992DB6B0099FBB7 /* ResponseBody.swift in Sources */,
 				845F3A4529D828420085F892 /* Assembly+Controllers.swift in Sources */,
 				C313F1DF29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift in Sources */,
@@ -500,6 +499,7 @@
 				8458113B29AC747000870870 /* City.swift in Sources */,
 				845F3A3C29D8237A0085F892 /* AuthController.swift in Sources */,
 				845F3A6729E5E74A0085F892 /* KeyboardableViewInput.swift in Sources */,
+				C34A40D029F92C8800E5895D /* MaterialSearchView.swift in Sources */,
 				C313F1D929F2AEE400EEA0E6 /* PhoneTextFieldView.swift in Sources */,
 				8458110529A2295300870870 /* ProfileResponseData.swift in Sources */,
 				8458110E29A3415E00870870 /* String+Formatter.swift in Sources */,
