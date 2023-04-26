@@ -5,21 +5,11 @@ final class CatalogController<View: CatalogView>: BaseViewController<View> {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureNavController()
+        rootView.configureNavController(navItem: navigationItem)
+        rootView.onBack = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
     }
     
-    private func configureNavController() {
-        let backButton = UIBarButtonItem(
-            image: UIImage(named: "Auth/backButton"),
-            style: .done,
-            target: self,
-            action: #selector(popVC(sender:)))
-        backButton.tintColor = UIColor(named: "Colors/Grayscale/black")
-        navigationItem.leftBarButtonItem = backButton
-    }
-    
-    @objc
-    func popVC(sender: UIBarButtonItem) {
-       navigationController?.popViewController(animated: true)
-    }
+ 
 }

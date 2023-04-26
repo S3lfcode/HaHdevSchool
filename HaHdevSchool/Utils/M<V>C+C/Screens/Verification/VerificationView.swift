@@ -7,4 +7,7 @@ enum State {
 
 protocol VerificationView: UIView{
     func updateState(state: State)
+    func configureNavController(navItem: UINavigationItem)
+    
+    var onBack: (() -> Void)? { get set }
 }

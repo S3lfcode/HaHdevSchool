@@ -9,7 +9,7 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
     }
     
     struct PhoneContext {
-        let action: (_ phone: String, _ completion: @escaping () -> Void) -> Void
+        let getNumber: ((_ phone: String) -> Void)?
     }
     
     override init(assembly: Assembly) {
@@ -27,12 +27,12 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         }
         
         //----------
+        
         let phoneCoordinator = assembly.phoneTextFieldCoordinator(
             context: .init(
-                action: {
-                    [weak controller] phone, update in
+                getNumber: {
+                    [weak controller] phone in
                     controller?.inputForm.phone = phone
-                    update()
                 }
             )
         )
@@ -42,7 +42,9 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
             on: controller,
             containerId: .phone
         )
+        
         //MARK: Test removeContent function
+        
         //        DispatchQueue.main.asyncAfter(deadline: .now()+4){
         //            self.removeContent(coordinator: phoneCoordinator,
         //                          on: controller,
@@ -76,7 +78,7 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         }
         
         //MARK: Test backTo function -----
-        ///////////////
+        
         //        let coordinator = self.assembly.verificationCoordinator(
         //            context: .init(
         //                phone: "323432",
@@ -94,7 +96,8 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         //        DispatchQueue.main.asyncAfter(deadline: .now()+4) {
         //            self.backTo(coordinator: self, animated: true)
         //        }
-        ///////////////
+        
+        //--------
         
         return controller
     }

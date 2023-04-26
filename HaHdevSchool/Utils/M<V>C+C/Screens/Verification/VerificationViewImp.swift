@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 
 final class VerificationViewImp: UIView, VerificationView {
+    var onBack: (() -> Void)?
     
     var groundToken: Any?
     var appDidEnterBackgroundDate: Date?
@@ -148,4 +149,27 @@ final class VerificationViewImp: UIView, VerificationView {
         button.isHidden = true
         return button
     }()
+    
+    @objc func toBack(sender: UIBarButtonItem) {
+        onBack?()
+    }
+}
+
+//MARK: Configuration navigation controller
+
+extension VerificationViewImp {
+    
+    func configureNavController(navItem: UINavigationItem) {
+        
+        let backButton = UIBarButtonItem(
+            image: UIImage(named: "Auth/backButton"),
+            style: .done,
+            target: self,
+            action: #selector(toBack(sender:))
+        )
+        backButton.tintColor = UIColor(named: "Colors/Grayscale/black")
+        navItem.leftBarButtonItem = backButton
+        
+    }
+    
 }

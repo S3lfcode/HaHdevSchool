@@ -1,9 +1,9 @@
 import Foundation
 
-final class PhoneTextFieldController <View: PhoneTextFieldViewImp>: BaseViewController<View> {
-    var phoneSearch: ((_ phone: String, _ completion: @escaping () -> Void) -> Void)?
+final class PhoneTextFieldController <View: PhoneTextFieldView>: BaseViewController<View> {
+    var phoneNum: ((_ phone: String) -> Void)?
     
     override func viewDidLoad() {
-        rootView.phoneSearch = phoneSearch
+        rootView.currentNumber = phoneNum
     }
 }

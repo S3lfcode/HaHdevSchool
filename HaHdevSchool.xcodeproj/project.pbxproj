@@ -348,10 +348,10 @@
 		C386E86529F512AE001D9FCF /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C313F1D729F2AEB200EEA0E6 /* PhoneTextField */,
 				845F3A5F29DDB09A0085F892 /* VerificationTextField.swift */,
 				8412543129CD6B5C00664879 /* AuthSocialMediaButton.swift */,
 				848EB46229C217BD0039D48D /* AuthTextField.swift */,
-				C313F1D729F2AEB200EEA0E6 /* PhoneTextField */,
 			);
 			path = Components;
 			sourceTree = "<group>";

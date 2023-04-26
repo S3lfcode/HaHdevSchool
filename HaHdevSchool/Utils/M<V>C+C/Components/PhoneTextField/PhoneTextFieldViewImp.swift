@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 
 class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
-    
-    var phoneSearch: ((_ phone: String, _ completion: @escaping () -> Void) -> Void)?
+     
+    var currentNumber: ((String) -> Void)?
     
     //MARK: States
     enum Status {
@@ -30,6 +30,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
         layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
         
         addTarget(self, action: #selector(didEditing), for: .touchUpInside)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -191,7 +192,16 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        update(status: .default, animated: true)
+        guard let text = textField.text, !text.isEmpty else {
+            update(status: .error(message: "Поле не может быть пустым"), animated: true)
+            return
+        }
+        
+        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
+            update(status: .error(message: "Неверный формат номера"), animated: true)
+            return
+        }
+        
     }
     
     private func phoneFormatter(mask: String, number: String) -> String {
@@ -207,18 +217,6 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
             }
         }
         return result
-    }
-    
-    func validate(text: String) -> String? {
-        guard !text.isEmpty else {
-            return "Заполните поле"
-        }
-        
-        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
-            return "Неверный формат номера"
-        }
-        
-        return nil
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -237,14 +235,6 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
             if !char.isNumber {
                 update(status: .error(message: "Можно вводить только цифры"), animated: true)
                 textField.text = newString
-                phoneSearch?(newString){ [weak self] in
-                    guard let self = self,
-                          let error = self.validate(text: newString)
-                    else {
-                        return
-                    }
-                    self.update(status: .error(message: error))
-                }
                 return false
             }
             update(status: .active, animated: true)
@@ -257,7 +247,7 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         update(status: .active, animated: true)
         
         textField.text = newText
-        phoneSearch?(newText) {}
+        currentNumber?(newString)
         
         if textIsEditing == true && newText.isEmpty {
             self.textIsEditing = false

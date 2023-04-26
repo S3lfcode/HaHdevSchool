@@ -28,7 +28,7 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
         super.viewDidLoad()
 
         rootView.onVerificationAction = { [weak self] in
-            //MARK: Действие, сообщаемое координатором
+            self?.rootView.endEditing(true)
             self?.verify(phone: self?.inputForm.phone)
         }
     }
@@ -50,18 +50,17 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
 private extension AuthController {
     
     func validate(text: String?) -> Bool {
-        guard let text = text, !text.isEmpty else {
+        guard
+            let text = text,
+            !text.isEmpty,
+            text.filter({ $0 != " " && $0.isNumber }).count == 10
+        else {
             return false
         }
-        
-        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
-            return false
-        }
-        
+
         return true
     }
     
-    //MARK: NEEDS CHANGE
     func verify(phone: String?) {
         
         if !validate(text: phone) {

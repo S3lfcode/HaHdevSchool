@@ -2,6 +2,10 @@ import UIKit
 
 final class CatalogViewImp: UIView, CatalogView {
     
+    var onBack: (() -> Void)?
+    
+    var onSettings: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -17,7 +21,6 @@ final class CatalogViewImp: UIView, CatalogView {
     //MARK: Setup subviews & constraints
     
     private func setup() {
-        addSubview(searchStackView)
         addSubview(titleStackView)
         addSubview(listFilterTitleButton)
         addSubview(displaySettingsStackView)
@@ -25,11 +28,7 @@ final class CatalogViewImp: UIView, CatalogView {
         
         NSLayoutConstraint.activate(
             [
-                searchStackView.topAnchor.constraint(equalTo: topAnchor, constant: 57),
-                searchStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 54),
-                searchStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-                
-                titleStackView.topAnchor.constraint(equalTo: searchStackView.bottomAnchor),
+                titleStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                 titleStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
                 titleStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
                 
@@ -46,42 +45,10 @@ final class CatalogViewImp: UIView, CatalogView {
             ]
         )
     }
-    
+
     enum Constants {
         static let padding: CGFloat = 16
     }
-    
-    //MARK: Search block
-    
-    lazy var materialSearch: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "Catalog/TestSearch")
-        return imageView
-    }()
-    
-    lazy var advancedFilterButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Catalog/AdvancedFilter"), for: .normal)
-        button.backgroundColor = UIColor(named: "Colors/white")
-        return button
-    }()
-    
-    private var searchContainer: [UIView] {
-        [
-            materialSearch,
-            advancedFilterButton
-        ]
-    }
-    
-    lazy var searchStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: searchContainer)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.axis = .horizontal
-        stackView.spacing = 16
-        return stackView
-    }()
     
     //MARK: Product title block
     
@@ -182,9 +149,49 @@ final class CatalogViewImp: UIView, CatalogView {
         collectionView.dataSource = self
         return collectionView
     }()
+    
+    @objc func toBack(sender: UIBarButtonItem) {
+        onBack?()
+    }
+    
+    @objc func toSettings(sender: UIBarButtonItem) {
+        onSettings?()
+    }
 }
 
+//MARK: Configuration navigation controller
+
+extension CatalogViewImp {
+    
+    func configureNavController(navItem: UINavigationItem) {
+        
+        let backButton = UIBarButtonItem(
+            image: UIImage(named: "Auth/backButton"),
+            style: .done,
+            target: self,
+            action: #selector(toBack(sender:))
+        )
+        backButton.tintColor = UIColor(named: "Colors/Grayscale/black")
+        navItem.leftBarButtonItem = backButton
+        
+        let settingsButton = UIBarButtonItem(
+            image: UIImage(named: "Catalog/AdvancedFilter"),
+            style: .done,
+            target: self,
+            action: #selector(toSettings(sender:))
+        )
+        settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
+        navItem.rightBarButtonItem = settingsButton
+        
+        navItem.titleView = UIImageView(image: UIImage(named: "Catalog/TestSearch"))
+    }
+    
+}
+
+//MARK: Calalog view settings
+
 extension CatalogViewImp: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         160
     }
@@ -194,6 +201,5 @@ extension CatalogViewImp: UICollectionViewDataSource {
         
         return cell
     }
-    
     
 }

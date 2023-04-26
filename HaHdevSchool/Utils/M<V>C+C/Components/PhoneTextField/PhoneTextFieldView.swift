@@ -1,5 +1,5 @@
-import Foundation
+import UIKit
 
-protocol PhoneTextFieldView {
-    var phoneSearch: ((_ phone: String, _ completion: @escaping () -> Void) -> Void)? { get set }
+protocol PhoneTextFieldView: UIView {
+    var currentNumber: ((_ phone: String) -> Void)? { get set }
 }
