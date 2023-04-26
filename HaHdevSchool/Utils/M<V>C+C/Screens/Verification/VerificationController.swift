@@ -25,6 +25,11 @@ final class VerificationController<View: VerificationView>: BaseViewController<V
     // MARK: Lifecycle
     
     override func viewDidLoad() {
+        rootView.configureNavController(navItem: navigationItem)
+        rootView.onBack = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        
         rootView.updateState(state: .info(text: phone))
         
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(onTimerFires), userInfo: nil, repeats: true)

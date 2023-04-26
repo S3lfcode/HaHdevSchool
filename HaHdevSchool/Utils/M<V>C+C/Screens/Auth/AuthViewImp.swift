@@ -107,7 +107,7 @@ final class AuthViewImp: UIView, AuthView {
         return label
     }()
     
-    //MARK: ContainerView for textfield
+    //MARK: ContainerView for phone
     lazy var phoneContainer: UIControl = {
         let view = UIControl()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +216,6 @@ final class AuthViewImp: UIView, AuthView {
         
         if !enable {
             phoneContainer.isUserInteractionEnabled = true
-            //            phoneTextField.textField.isUserInteractionEnabled = true
             loginButton.isUserInteractionEnabled = true
             UIView.animate(withDuration: 0.5) {
                 self.loadingImageView.alpha = 0
@@ -233,7 +232,6 @@ final class AuthViewImp: UIView, AuthView {
         }
         
         phoneContainer.isUserInteractionEnabled = false
-        //        phoneTextField.textField.isUserInteractionEnabled = false
         loginButton.isUserInteractionEnabled = false
         
         
@@ -257,7 +255,6 @@ final class AuthViewImp: UIView, AuthView {
     }
     
     @objc func didVerification() {
-       //MARK: Действие, сообщаемое котроллером
        self.onVerificationAction?()
     }
 }

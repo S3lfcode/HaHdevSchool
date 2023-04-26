@@ -15,7 +15,7 @@ final class PhoneTextFieldCoordinator: Coordinator<Assembly, UINavigationControl
         
         let controller = assembly.phoneTextFieldController()
         
-        controller.phoneSearch = context.action
+        controller.phoneNum = context.getNumber
         
         return controller
     }

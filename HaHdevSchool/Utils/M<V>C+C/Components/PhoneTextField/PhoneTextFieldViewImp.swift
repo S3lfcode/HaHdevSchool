@@ -1,14 +1,22 @@
 import Foundation
 import UIKit
 
-class AuthTextField: UIControl {
+class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
+     
+    var currentNumber: ((String) -> Void)?
     
+    //MARK: States
     enum Status {
         case `default`
         case active
         case error(message: String)
     }
     
+    private(set) var status: Status = .default
+    
+    var textIsEditing: Bool = false
+    
+    //MARK: Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -16,19 +24,20 @@ class AuthTextField: UIControl {
         addSubview(placeholderLabel)
         addSubview(errorLabel)
         
-        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = UIColor(named: "Colors/Phone/background")
         layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
         
         addTarget(self, action: #selector(didEditing), for: .touchUpInside)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: Lifecycle
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -41,6 +50,10 @@ class AuthTextField: UIControl {
         }
     }
     
+    override var intrinsicContentSize: CGSize {
+        .init(width: UIView.noIntrinsicMetric, height: errorLabel.frame.maxY)
+    }
+    
     private enum Constants {
         static let textFieldHeight: CGFloat = 50
     }
@@ -49,12 +62,40 @@ class AuthTextField: UIControl {
         textField.becomeFirstResponder()
     }
     
+    //MARK: View hierarchy
+    lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.backgroundColor = UIColor(named: "Colors/Phone/background")
+        textField.font = UIFont(name: "GothamSSm-Book", size: 14)
+        textField.delegate = self
+        return textField
+    }()
+    
+    lazy var placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "Colors/Phone/placeholder")
+        label.text = "Номер телефона"
+        label.font = UIFont(name: "GothamSSm-Book", size: 14)
+        return label
+    }()
+    
+    lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont(name: "GothamSSm-Book", size: 14)
+        label.textColor = .red
+        return label
+    }()
+}
+
+//MARK: Frame initialization
+extension PhoneTextFieldViewImp {
     private func textFieldFrame() -> CGRect {
         if textIsEditing {
             return .init(
                 x: 16,
                 y: 27,
-                width: bounds.width-16,
+                width: bounds.width-32,
                 height: bounds.height-36
             )
         }
@@ -62,7 +103,7 @@ class AuthTextField: UIControl {
         return .init(
             x: 16,
             y: 0,
-            width: bounds.width-16,
+            width: bounds.width-32,
             height: bounds.height)
     }
     
@@ -74,7 +115,7 @@ class AuthTextField: UIControl {
             return .init(
                 x: 16,
                 y: 9,
-                width: bounds.width,
+                width: bounds.width-32,
                 height: size.height
             )
         }
@@ -82,7 +123,7 @@ class AuthTextField: UIControl {
         return .init(
             x: 16,
             y: bounds.height/3,
-            width: bounds.width,
+            width: bounds.width-32,
             height: size.height
         )
         
@@ -98,9 +139,10 @@ class AuthTextField: UIControl {
             height: size.height
         )
     }
-    
-    var textIsEditing: Bool = false
-    private(set) var status: Status = .default
+}
+
+//MARK: Update state function
+extension PhoneTextFieldViewImp {
     
     func update(status: Status, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
@@ -129,36 +171,10 @@ class AuthTextField: UIControl {
         setNeedsLayout()
     }
     
-    override var intrinsicContentSize: CGSize {
-        .init(width: UIView.noIntrinsicMetric, height: errorLabel.frame.maxY)
-    }
-    
-    lazy var textField: UITextField = {
-        let textField = UITextField()
-        textField.backgroundColor = UIColor(named: "Colors/Phone/background")
-        textField.font = UIFont(name: "GothamSSm-Book", size: 14)
-        textField.delegate = self
-        return textField
-    }()
-    
-    lazy var placeholderLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(named: "Colors/Phone/placeholder")
-        label.text = "Номер телефона"
-        label.font = UIFont(name: "GothamSSm-Book", size: 14)
-        return label
-    }()
-    
-    lazy var errorLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = UIFont(name: "GothamSSm-Book", size: 14)
-        label.textColor = .red
-        return label
-    }()    
 }
 
-extension AuthTextField: UITextFieldDelegate {
+//MARK: TextField interactive logic
+extension PhoneTextFieldViewImp: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -176,7 +192,16 @@ extension AuthTextField: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        update(status: .default, animated: true)
+        guard let text = textField.text, !text.isEmpty else {
+            update(status: .error(message: "Поле не может быть пустым"), animated: true)
+            return
+        }
+        
+        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
+            update(status: .error(message: "Неверный формат номера"), animated: true)
+            return
+        }
+        
     }
     
     private func phoneFormatter(mask: String, number: String) -> String {
@@ -222,6 +247,7 @@ extension AuthTextField: UITextFieldDelegate {
         update(status: .active, animated: true)
         
         textField.text = newText
+        currentNumber?(newString)
         
         if textIsEditing == true && newText.isEmpty {
             self.textIsEditing = false

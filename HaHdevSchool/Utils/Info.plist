@@ -5,6 +5,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>GothamSSm-Book.ttf</string>
+		<string>GothamSSm-Bold.otf</string>
 		<string>GothamSSm-Medium.ttf</string>
 		<string>GothamSSm-BlackItalic.ttf</string>
 	</array>

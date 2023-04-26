@@ -1,14 +1,15 @@
 import Foundation
 import UIKit
 
+//MARK: Screens
 extension Assembly {
         
     func appCoordinator() -> AppCoordinator {
-        AppCoordinator(assembly: self)
+        .init(assembly: self)
     }
     
     func authCoordinator() -> AuthCoordinator {
-        AuthCoordinator(assembly: self)
+        .init(assembly: self)
     }
     
     func verificationCoordinator(
@@ -16,10 +17,19 @@ extension Assembly {
     ) -> VerificationCoordinator {
         .init(assembly: self, context: context)
     }
+
+    func catalogCoordinator() -> CatalogCoordinator {
+        .init(assembly: self)
+    }
+}
+
+//MARK: Components
+extension Assembly {
     
     func phoneTextFieldCoordinator(
         context: AuthCoordinator.PhoneContext
     ) -> PhoneTextFieldCoordinator {
         .init(assembly: self, context: context)
     }
+    
 }
