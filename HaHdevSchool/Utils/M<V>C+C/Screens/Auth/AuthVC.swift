@@ -1,6 +1,6 @@
 import UIKit
 
-final class AuthController<View: AuthView>: BaseViewController<View> {
+final class AuthVC<View: AuthView>: BaseViewController<View> {
     typealias Completion = () -> Void
     
     struct InputForm {
@@ -47,7 +47,7 @@ final class AuthController<View: AuthView>: BaseViewController<View> {
 }
 
 // MARK: Verification logic
-private extension AuthController {
+private extension AuthVC {
     
     func validate(text: String?) -> Bool {
         guard

@@ -11,13 +11,15 @@ final class ProductCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     //MARK: Setup subviews & constraints
     
     private func setup() {
         contentView.addSubview(placeholderImageView)
         contentView.addSubview(imageButtonStackView)
         contentView.addSubview(descProductStackView)
+        contentView.addSubview(cartImageView)
+        contentView.addSubview(priceLabel)
         
         NSLayoutConstraint.activate(
             [
@@ -31,6 +33,12 @@ final class ProductCell: UICollectionViewCell {
                 descProductStackView.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: 12),
                 descProductStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 descProductStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                
+                cartImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -9),
+                cartImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                
+                priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ]
         )
     }
@@ -105,7 +113,7 @@ final class ProductCell: UICollectionViewCell {
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.22
         label.attributedText = NSMutableAttributedString(
-            string: "Черная толстовка с длиным рукавом и какими-нибудь ещё приколами",
+            string: "Без названия",
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
         label.lineBreakMode = .byTruncatingTail
@@ -113,32 +121,34 @@ final class ProductCell: UICollectionViewCell {
         return label
     }()
     
-    private func generationRateContainer(rate: Int) -> [UIView] {
-        var rateContainer: [UIView] = []
-        for index in 0..<5 {
+    private func generationRateContainer() -> [UIView] {
+        var container: [UIView] = []
+        for _ in 0..<5 {
             let imageView = UIImageView(image: UIImage(named: "Catalog/Rate"))
             imageView.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
-            if index<rate {
-                imageView.tintColor = UIColor(named: "Colors/Primary/blue")
-            }
-            rateContainer.append(imageView)
+            container.append(imageView)
         }
-        
-        rateNumLabel.text = " \(String(Double(rate)))"
-        rateContainer.append(rateNumLabel)
-        
-        return rateContainer
+
+        return container
+    }
+    
+    private func fillRateStars(rating: Int) {
+        for index in 0..<rating {
+            rateStackView.arrangedSubviews[index].tintColor = UIColor(named: "Colors/Primary/blue")
+        }
     }
     
     lazy var rateNumLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         label.font = UIFont(name: "GothamSSm-Book", size: 12)
+        label.text = "0.0"
         return label
     }()
     
     lazy var rateStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: generationRateContainer(rate: 4))
+        let stackView = UIStackView(arrangedSubviews: generationRateContainer())
+        stackView.addArrangedSubview(rateNumLabel)
         stackView.axis = .horizontal
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
@@ -148,41 +158,17 @@ final class ProductCell: UICollectionViewCell {
     
     lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.text = "999 999 ₽"
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor(named: "Colors/Grayscale/black")
-        label.font = UIFont(name: "GothamSSm-Bold", size: 15)
+        label.font = .systemFont(ofSize: 15, weight: .init(700))
+        label.text = "0 ₽"
         return label
-    }()
-    
-    lazy var cartImageView: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Catalog/ShoppingCart"), for: .normal)
-        button.contentHorizontalAlignment = .right
-        button.backgroundColor = UIColor(named: "Colors/white")
-        return button
-    }()
-    
-    private var productBuyContainer: [UIView] {
-        [
-            priceLabel,
-            cartImageView,
-        ]
-    }
-    
-    lazy var productBuyStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: productBuyContainer)
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.spacing = 3
-        return stackView
     }()
     
     private var descProductContainer: [UIView] {
         [
             titleLabel,
             rateStackView,
-            productBuyStackView,
         ]
     }
     
@@ -194,6 +180,15 @@ final class ProductCell: UICollectionViewCell {
         stackView.alignment = .leading
         stackView.spacing = 10
         return stackView
+    }()
+    
+    lazy var cartImageView: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "Catalog/ShoppingCart"), for: .normal)
+        button.contentHorizontalAlignment = .right
+        button.backgroundColor = UIColor(named: "Colors/white")
+        return button
     }()
 }
 
@@ -229,5 +224,11 @@ extension ProductCell {
         
         return section
     }
-    
+ 
+    func update(with data: ProductCellData) {
+        titleLabel.text = data.title
+        fillRateStars(rating: data.rating)
+        rateNumLabel.text = " \(String(Double(data.rating)))"
+        priceLabel.text = data.price
+    }
 }
