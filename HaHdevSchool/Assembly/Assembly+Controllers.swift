@@ -17,16 +17,16 @@ extension Assembly {
         AuthProviderImp()
     }
     
-    func authController() -> AuthController<AuthViewImp> {
+    func authController() -> AuthVC<AuthViewImp> {
         .init(authProvider: authProvider)
     }
     
-    func verificationController(phone: String, seconds: Int) -> VerificationController<VerificationViewImp> {
+    func verificationController(phone: String, seconds: Int) -> VerificationVC<VerificationViewImp> {
         .init(phone: phone, seconds: seconds)
     }
     
-    func catalogController() -> CatalogController<CatalogViewImp> {
-        .init()
+    func catalogController() -> CatalogVC<CatalogViewImp> {
+        .init(priceFormatter: priceFormatter)
     }
     
 }
@@ -34,7 +34,7 @@ extension Assembly {
 //MARK: Components
 extension Assembly {
     
-    func phoneTextFieldController() -> PhoneTextFieldController<PhoneTextFieldViewImp> {
+    func phoneTextFieldController() -> PhoneTextFieldVC<PhoneTextFieldViewImp> {
         .init()
     }
     

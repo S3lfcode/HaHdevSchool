@@ -4,8 +4,8 @@ import UIKit
 final class VerificationViewImp: UIView, VerificationView {
     var onBack: (() -> Void)?
     
-    var groundToken: Any?
-    var appDidEnterBackgroundDate: Date?
+    private var groundToken: Any?
+    private var appDidEnterBackgroundDate: Date?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,7 +31,7 @@ final class VerificationViewImp: UIView, VerificationView {
         
     }
     
-    enum Constants {
+    private  enum Constants {
         enum Margin {
             static let horizontal: CGFloat = 30
         }
@@ -48,7 +48,7 @@ final class VerificationViewImp: UIView, VerificationView {
         ]
     }
     
-    lazy var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackViewSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -60,14 +60,14 @@ final class VerificationViewImp: UIView, VerificationView {
         return stackView
     }()
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "ВВЕДИТЕ КОД"
         label.font = UIFont(name: "GothamSSm-BlackItalic", size: 26)
         return label
     }()
     
-    lazy var phoneInfoLabel: UILabel = {
+    private lazy var phoneInfoLabel: UILabel = {
         let label = UILabel()
         label.text = "Мы отправили код на номер\n+7 911 901 9999"
         label.textColor = UIColor(named: "Colors/Grayscale/black")
@@ -76,14 +76,14 @@ final class VerificationViewImp: UIView, VerificationView {
         return label
     }()
     
-    lazy var verificationTextField: VerificationTextField = {
+    private lazy var verificationTextField: VerificationTextField = {
         let textField = VerificationTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.heightAnchor.constraint(equalToConstant: 54).isActive = true
         return textField
     }()
     
-    lazy var resendingTextLabel: UILabel = {
+    private lazy var resendingTextLabel: UILabel = {
         let label = UILabel()
         label.text = "  Получить новый код можно через"
         label.textAlignment = .right
@@ -92,7 +92,7 @@ final class VerificationViewImp: UIView, VerificationView {
         return label
     }()
     
-    lazy var resendingTimerLabel: UILabel = {
+    private lazy var resendingTimerLabel: UILabel = {
         let label = UILabel()
         label.text = " 00:00"
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
@@ -132,14 +132,14 @@ final class VerificationViewImp: UIView, VerificationView {
         ]
     }
     
-    lazy var resendingStackView: UIStackView = {
+    private lazy var resendingStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackResendingSubviews)
         stackView.axis = .horizontal
         stackView.distribution = .fill
         return stackView
     }()
     
-    lazy var resendingButton: UIButton = {
+    private lazy var resendingButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(named: "Colors/white")
         button.setTitle("Отправить код повторно", for: .normal)

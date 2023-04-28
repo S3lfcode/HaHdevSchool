@@ -72,6 +72,7 @@ class MaterialSearchView: UIControl {
             height: 15
         )
     }
+    
     @objc func didEditing() {
         textField.becomeFirstResponder()
     }
@@ -129,6 +130,9 @@ class MaterialSearchView: UIControl {
     
     @objc func clearText() {
         textField.text = ""
+        scanImageButton.isHidden = false
+        searchByPhotoButton.isHidden = false
+        clearButton.isHidden = true
         if !textField.isEditing {
             update(status: .default, animated: true)
         }
@@ -152,15 +156,9 @@ extension MaterialSearchView {
         case .`default`:
             layer.borderColor = UIColor(named: "Colors/Phone/background")?.cgColor
             searchImageView.tintColor = UIColor(named: "Colors/Phone/placeholder")
-            scanImageButton.isHidden = false
-            searchByPhotoButton.isHidden = false
-            clearButton.isHidden = true
         case .active:
             layer.borderColor = UIColor(named: "Colors/Primary/blue")?.cgColor
             searchImageView.tintColor = UIColor(named: "Colors/Primary/blue")
-            scanImageButton.isHidden = true
-            searchByPhotoButton.isHidden = true
-            clearButton.isHidden = false
         }
         setNeedsLayout()
     }
@@ -186,7 +184,20 @@ extension MaterialSearchView: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return false
+        }
+        let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
+        if newString == "" {
+            scanImageButton.isHidden = false
+            searchByPhotoButton.isHidden = false
+            clearButton.isHidden = true
+        } else {
+            scanImageButton.isHidden = true
+            searchByPhotoButton.isHidden = true
+            clearButton.isHidden = false
+        }
         return true
     }
 }

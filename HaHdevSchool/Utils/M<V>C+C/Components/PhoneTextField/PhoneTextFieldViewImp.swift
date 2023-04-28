@@ -14,7 +14,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
     
     private(set) var status: Status = .default
     
-    var textIsEditing: Bool = false
+    private var textIsEditing: Bool = false
     
     //MARK: Initializers
     override init(frame: CGRect) {
@@ -63,7 +63,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
     }
     
     //MARK: View hierarchy
-    lazy var textField: UITextField = {
+    private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = UIColor(named: "Colors/Phone/background")
         textField.font = UIFont(name: "GothamSSm-Book", size: 14)
@@ -71,7 +71,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
         return textField
     }()
     
-    lazy var placeholderLabel: UILabel = {
+    private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "Colors/Phone/placeholder")
         label.text = "Номер телефона"
@@ -79,7 +79,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
         return label
     }()
     
-    lazy var errorLabel: UILabel = {
+    private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont(name: "GothamSSm-Book", size: 14)
@@ -89,7 +89,7 @@ class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
 }
 
 //MARK: Frame initialization
-extension PhoneTextFieldViewImp {
+private extension PhoneTextFieldViewImp {
     private func textFieldFrame() -> CGRect {
         if textIsEditing {
             return .init(
@@ -142,7 +142,7 @@ extension PhoneTextFieldViewImp {
 }
 
 //MARK: Update state function
-extension PhoneTextFieldViewImp {
+private extension PhoneTextFieldViewImp {
     
     func update(status: Status, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
@@ -220,7 +220,9 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let text = textField.text else {return false}
+        guard let text = textField.text else {
+            return false
+        }
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
         if textIsEditing == false && !newString.isEmpty {

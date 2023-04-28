@@ -18,13 +18,13 @@ final class AuthViewImp: UIView, AuthView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupView() {
+    private func setupView() {
         addSubview(logoImageView)
         addSubview(containerView)
         addSubview(socialMediaContainer)
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         
         let containerViewTopAnchorYConstraint = containerView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor)
         self.containerViewTopAnchorYConstraint = containerViewTopAnchorYConstraint
@@ -48,10 +48,10 @@ final class AuthViewImp: UIView, AuthView {
         )
     }
     
-    var containerViewTopAnchorYConstraint: NSLayoutConstraint?
-    var logoImageViewTopAnchorYConstraint: NSLayoutConstraint?
+    private var containerViewTopAnchorYConstraint: NSLayoutConstraint?
+    private var logoImageViewTopAnchorYConstraint: NSLayoutConstraint?
     
-    enum Constants {
+    private enum Constants {
         enum Margin {
             static let horizontal: CGFloat = 30
         }
@@ -66,14 +66,14 @@ final class AuthViewImp: UIView, AuthView {
         ]
     }
     
-    lazy var logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Auth/Logo")
         return imageView
     }()
     
-    lazy var containerView: UIStackView = {
+    private lazy var containerView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackViewSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -83,7 +83,7 @@ final class AuthViewImp: UIView, AuthView {
         return stackView
     }()
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "ВХОД ИЛИ\nРЕГИСТРАЦИЯ"
@@ -93,7 +93,7 @@ final class AuthViewImp: UIView, AuthView {
         return label
     }()
     
-    lazy var numberCodeLabel: UILabel = {
+    private lazy var numberCodeLabel: UILabel = {
         let label = UILabel()
         label.text = "+7"
         label.textAlignment = .center
@@ -108,7 +108,7 @@ final class AuthViewImp: UIView, AuthView {
     }()
     
     //MARK: ContainerView for phone
-    lazy var phoneContainer: UIControl = {
+    private lazy var phoneContainer: UIControl = {
         let view = UIControl()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -121,7 +121,7 @@ final class AuthViewImp: UIView, AuthView {
         ]
     }
     
-    lazy var phoneContainerStackView: UIStackView = {
+    private lazy var phoneContainerStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackPhoneSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
@@ -131,7 +131,7 @@ final class AuthViewImp: UIView, AuthView {
         return stackView
     }()
     
-    lazy var loginButton: UIButton = {
+    private lazy var loginButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "Colors/Primary/blue")
@@ -148,7 +148,7 @@ final class AuthViewImp: UIView, AuthView {
         return button
     }()
     
-    lazy var appleButton: AuthSocialMediaButton = {
+    private  lazy var appleButton: AuthSocialMediaButton = {
         let button = AuthSocialMediaButton()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/apple"),
@@ -157,7 +157,7 @@ final class AuthViewImp: UIView, AuthView {
         return button
     }()
     
-    lazy var vkButton: AuthSocialMediaButton = {
+    private lazy var vkButton: AuthSocialMediaButton = {
         let button = AuthSocialMediaButton()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/VK"),
@@ -166,7 +166,7 @@ final class AuthViewImp: UIView, AuthView {
         return button
     }()
     
-    lazy var odnoklassnikiButton: AuthSocialMediaButton = {
+    private lazy var odnoklassnikiButton: AuthSocialMediaButton = {
         let button = AuthSocialMediaButton()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/Odnoklassniki"),
@@ -175,7 +175,7 @@ final class AuthViewImp: UIView, AuthView {
         return button
     }()
     
-    lazy var facebookButton: AuthSocialMediaButton = {
+    private lazy var facebookButton: AuthSocialMediaButton = {
         let button = AuthSocialMediaButton()
         button.configure(
             image: UIImage(named: "Auth/SocialMedia/Facebook"),
@@ -193,7 +193,7 @@ final class AuthViewImp: UIView, AuthView {
         ]
     }
     
-    lazy var socialMediaContainer: UIStackView = {
+    private lazy var socialMediaContainer: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: stackSocialMediaSubviews)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.widthAnchor.constraint(equalToConstant: 220).isActive = true
@@ -202,7 +202,7 @@ final class AuthViewImp: UIView, AuthView {
         return stackView
     }()
     
-    lazy var loadingImageView: UIImageView = {
+    private lazy var loadingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Auth/Loading")

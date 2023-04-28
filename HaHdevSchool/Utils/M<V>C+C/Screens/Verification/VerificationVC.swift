@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-final class VerificationController<View: VerificationView>: BaseViewController<View> {
+final class VerificationVC<View: VerificationView>: BaseViewController<View> {
     
     init(phone: String, seconds: Int) {
         self.phone = phone
