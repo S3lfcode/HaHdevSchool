@@ -208,27 +208,13 @@
 			path = BootstrapDataProvider;
 			sourceTree = "<group>";
 		};
-		845F3A3929D822F30085F892 /* M<V>C+C */ = {
-			isa = PBXGroup;
-			children = (
-				845F3A6829E672D00085F892 /* Screens */,
-				C386E86529F512AE001D9FCF /* Components */,
-				C368DBEA29F15D3800C4DE31 /* Coordinator.swift */,
-				845F3A6229E5254D0085F892 /* BaseCoordinator.swift */,
-				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
-				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
-				845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */,
-				845F3A3F29D827220085F892 /* AuthProvider.swift */,
-			);
-			path = "M<V>C+C";
-			sourceTree = "<group>";
-		};
 		845F3A6829E672D00085F892 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				C386E86629F51F85001D9FCF /* Catalog */,
+				C386E86529F512AE001D9FCF /* Components */,
 				845F3A6929E672DE0085F892 /* Auth */,
 				845F3A6A29E673280085F892 /* Verification */,
+				C386E86629F51F85001D9FCF /* Catalog */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -240,6 +226,7 @@
 				845F3A4629D828970085F892 /* AuthViewImp.swift */,
 				845F3A3B29D8237A0085F892 /* AuthVC.swift */,
 				845F3A4129D827A20085F892 /* AuthCoordinator.swift */,
+				845F3A3F29D827220085F892 /* AuthProvider.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -259,12 +246,10 @@
 		8479AF2629A0A7BC001EED09 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				845F3A3929D822F30085F892 /* M<V>C+C */,
-				849158B32986E24000368BAE /* AppDelegate.swift */,
-				849158B52986E24000368BAE /* SceneDelegate.swift */,
 				849158BC2986E24100368BAE /* Assets.xcassets */,
 				849158BE2986E24100368BAE /* LaunchScreen.storyboard */,
 				849158C12986E24200368BAE /* Info.plist */,
+				C36541D229FFE31400EAE5A8 /* NotUsed */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -288,16 +273,13 @@
 		849158B22986E24000368BAE /* HaHdevSchool */ = {
 			isa = PBXGroup;
 			children = (
-				8412542C29CCD1BC00664879 /* Font */,
-				8458113329AC733100870870 /* BootstrapDataProvider */,
-				844C1A592997A21D0094F412 /* Homework */,
-				84F4CE4D29896F6700BB5D31 /* Resources */,
-				8402ED052992D8620099FBB7 /* ApiClient */,
-				84A57FE4298AC2B100A8B201 /* DataStorage */,
-				8458110A29A3414000870870 /* Extensions */,
-				84A57FE1298ABCDC00A8B201 /* Entities */,
 				84A57FF0298BB0FE00A8B201 /* Assembly */,
+				845F3A6829E672D00085F892 /* Screens */,
+				C36541D329FFE48E00EAE5A8 /* Base */,
+				8412542C29CCD1BC00664879 /* Font */,
 				8479AF2629A0A7BC001EED09 /* Utils */,
+				849158B32986E24000368BAE /* AppDelegate.swift */,
+				849158B52986E24000368BAE /* SceneDelegate.swift */,
 			);
 			path = HaHdevSchool;
 			sourceTree = "<group>";
@@ -362,6 +344,32 @@
 				C36541D029FFB73700EAE5A8 /* PhoneTextFieldError.swift */,
 			);
 			path = PhoneTextField;
+			sourceTree = "<group>";
+		};
+		C36541D229FFE31400EAE5A8 /* NotUsed */ = {
+			isa = PBXGroup;
+			children = (
+				84A57FE1298ABCDC00A8B201 /* Entities */,
+				8458110A29A3414000870870 /* Extensions */,
+				84A57FE4298AC2B100A8B201 /* DataStorage */,
+				8402ED052992D8620099FBB7 /* ApiClient */,
+				84F4CE4D29896F6700BB5D31 /* Resources */,
+				844C1A592997A21D0094F412 /* Homework */,
+				8458113329AC733100870870 /* BootstrapDataProvider */,
+			);
+			path = NotUsed;
+			sourceTree = "<group>";
+		};
+		C36541D329FFE48E00EAE5A8 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				C368DBEA29F15D3800C4DE31 /* Coordinator.swift */,
+				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
+				845F3A6229E5254D0085F892 /* BaseCoordinator.swift */,
+				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
+				845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		C365FAD129FAA1FC00BE5D78 /* Data */ = {
