@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 
-final class PhoneTextFieldCoordinator: Coordinator<Assembly, UINavigationController, AuthCoordinator.PhoneContext> {
+final class PhoneTextFieldCoordinator: Coordinator<Assembly, UINavigationController, PhoneTextFieldContext> {
     
     
-    override init(assembly: Assembly, context: AuthCoordinator.PhoneContext) {
+    override init(assembly: Assembly, context: PhoneTextFieldContext) {
         super.init(assembly: assembly, context: context)
     }
     
@@ -15,7 +15,9 @@ final class PhoneTextFieldCoordinator: Coordinator<Assembly, UINavigationControl
         
         let controller = assembly.phoneTextFieldController()
         
-        controller.phoneNum = context.getNumber
+        controller.didFieldChanged = context.didFieldChanged
+        
+        context.errorProvider(controller)
         
         return controller
     }

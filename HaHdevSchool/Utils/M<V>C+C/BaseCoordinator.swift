@@ -19,7 +19,7 @@ protocol RootableCoordinator: BaseCoordinator, AnyRootableCoordinator {
     
     var root: Root? { get set }
 }
-//-----
+
 protocol AnyRootableCoordinator {
     var anyRoot: Any? { get }
 }
@@ -29,7 +29,7 @@ extension RootableCoordinator {
         root
     }
 }
-//------
+
 extension BaseCoordinator {
     func start<Coordinate: RootableCoordinator>(
         coordinator: Coordinate?,
@@ -116,6 +116,7 @@ extension BaseCoordinator {
         else {
             return
         }
+        
         controller.willMove(toParent: nil)
         controller.removeFromParent()
         controller.didMove(toParent: nil)

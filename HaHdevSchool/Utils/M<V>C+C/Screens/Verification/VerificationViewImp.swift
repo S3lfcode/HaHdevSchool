@@ -100,7 +100,7 @@ final class VerificationViewImp: UIView, VerificationView {
         return label
     }()
     
-    func updateState(state: State) {
+    func updateState(state: VerificationState) {
         switch state {
         case .info(let text):
             phoneInfoLabel.text = "Мы отправили код на номер\n+7 \(text)"

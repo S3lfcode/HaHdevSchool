@@ -61,6 +61,10 @@
 		C313F1DD29F2AF0500EEA0E6 /* PhoneTextFieldVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313F1DC29F2AF0500EEA0E6 /* PhoneTextFieldVC.swift */; };
 		C313F1DF29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313F1DE29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift */; };
 		C34A40D029F92C8800E5895D /* MaterialSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */; };
+		C36541CB29FE55D200EAE5A8 /* PhoneTextFieldContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CA29FE55D200EAE5A8 /* PhoneTextFieldContext.swift */; };
+		C36541CD29FE564100EAE5A8 /* VerificationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CC29FE564100EAE5A8 /* VerificationContext.swift */; };
+		C36541CF29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CE29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift */; };
+		C36541D129FFB73700EAE5A8 /* PhoneTextFieldError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541D029FFB73700EAE5A8 /* PhoneTextFieldError.swift */; };
 		C365FAD329FAA20B00BE5D78 /* ProductCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C365FAD229FAA20B00BE5D78 /* ProductCellData.swift */; };
 		C365FAD529FAD7E300BE5D78 /* Assembly+Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = C365FAD429FAD7E300BE5D78 /* Assembly+Formatters.swift */; };
 		C368DBEB29F15D3800C4DE31 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C368DBEA29F15D3800C4DE31 /* Coordinator.swift */; };
@@ -130,6 +134,10 @@
 		C313F1DC29F2AF0500EEA0E6 /* PhoneTextFieldVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldVC.swift; sourceTree = "<group>"; };
 		C313F1DE29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldCoordinator.swift; sourceTree = "<group>"; };
 		C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialSearchView.swift; sourceTree = "<group>"; };
+		C36541CA29FE55D200EAE5A8 /* PhoneTextFieldContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldContext.swift; sourceTree = "<group>"; };
+		C36541CC29FE564100EAE5A8 /* VerificationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationContext.swift; sourceTree = "<group>"; };
+		C36541CE29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldOutput.swift; sourceTree = "<group>"; };
+		C36541D029FFB73700EAE5A8 /* PhoneTextFieldError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldError.swift; sourceTree = "<group>"; };
 		C365FAD229FAA20B00BE5D78 /* ProductCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCellData.swift; sourceTree = "<group>"; };
 		C365FAD429FAD7E300BE5D78 /* Assembly+Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Assembly+Formatters.swift"; sourceTree = "<group>"; };
 		C368DBEA29F15D3800C4DE31 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -207,8 +215,8 @@
 				C386E86529F512AE001D9FCF /* Components */,
 				C368DBEA29F15D3800C4DE31 /* Coordinator.swift */,
 				845F3A6229E5254D0085F892 /* BaseCoordinator.swift */,
-				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
 				845F3A3D29D823BA0085F892 /* BaseViewController.swift */,
+				845F3A5D29DD9F610085F892 /* AppCoordinator.swift */,
 				845F3A6629E5E74A0085F892 /* KeyboardableViewInput.swift */,
 				845F3A3F29D827220085F892 /* AuthProvider.swift */,
 			);
@@ -243,6 +251,7 @@
 				845F3A4E29DC9F130085F892 /* VerificationViewImp.swift */,
 				845F3A5229DD40730085F892 /* VerificationVC.swift */,
 				845F3A5429DD466D0085F892 /* VerificationCoordinator.swift */,
+				C36541CC29FE564100EAE5A8 /* VerificationContext.swift */,
 			);
 			path = Verification;
 			sourceTree = "<group>";
@@ -348,6 +357,9 @@
 				C313F1DA29F2AEF600EEA0E6 /* PhoneTextFieldViewImp.swift */,
 				C313F1DC29F2AF0500EEA0E6 /* PhoneTextFieldVC.swift */,
 				C313F1DE29F2AF1300EEA0E6 /* PhoneTextFieldCoordinator.swift */,
+				C36541CA29FE55D200EAE5A8 /* PhoneTextFieldContext.swift */,
+				C36541CE29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift */,
+				C36541D029FFB73700EAE5A8 /* PhoneTextFieldError.swift */,
 			);
 			path = PhoneTextField;
 			sourceTree = "<group>";
@@ -474,6 +486,7 @@
 				845F3A4029D827220085F892 /* AuthProvider.swift in Sources */,
 				844C1A4C299649610094F412 /* ApiClient.swift in Sources */,
 				84A57FE6298AC2CA00A8B201 /* DataStorage.swift in Sources */,
+				C36541D129FFB73700EAE5A8 /* PhoneTextFieldError.swift in Sources */,
 				8412543229CD6B5C00664879 /* AuthSocialMediaButton.swift in Sources */,
 				84A57FEA298AC60800A8B201 /* Assembly+DataStrorage.swift in Sources */,
 				845F3A3E29D823BA0085F892 /* BaseViewController.swift in Sources */,
@@ -481,6 +494,7 @@
 				845F3A5329DD40730085F892 /* VerificationVC.swift in Sources */,
 				84A57FE3298ABD0300A8B201 /* Profile.swift in Sources */,
 				845F3A6029DDB09A0085F892 /* VerificationTextField.swift in Sources */,
+				C36541CB29FE55D200EAE5A8 /* PhoneTextFieldContext.swift in Sources */,
 				8458114E29ACEFDC00870870 /* Task5.swift in Sources */,
 				8458110C29A3415500870870 /* Date+Formatter.swift in Sources */,
 				C386E86F29F51FFA001D9FCF /* CatalogView.swift in Sources */,
@@ -488,6 +502,7 @@
 				845F3A5529DD466D0085F892 /* VerificationCoordinator.swift in Sources */,
 				8458110729A3257400870870 /* Assembly+Homework.swift in Sources */,
 				845F3A5E29DD9F610085F892 /* AppCoordinator.swift in Sources */,
+				C36541CD29FE564100EAE5A8 /* VerificationContext.swift in Sources */,
 				8458113529AC735E00870870 /* BootstrapDataProvider.swift in Sources */,
 				845F3A6D29E6749C0085F892 /* VerificationView.swift in Sources */,
 				844C1A5F2997A25C0094F412 /* Task4.swift in Sources */,
@@ -496,6 +511,7 @@
 				845F3A4929D82F090085F892 /* Assembly+Coordinators.swift in Sources */,
 				845F3A6329E5254D0085F892 /* BaseCoordinator.swift in Sources */,
 				845F3A4229D827A20085F892 /* AuthCoordinator.swift in Sources */,
+				C36541CF29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift in Sources */,
 				C386E86829F51FA1001D9FCF /* ProductCell.swift in Sources */,
 				8458114A29ACEF3100870870 /* Assembly+DispatchGroup.swift in Sources */,
 				8479AF2829A0BC4C001EED09 /* Assembly+Coding.swift in Sources */,

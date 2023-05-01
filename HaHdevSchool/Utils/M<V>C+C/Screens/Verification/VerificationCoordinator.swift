@@ -1,8 +1,8 @@
 import UIKit
 
-final class VerificationCoordinator: Coordinator<Assembly, UINavigationController, AuthCoordinator.Context> {
+final class VerificationCoordinator: Coordinator<Assembly, UINavigationController, VerificationContext> {
     
-    override init(assembly: Assembly, context: AuthCoordinator.Context) {
+    override init(assembly: Assembly, context: VerificationContext) {
         super.init(assembly: assembly, context: context)
     }
     

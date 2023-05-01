@@ -1,5 +1,8 @@
 import UIKit
 
 protocol PhoneTextFieldView: UIView {
-    var currentNumber: ((_ phone: String) -> Void)? { get set }
+    
+    var didFieldChanged: (( _ data: PhoneTextFieldOutputData?) -> Void)? { get set }
+    
+    func update(status: PhoneTextFieldState, animated: Bool)
 }

@@ -1,17 +1,8 @@
 import UIKit
 
 final class AuthVC<View: AuthView>: BaseViewController<View> {
+    
     typealias Completion = () -> Void
-    
-    struct InputForm {
-        var phone: String?
-    }
-    
-    var inputForm = InputForm(phone: "")
-    
-    var onVerification: ((_  phone: String?, _ completion: @escaping Completion) -> Void)?
-    
-    private let authProvider: AuthProvider
     
     init(authProvider: AuthProvider) {
         self.authProvider = authProvider
@@ -23,13 +14,20 @@ final class AuthVC<View: AuthView>: BaseViewController<View> {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let authProvider: AuthProvider
+    
+    private var phoneData: PhoneTextFieldOutputData?
+    
+    var onVerification: ((_  phone: String?, _ completion: @escaping Completion) -> Void)?
+    
+    var onDisplayPhoneError: ((PhoneTextFieldError?) -> Void)?
+    
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         rootView.onVerificationAction = { [weak self] in
-            self?.rootView.endEditing(true)
-            self?.verify(phone: self?.inputForm.phone)
+            self?.verifyIfNeeded()
         }
     }
     
@@ -44,36 +42,43 @@ final class AuthVC<View: AuthView>: BaseViewController<View> {
         
         rootView.disconnectKeyboard()
     }
+    
+    func changeData(phoneData: PhoneTextFieldOutputData?) {
+        self.phoneData = phoneData
+    }
+    
 }
 
 // MARK: Verification logic
 private extension AuthVC {
     
-    func validate(text: String?) -> Bool {
-        guard
-            let text = text,
-            !text.isEmpty,
-            text.filter({ $0 != " " && $0.isNumber }).count == 10
-        else {
-            return false
-        }
-
-        return true
-    }
-    
-    func verify(phone: String?) {
-        
-        if !validate(text: phone) {
+    func verifyIfNeeded() {
+        guard let phone = phoneData?.text else {
+            onDisplayPhoneError?(.emptyField)
             return
         }
+        
+        if let error = self.phoneData?.error {
+            onDisplayPhoneError?(error)
+            return
+        }
+        
+        verify(phone: phone)
+        
+    }
+    
+    func verify(phone: String) {
         
         rootView.displayLoading(enable: true)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            
             self.onVerification?(phone) {
                 print("Complete onVerification")
             }
+            
             self.rootView.displayLoading(enable: false)
         }
+        
     }
 }

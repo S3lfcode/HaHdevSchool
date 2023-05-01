@@ -13,7 +13,7 @@ extension Assembly {
     }
     
     func verificationCoordinator(
-        context: AuthCoordinator.Context
+        context: VerificationContext
     ) -> VerificationCoordinator {
         .init(assembly: self, context: context)
     }
@@ -27,7 +27,7 @@ extension Assembly {
 extension Assembly {
     
     func phoneTextFieldCoordinator(
-        context: AuthCoordinator.PhoneContext
+        context: PhoneTextFieldContext
     ) -> PhoneTextFieldCoordinator {
         .init(assembly: self, context: context)
     }

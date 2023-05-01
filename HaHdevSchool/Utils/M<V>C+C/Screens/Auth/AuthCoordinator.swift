@@ -2,16 +2,6 @@ import UIKit
 
 final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void> {
     
-    struct Context {
-        let phone: String
-        let seconds: Int
-        let finishFlow: (_ operationToken: String) -> Void
-    }
-    
-    struct PhoneContext {
-        let getNumber: ((_ phone: String) -> Void)?
-    }
-    
     override init(assembly: Assembly) {
         super.init(assembly: assembly)
     }
@@ -21,18 +11,25 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         
         //MARK: TestCatalog-----
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+1){
-            let catalogCoordinator = self.assembly.catalogCoordinator()
-            self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now()+1){
+//            let catalogCoordinator = self.assembly.catalogCoordinator()
+//            self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
+//        }
         
-        //----------
+        //---------- TF(phone) -> Auth(state) -> TF
         
         let phoneCoordinator = assembly.phoneTextFieldCoordinator(
             context: .init(
-                getNumber: {
-                    [weak controller] phone in
-                    controller?.inputForm.phone = phone
+                didFieldChanged: { [weak controller] data in
+    
+                    controller?.changeData(phoneData: data)
+                    
+                },
+                errorProvider: { [weak controller] errorProvider in
+                    
+                    controller?.onDisplayPhoneError = { error in
+                        errorProvider.display(error: error)
+                    }
                 }
             )
         )

@@ -1,18 +1,19 @@
 import Foundation
 import UIKit
 
+enum PhoneTextFieldState {
+    case `default`
+    case active
+    case error(message: String)
+}
+
 class PhoneTextFieldViewImp: UIControl, PhoneTextFieldView{
-     
-    var currentNumber: ((String) -> Void)?
+    
+    var didFieldChanged: (( _ data: PhoneTextFieldOutputData?) -> Void)?
     
     //MARK: States
-    enum Status {
-        case `default`
-        case active
-        case error(message: String)
-    }
     
-    private(set) var status: Status = .default
+    private(set) var status: PhoneTextFieldState = .default
     
     private var textIsEditing: Bool = false
     
@@ -142,9 +143,9 @@ private extension PhoneTextFieldViewImp {
 }
 
 //MARK: Update state function
-private extension PhoneTextFieldViewImp {
+extension PhoneTextFieldViewImp {
     
-    func update(status: Status, animated: Bool) {
+    func update(status: PhoneTextFieldState, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
             self.update(status: status)
             self.layoutIfNeeded()
@@ -152,7 +153,7 @@ private extension PhoneTextFieldViewImp {
         }
     }
     
-    private func update(status: Status) {
+    private func update(status: PhoneTextFieldState) {
         self.status = status
         switch status {
         case .`default`:
@@ -191,19 +192,6 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         update(status: .active, animated: true)
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else {
-            update(status: .error(message: "Поле не может быть пустым"), animated: true)
-            return
-        }
-        
-        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
-            update(status: .error(message: "Неверный формат номера"), animated: true)
-            return
-        }
-        
-    }
-    
     private func phoneFormatter(mask: String, number: String) -> String {
         let onlyNumbers = number.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
         var result = ""
@@ -225,6 +213,13 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         }
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
+        didFieldChanged?(
+            .init(
+                text: newString,
+                error: didError(text: newString)
+            )
+        )
+        
         if textIsEditing == false && !newString.isEmpty {
             self.textIsEditing = true
             update(status: .active, animated: true)
@@ -234,7 +229,7 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         if newString.count > mask.count && string.count > 0 { return false }
         
         for char in string {
-            if !char.isNumber {
+            if !char.isNumber && char != " " {
                 update(status: .error(message: "Можно вводить только цифры"), animated: true)
                 textField.text = newString
                 return false
@@ -249,7 +244,6 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         update(status: .active, animated: true)
         
         textField.text = newText
-        currentNumber?(newString)
         
         if textIsEditing == true && newText.isEmpty {
             self.textIsEditing = false
@@ -279,6 +273,18 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         }
         
         return false
+    }
+    
+    func didError(text: String) -> PhoneTextFieldError? {
         
+        guard text != "" else {
+            return .emptyField
+        }
+        
+        guard text.filter({ $0 != " " && $0.isNumber }).count == 10 else {
+            return .invalidFormat
+        }
+        
+        return nil
     }
 }
