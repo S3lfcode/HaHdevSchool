@@ -213,13 +213,6 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         }
         let newString = (text as NSString).replacingCharacters(in: range, with: string)
         
-        didFieldChanged?(
-            .init(
-                text: newString,
-                error: didError(text: newString)
-            )
-        )
-        
         if textIsEditing == false && !newString.isEmpty {
             self.textIsEditing = true
             update(status: .active, animated: true)
@@ -227,6 +220,13 @@ extension PhoneTextFieldViewImp: UITextFieldDelegate {
         
         let mask = "XXX XXX XX XX"
         if newString.count > mask.count && string.count > 0 { return false }
+        
+        didFieldChanged?(
+            .init(
+                text: newString,
+                error: didError(text: newString)
+            )
+        )
         
         for char in string {
             if !char.isNumber && char != " " {

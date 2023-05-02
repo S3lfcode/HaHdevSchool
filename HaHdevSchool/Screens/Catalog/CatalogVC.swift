@@ -19,41 +19,81 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        rootView.configureNavController(navItem: navigationItem)
-        rootView.onBack = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
-        }
+        congfigurateNavigationBar()
         
+        loadData()
+    }
+    
+    private func loadData() {
         rootView.displayLoading(enable: true)
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.rootView.displayLoading(enable: false)
             
             self.rootView.display(
                 cellData: self.makeProducts(ids: Array(0...20)),
                 titleData: self.makeTitle(),
-                animated: true)
+                animated: true
+            )
         }
-        
     }
-
+    
+    @objc func toSettings(sender: UIBarButtonItem) {
+        //toSettings button action...
+    }
 }
 
-//MARK: - Make data
+//MARK: Configurate nav bar
+
+private extension CatalogVC {
+    func congfigurateNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .clear
+        appearance.setBackIndicatorImage(
+            UIImage(named: "Auth/backButton"),
+            transitionMaskImage: UIImage(named: "Auth/backButton")
+        )
+
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.standardAppearance = appearance
+//            navigationBar.isTranslucent = false
+//            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
+        
+        let settingsButton = UIBarButtonItem(
+            image: UIImage(named: "Catalog/AdvancedFilter"),
+            style: .done,
+            target: self,
+            action: #selector(toSettings(sender:))
+        )
+        
+        settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
+        navigationItem.rightBarButtonItem = settingsButton
+        
+        navigationItem.titleView = MaterialSearchView.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width, height: 36)))
+    }
+}
+
+//MARK: Make data
 
 private extension CatalogVC {
     func makeProducts(ids: [Int]) -> [ProductCellData] {
         
-        return ids.map { id in
-            ProductCellData(
+        return ids.enumerated().map { item in
+            let (item, index) = item
+            
+            return ProductCellData(
                 title: "Худи со скидкой из секондхенда",
                 rating: 3,
                 price: priceFormatter.string(from: NSNumber(value: 993_324)) ?? "0"
             ) { [weak self] in
                 
-                print("Select \(id)")
+                print("Select \(item) \(index)")
                 
-                self?.onDisplayProduct?(id)
+                self?.onDisplayProduct?(item)
             }
         }
     }

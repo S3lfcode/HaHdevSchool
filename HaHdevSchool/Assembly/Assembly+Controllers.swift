@@ -5,7 +5,13 @@ import UIKit
 extension Assembly {
     
     var navigationController: UINavigationController {
-        .init()
+        let controller = UINavigationController()
+        
+        controller.navigationBar.backIndicatorImage = UIImage(named: "Auth/backButton")
+        controller.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "Auth/backButton")
+        controller.navigationBar.tintColor = UIColor(named: "Colors/Grayscale/black")
+        
+        return controller
     }
     
 }

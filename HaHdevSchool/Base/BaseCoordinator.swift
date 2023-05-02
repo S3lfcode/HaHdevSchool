@@ -89,7 +89,8 @@ extension BaseCoordinator {
     func setContent<ViewController: ContainerViewController> (
         coordinator: BaseCoordinator?,
         on containerController: ViewController,
-        containerId: ViewController.View.ContainerID
+        containerId: ViewController.View.ContainerID,
+        animated: Bool
     ) {
         guard
             let coordinator = coordinator,
@@ -102,13 +103,14 @@ extension BaseCoordinator {
         controller.didMove(toParent: containerController)
         
         addChild(coordinator: coordinator)
-        containerController.hostView.addSubview(view: controller.view, by: containerId)
+        containerController.hostView.addSubview(view: controller.view, by: containerId, animated: animated)
     }
     
     func removeContent<ViewController: ContainerViewController> (
         coordinator: BaseCoordinator?,
         on containerController: ViewController,
-        containerId: ViewController.View.ContainerID
+        containerId: ViewController.View.ContainerID,
+        animated: Bool
     ) {
         guard
             let coordinator = coordinator,
@@ -121,7 +123,7 @@ extension BaseCoordinator {
         controller.removeFromParent()
         controller.didMove(toParent: nil)
 
-        containerController.hostView.removeSubview(view: controller.view, by: containerId)
+        containerController.hostView.removeSubview(view: controller.view, by: containerId, animated: animated)
     }
 }
 
@@ -134,7 +136,7 @@ protocol ContainerViewController: UIViewController  {
 protocol ContainerView {
     associatedtype ContainerID
     
-    func addSubview(view: UIView, by id: ContainerID)
+    func addSubview(view: UIView, by id: ContainerID, animated: Bool)
     
-    func removeSubview(view: UIView, by id: ContainerID)
+    func removeSubview(view: UIView, by id: ContainerID, animated: Bool)
 }

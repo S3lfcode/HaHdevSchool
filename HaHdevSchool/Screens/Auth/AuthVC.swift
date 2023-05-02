@@ -25,7 +25,7 @@ final class AuthVC<View: AuthView>: BaseViewController<View> {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         rootView.onVerificationAction = { [weak self] in
             self?.verifyIfNeeded()
         }
@@ -33,8 +33,8 @@ final class AuthVC<View: AuthView>: BaseViewController<View> {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         rootView.connectKeyboard()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

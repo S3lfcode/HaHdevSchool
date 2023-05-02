@@ -25,10 +25,7 @@ final class VerificationVC<View: VerificationView>: BaseViewController<View> {
     // MARK: Lifecycle
     
     override func viewDidLoad() {
-        rootView.configureNavController(navItem: navigationItem)
-        rootView.onBack = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
-        }
+        navigationController?.navigationBar.topItem?.title = ""
         
         rootView.updateState(state: .info(text: phone))
         

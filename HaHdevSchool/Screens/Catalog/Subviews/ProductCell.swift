@@ -77,15 +77,26 @@ final class ProductCell: UICollectionViewCell {
     }()
     
     private func buttonSettings(button: UIButton) {
-        button.backgroundColor = UIColor(named: "Colors/white")
-        button.layer.cornerRadius = 14
-        button.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
-        button.layer.shadowOpacity = 1
-        button.layer.shadowOffset = CGSize(width: 0, height: 3)
-        button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
-        button.layer.shadowRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: 28).isActive = true
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        button.backgroundColor = UIColor(named: "Colors/white")
+        button.layer.masksToBounds = false
+        button.layer.cornerRadius = 14
+        button.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1/10)
+        button.layer.shadowOffset = CGSize(width: 0, height: 3)
+        button.layer.shadowOpacity = 1
+        button.layer.shadowRadius = 8
+        button.layer.shadowPath = UIBezierPath(
+            roundedRect: .init(
+                origin: button.bounds.origin,
+                size: .init(
+                    width: 28,
+                    height: 28
+                )
+            ),
+            cornerRadius: 0
+        ).cgPath
     }
     
     private var imageButtonContainer: [UIView] {

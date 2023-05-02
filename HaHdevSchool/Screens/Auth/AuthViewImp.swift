@@ -283,9 +283,16 @@ extension AuthViewImp: ContainerView {
         case phone
     }
     
-    func addSubview(view: UIView, by id: AuthViewImp.ContainerID) {
+    func addSubview(view: UIView, by id: AuthViewImp.ContainerID, animated: Bool) {
         let container = container(by: id)
         
+        if animated {
+            let transition = CATransition()
+            transition.duration = 0.3
+            transition.type = .fade
+            container.layer.add(transition, forKey: nil)
+        }
+ 
         container.addSubview(view)
         
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -300,8 +307,16 @@ extension AuthViewImp: ContainerView {
         )
     }
     
-    func removeSubview(view: UIView, by id: AuthViewImp.ContainerID) {
+    func removeSubview(view: UIView, by id: AuthViewImp.ContainerID, animated: Bool) {
         let container = container(by: id)
+        
+        if animated {
+            let transition = CATransition()
+            transition.duration = 0.3
+            transition.type = .fade
+            container.layer.add(transition, forKey: nil)
+        }
+        
         container.subviews.forEach {
             $0.removeFromSuperview()
         }

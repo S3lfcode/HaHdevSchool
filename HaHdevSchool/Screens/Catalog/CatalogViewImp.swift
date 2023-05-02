@@ -2,12 +2,7 @@ import UIKit
 
 final class CatalogViewImp: UIView, CatalogView {
     
-    var onBack: (() -> Void)?
-    var onSettings: (() -> Void)?
-    
     private var cellData: [ProductCellData] = []
-    
-    private var lastContentOffset: CGFloat = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,6 +14,12 @@ final class CatalogViewImp: UIView, CatalogView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        catalogCollectionView.contentInset.top = headerStackView.frame.height
     }
     
     //MARK: Setup subviews & constraints
@@ -35,7 +36,7 @@ final class CatalogViewImp: UIView, CatalogView {
                 headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
                 headerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
                 
-                catalogCollectionView.topAnchor.constraint(equalTo: settingsStackView.bottomAnchor),
+                catalogCollectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                 catalogCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 catalogCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
                 catalogCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -54,37 +55,43 @@ final class CatalogViewImp: UIView, CatalogView {
     
     private lazy var titleProducdsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Название категории"
+        
+        label.text = ""
         label.numberOfLines = 2
         label.font = UIFont(name: "GothamSSm-Medium", size: 20)
         label.textColor = UIColor(named: "Colors/Grayscale/black")
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
         return label
     }()
     
     private lazy var numberProductsLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 товаров"
+        
+        label.text = ""
         label.font = UIFont(name: "GothamSSm-Book", size: 12)
         label.textColor = UIColor(named: "Colors/Grayscale/midGray")
         label.textAlignment = .right
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
         return label
     }()
     
-    private var titleContainer: [UIView] {
-        [
-            titleProducdsLabel,
-            numberProductsLabel
-        ]
-    }
-    
     private lazy var titleStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: titleContainer)
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                titleProducdsLabel,
+                numberProductsLabel
+            ]
+        )
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.spacing = 20
         stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 64).isActive = true
+        
         return stackView
     }()
     
@@ -92,68 +99,89 @@ final class CatalogViewImp: UIView, CatalogView {
     
     private lazy var listFilterTitleButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(UIImage(named: "Catalog/ListFilter"), for: .normal)
         button.setTitle("  По популярности", for: .normal)
         button.setTitleColor(UIColor(named: "Colors/Grayscale/black"), for: .normal)
         button.backgroundColor = UIColor(named: "Colors/white")
         button.contentHorizontalAlignment = .left
         button.titleLabel?.font = UIFont(name: "GothamSSm-Medium", size: 14)
+        button.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        
         return button
     }()
     
     private lazy var scalesButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(UIImage(named: "Catalog/Scales"), for: .normal)
         button.tintColor = UIColor(named: "Colors/Grayscale/black")
         button.backgroundColor = UIColor(named: "Colors/white")
+        
         return button
     }()
     
     private lazy var mappingModeButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(UIImage(named: "Catalog/MappingMode"), for: .normal)
         button.backgroundColor = UIColor(named: "Colors/white")
+        
         return button
     }()
     
-    private var displaySettingsContainer: [UIView] {
-        [
-            scalesButton,
-            mappingModeButton
-        ]
-    }
-    
     private lazy var displaySettingsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: displaySettingsContainer)
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                scalesButton,
+                mappingModeButton
+            ]
+        )
+        
         stackView.distribution = .fill
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.spacing = 20
+        stackView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        stackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
         return stackView
     }()
     
     private lazy var settingsStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.addArrangedSubview(listFilterTitleButton)
-        stackView.addArrangedSubview(displaySettingsStackView)
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                listFilterTitleButton,
+                displaySettingsStackView
+            ]
+        )
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.heightAnchor.constraint(equalToConstant: 44).isActive = true
+       
         return stackView
     }()
     
     //MARK: Header stackView
     
     private lazy var headerStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.addArrangedSubview(titleStackView)
-        stackView.addArrangedSubview(settingsStackView)
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                titleStackView,
+                settingsStackView
+            ]
+        )
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.backgroundColor = UIColor(named: "Colors/white")
         stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.axis = .vertical
+        
         return stackView
     }()
     
@@ -161,18 +189,22 @@ final class CatalogViewImp: UIView, CatalogView {
     
     private lazy var loadingImageView: UIImageView = {
         let imageView = UIImageView()
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Auth/Loading")
         imageView.alpha = 0
         imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        
         return imageView
     }()
     
     func displayLoading(enable: Bool) {
-        
         if !enable {
             catalogCollectionView.isUserInteractionEnabled = true
+            headerStackView.isUserInteractionEnabled = true
+            headerStackView.isHidden = false
+            
             UIView.animate(withDuration: 0.2) {
                 self.loadingImageView.alpha = 0
             }
@@ -184,6 +216,8 @@ final class CatalogViewImp: UIView, CatalogView {
         }
         
         catalogCollectionView.isUserInteractionEnabled = false
+        headerStackView.isUserInteractionEnabled = false
+        headerStackView.isHidden = true
         
         UIView.animateKeyframes(withDuration: 1, delay: 0, options: [.repeat], animations: {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
@@ -220,15 +254,8 @@ final class CatalogViewImp: UIView, CatalogView {
         return collectionView
     }()
     
-    @objc func toBack(sender: UIBarButtonItem) {
-        onBack?()
-    }
-    
-    @objc func toSettings(sender: UIBarButtonItem) {
-        onSettings?()
-    }
-    
     //MARK: Display data
+    
     func display(
         cellData: [ProductCellData],
         titleData: ProductTitleData,
@@ -244,39 +271,9 @@ final class CatalogViewImp: UIView, CatalogView {
     
 }
 
-//MARK: Configuration navigation controller
-
-extension CatalogViewImp {
-    
-    func configureNavController(navItem: UINavigationItem) {
-        
-        let backButton = UIBarButtonItem(
-            image: UIImage(named: "Auth/backButton"),
-            style: .done,
-            target: self,
-            action: #selector(toBack(sender:))
-        )
-        backButton.tintColor = UIColor(named: "Colors/Grayscale/black")
-        navItem.leftBarButtonItem = backButton
-        
-        let settingsButton = UIBarButtonItem(
-            image: UIImage(named: "Catalog/AdvancedFilter"),
-            style: .done,
-            target: self,
-            action: #selector(toSettings(sender:))
-        )
-        settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
-        navItem.rightBarButtonItem = settingsButton
-        
-        navItem.titleView = MaterialSearchView.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width, height: 36)))
-    }
-    
-}
-
 //MARK: Calalog view settings
 
 extension CatalogViewImp: UICollectionViewDataSource {
-    
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
@@ -302,37 +299,16 @@ extension CatalogViewImp: UICollectionViewDataSource {
 //MARK: Collection view logic
 
 extension CatalogViewImp: UICollectionViewDelegate {
-    
     func collectionView(
         _ collectionView: UICollectionView,
-        didDeselectItemAt indexPath: IndexPath
+        didSelectItemAt indexPath: IndexPath
     ) {
         cellData[indexPath.item].onSelect()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let y = scrollView.contentOffset.y
+        let diff = scrollView.contentInset.top + scrollView.contentOffset.y
         
-        if y > 100 && y < scrollView.contentSize.height - 800 {
-            
-            if (lastContentOffset > y && titleStackView.isHidden) {
-                //scroll up
-                UIView.transition(with: titleStackView, duration: 0.5,
-                                  options: .transitionCrossDissolve,
-                                  animations: {
-                    self.titleStackView.isHidden = false
-                })
-            }
-            else if (lastContentOffset < y && !titleStackView.isHidden) {
-                // scroll down
-                UIView.transition(with: titleStackView, duration: 0.5,
-                                  options: .showHideTransitionViews,
-                                  animations: {
-                    self.titleStackView.isHidden = true
-                })
-            }
-            
-            lastContentOffset = y
-        }
+        headerStackView.transform = .init(translationX: 0, y: -min(diff, titleStackView.frame.height))
     }
 }

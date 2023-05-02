@@ -11,12 +11,12 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         
         //MARK: TestCatalog-----
         
-//        DispatchQueue.main.asyncAfter(deadline: .now()+1){
-//            let catalogCoordinator = self.assembly.catalogCoordinator()
-//            self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
-//        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+1){
+            let catalogCoordinator = self.assembly.catalogCoordinator()
+            self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
+        }
         
-        //---------- TF(phone) -> Auth(state) -> TF
+        //---------- TF(data) -> Auth(state) -> TF
         
         let phoneCoordinator = assembly.phoneTextFieldCoordinator(
             context: .init(
@@ -34,19 +34,27 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
             )
         )
         
-        setContent(
-            coordinator: phoneCoordinator,
-            on: controller,
-            containerId: .phone
-        )
+        //MARK: Test setContent function
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)){
+            self.setContent(
+                coordinator: phoneCoordinator,
+                on: controller,
+                containerId: .phone,
+                animated: true
+            )
+        }
         
         //MARK: Test removeContent function
         
-        //        DispatchQueue.main.asyncAfter(deadline: .now()+4){
-        //            self.removeContent(coordinator: phoneCoordinator,
-        //                          on: controller,
-        //                          containerId: .phone)
-        //        }
+//        DispatchQueue.main.asyncAfter(deadline: .now()+4){
+//            self.removeContent(
+//                coordinator: phoneCoordinator,
+//                on: controller,
+//                containerId: .phone,
+//                animated: true
+//            )
+//        }
         
         //----------
         
