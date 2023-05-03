@@ -11,14 +11,14 @@ final class ProductCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     //MARK: Setup subviews & constraints
     
     private func setup() {
         contentView.addSubview(placeholderImageView)
         contentView.addSubview(imageButtonStackView)
         contentView.addSubview(descProductStackView)
-        contentView.addSubview(cartImageView)
+        contentView.addSubview(cartButton)
         contentView.addSubview(priceLabel)
         
         NSLayoutConstraint.activate(
@@ -34,8 +34,8 @@ final class ProductCell: UICollectionViewCell {
                 descProductStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 descProductStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                 
-                cartImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -9),
-                cartImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -9),
+                cartButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
                 
                 priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -56,22 +56,47 @@ final class ProductCell: UICollectionViewCell {
     }()
     
     //MARK: Image buttons block
-    
+    //MARK: LIKE BUTTON
     lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Catalog/LikeOn"), for: .normal)
+        button.setImage(UIImage(named: "Catalog/LikeOff"), for: .normal)
+        button.setImage(UIImage(named: "Catalog/LikeOn"), for: .selected)
+        button.tintColor = UIColor(named: "Colors/Phone/placeholder")
         button.contentMode = .center
+        button.addTarget(self, action: #selector(selectLike), for: .touchUpInside)
+        button.addSubview(loadingImageView)
+        loadingImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+        loadingImageView.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
         buttonSettings(button: button)
         return button
     }()
     
+    var change: (() -> Void)?
+    
+    @objc func selectLike(){
+        change?()
+    }
+    
+    private lazy var loadingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "Auth/Loading")
+        imageView.alpha = 0
+        imageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        return imageView
+    }()
+    
+    //---------------
+    
     lazy var scalesButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Catalog/Scales"), for: .normal)
-        button.tintColor = UIColor(named: "Colors/Phone/placeholder")
+        button.setImage(UIImage(named: "Catalog/ScalesOff"), for: .normal)
+        button.setImage(UIImage(named: "Catalog/ScalesOn"), for: .selected)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        button.addTarget(self, action: #selector(selectButton(sender:)), for: .touchUpInside)
         buttonSettings(button: button)
         return button
     }()
@@ -139,7 +164,7 @@ final class ProductCell: UICollectionViewCell {
             imageView.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
             container.append(imageView)
         }
-
+        
         return container
     }
     
@@ -193,14 +218,25 @@ final class ProductCell: UICollectionViewCell {
         return stackView
     }()
     
-    lazy var cartImageView: UIButton = {
+    lazy var cartButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "Catalog/ShoppingCart"), for: .normal)
+        button.setImage(UIImage(named: "Catalog/ShoppingCartAdded"), for: .selected)
         button.contentHorizontalAlignment = .right
         button.backgroundColor = UIColor(named: "Colors/white")
+        button.addTarget(self, action: #selector(selectButton(sender:)), for: .touchUpInside)
         return button
     }()
+    
+    @objc func selectButton(sender: UIButton){
+        switch sender.isSelected {
+        case true:
+            sender.isSelected = false
+        case false:
+            sender.isSelected = true
+        }
+    }
 }
 
 //MARK: Setup sectionLayout
@@ -235,11 +271,74 @@ extension ProductCell {
         
         return section
     }
- 
+    
     func update(with data: ProductCellData) {
         titleLabel.text = data.title
         fillRateStars(rating: data.rating)
         rateNumLabel.text = " \(String(Double(data.rating)))"
         priceLabel.text = data.price
+        
+        data.onFavoriteSubscriber(self) { [weak self] state in
+            
+            if state.isSelected {
+                self?.likeButton.isSelected = true
+                self?.displayLoading(enable: false)
+            } else {
+                self?.likeButton.isSelected = false
+            }
+            
+            if state.isLoading && !state.isSelected {
+                self?.displayLoading(enable: true)
+            }
+            //Тут происходит второй шаг 2. Update UI request
+            
+            //TODO код для обновления представления
+            //            (так как мы подписались, то в любой момент времени можем получить уведомление о действии с кнопкой)
+        }
+        change = {
+            data.onFavoriteSelect(self.likeButton.isSelected)
+        }
+    }
+}
+
+//MARK: display loading
+private extension ProductCell {
+    func displayLoading(enable: Bool) {
+        
+        if !enable {
+            likeButton.isUserInteractionEnabled = true
+            UIView.animate(withDuration: 0.2) {
+                self.loadingImageView.alpha = 0
+                self.likeButton.imageView?.layer.transform = CATransform3DIdentity
+            }
+            return
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.likeButton.imageView?.layer.transform = CATransform3DMakeScale(0.0, 0.0, 0.0)
+        }
+        UIView.animate(withDuration: 0.2, delay: 0.2) {
+            self.loadingImageView.alpha = 1
+        }
+        
+        likeButton.isUserInteractionEnabled = false
+        
+        UIView.animateKeyframes(withDuration: 1, delay: 0, options: [.repeat], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi/2)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi*1.5)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25) {
+                self.loadingImageView.transform = .init(rotationAngle: Double.pi*2)
+            }
+        })
     }
 }

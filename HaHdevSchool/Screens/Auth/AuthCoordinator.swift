@@ -11,7 +11,7 @@ final class AuthCoordinator: Coordinator<Assembly, UINavigationController, Void>
         
         //MARK: TestCatalog-----
         
-        DispatchQueue.main.asyncAfter(deadline: .now()+1){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             let catalogCoordinator = self.assembly.catalogCoordinator()
             self.start(coordinator: catalogCoordinator, on: self.root, animated: true)
         }

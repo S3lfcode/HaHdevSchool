@@ -246,6 +246,7 @@ final class CatalogViewImp: UIView, CatalogView {
         }
         
         let collectionView = UICollectionView(frame: bounds, collectionViewLayout: collectionViewLayout)
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(ProductCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.dataSource = self
@@ -293,7 +294,6 @@ extension CatalogViewImp: UICollectionViewDataSource {
         
         return cell
     }
-    
 }
 
 //MARK: Collection view logic
