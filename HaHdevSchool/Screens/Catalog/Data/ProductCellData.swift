@@ -9,7 +9,8 @@ struct ProductCellData {
         _ cell: AnyObject,
         _ notify: @escaping CellButtonStateNotify
     ) -> Void
-    let onFavoriteSelect: (_ currentValue: Bool) -> Void
+    
+    let onFavoriteSelect: () -> Void
     
     var onSelect: () -> Void
 }

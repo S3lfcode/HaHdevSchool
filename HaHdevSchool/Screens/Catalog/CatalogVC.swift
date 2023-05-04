@@ -22,15 +22,13 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
     
     var onDisplayProduct: ((_ id: Int) -> Void)?
     
-//    var favoriteProducts: [Int] = []
-//    var favoriteLoadingProducts: [Int] = []
+    var favoriteState: [ButtonState] = []
     
     var productFavoriteCache: [Int: CellButtonState] = [:]
-    var favoriteState: [ButtonState] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         congfigurateNavigationBar()
         
         loadData()
@@ -68,11 +66,11 @@ private extension CatalogVC {
             UIImage(named: "Auth/backButton"),
             transitionMaskImage: UIImage(named: "Auth/backButton")
         )
-
+        
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.standardAppearance = appearance
-//            navigationBar.isTranslucent = false
-//            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+            //            navigationBar.isTranslucent = false
+            //            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
         }
         
         let settingsButton = UIBarButtonItem(
@@ -95,23 +93,22 @@ private extension CatalogVC {
     func makeProducts(ids: [Int]) -> [ProductCellData] {
         
         return ids.enumerated().map { item in
-            let (item, index) = item
+            let (item, _) = item
             
             return ProductCellData(
-                title: "Худи со скидкой из секондхенда",
+                title: "Худи со скидкой №\(item)",
                 rating: 3,
                 price: priceFormatter.string(from: NSNumber(value: 993_324)) ?? "0",
                 onFavoriteSubscriber: { [weak self] cell, notify in
                     self?.subscribe(productID: item, cell: cell, notify: notify)
-                }, 
-                onFavoriteSelect: { [weak self] currentValue in
-                    self?.setFavorite(value: currentValue, productID: item)
+                },
+                onFavoriteSelect: { [weak self] in
+                    self?.setFavorite(productID: item)
                 }
             ) { [weak self] in
                 
-                print("Select \(item) \(index)")
+                print("Select \(item) item")
                 
-                //Переход на экран товара
                 self?.onDisplayProduct?(item)
             }
         }
@@ -132,57 +129,54 @@ private extension CatalogVC {
     ) {
         unsubscribe(cell: cell)
         
-        //Добавили состояние нового элемента
-        favoriteState.append(.init(context: cell, notify: notify, productId: productID))
-        
-        let cellState = searchFavoritestState(productId: productID)
-        
-        notify(cellState)
-    }
-    
-    //Очищение предыдущего состояния
-    func unsubscribe(cell: AnyObject) {
-        favoriteState = favoriteState.filter {
-            $0.context !== cell
-        }
-    }
-    
-    func searchFavoritestState(productId: Int) -> CellButtonState {
-        let cacheValue = productFavoriteCache[productId]
-        
-        return cacheValue ?? .init(isSelected: false, isLoading: false)
-    }
-    
-    func setFavorite(value: Bool, productID: Int) {
-        // 1 ----
-        //Ищем замыкание notify в массиве "fravoriteState"
-        //Передаем в него нужные флаги (value, true) для обновления UI
-        updateCellUI(value: value, productID: productID, isLoading: true)
-        
-        // 2 ----
-        //Fake request async + delay //Искусственная задержка
-        //Update local state //Изменяем локальное состояние
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.productFavoriteCache.updateValue(
-                .init(isSelected: !value, isLoading: true),
-                forKey: productID
+        favoriteState.append(
+            .init(
+                context: cell,
+                notify: notify,
+                productId: productID
             )
-            self?.updateCellUI(value: !value, productID: productID, isLoading: false)
-        }
+        )
         
-        // 3 ----
-        //Ищем замыкание notify в массиве "fravoriteState"
-        //передаем в notify актуальные значения (newValue, false)
-
-        
+        notify(cellButtonState(productId: productID))
     }
     
-    func updateCellUI(value: Bool, productID: Int, isLoading: Bool) {
-        let notify = favoriteState.first {
-            $0.productId == productID
-        }?.notify
+    func unsubscribe(cell: AnyObject) {
+        favoriteState = favoriteState.filter { $0.context !== cell }
+    }
+    
+    func setFavorite(productID: Int) {
+        let oldButtonState = cellButtonState(productId: productID)
         
-        notify?(.init(isSelected: value, isLoading: isLoading))
+        updateFavoriteState(
+            productId: productID,
+            isSelected: oldButtonState.isSelected,
+            isLoading: true
+        )
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.updateFavoriteState(
+                productId: productID,
+                isSelected: !oldButtonState.isSelected,
+                isLoading: false
+            )
+        }
+    }
+    
+    func updateFavoriteState(productId: Int, isSelected: Bool, isLoading: Bool) {
+        let newButtonState = CellButtonState(isSelected: isSelected, isLoading: isLoading)
+        self.productFavoriteCache[productId] = newButtonState
+        
+        if let cellState = self.searchFavoriteState(productId: productId) {
+            cellState.notify(newButtonState)
+        }
+    }
+    
+    func searchFavoriteState(productId: Int) -> ButtonState? {
+        favoriteState.first { $0.productId == productId }
+    }
+    
+    func cellButtonState(productId: Int) -> CellButtonState {
+        productFavoriteCache[productId] ?? .init(isSelected: false, isLoading: false)
     }
     
 }

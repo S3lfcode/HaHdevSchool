@@ -12,6 +12,8 @@ final class ProductCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var onSelectLike: (() -> Void)?
+    
     //MARK: Setup subviews & constraints
     
     private func setup() {
@@ -56,7 +58,6 @@ final class ProductCell: UICollectionViewCell {
     }()
     
     //MARK: Image buttons block
-    //MARK: LIKE BUTTON
     lazy var likeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Catalog/LikeOff"), for: .normal)
@@ -71,12 +72,6 @@ final class ProductCell: UICollectionViewCell {
         return button
     }()
     
-    var change: (() -> Void)?
-    
-    @objc func selectLike(){
-        change?()
-    }
-    
     private lazy var loadingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -86,8 +81,6 @@ final class ProductCell: UICollectionViewCell {
         imageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
         return imageView
     }()
-    
-    //---------------
     
     lazy var scalesButton: UIButton = {
         let button = UIButton()
@@ -237,6 +230,11 @@ final class ProductCell: UICollectionViewCell {
             sender.isSelected = true
         }
     }
+    
+    @objc func selectLike(){
+        onSelectLike?()
+    }
+    
 }
 
 //MARK: Setup sectionLayout
@@ -280,23 +278,25 @@ extension ProductCell {
         
         data.onFavoriteSubscriber(self) { [weak self] state in
             
-            if state.isSelected {
-                self?.likeButton.isSelected = true
-                self?.displayLoading(enable: false)
-            } else {
-                self?.likeButton.isSelected = false
-            }
-            
-            if state.isLoading && !state.isSelected {
-                self?.displayLoading(enable: true)
-            }
-            //Тут происходит второй шаг 2. Update UI request
-            
-            //TODO код для обновления представления
-            //            (так как мы подписались, то в любой момент времени можем получить уведомление о действии с кнопкой)
+            self?.updateLikeButtonState(state: state)
         }
-        change = {
-            data.onFavoriteSelect(self.likeButton.isSelected)
+        onSelectLike = data.onFavoriteSelect
+    }
+}
+
+//MARK: Update button state
+private extension ProductCell {
+    func updateLikeButtonState(state: CellButtonState) {
+        if state.isLoading {
+            displayLoading(enable: true)
+        } else {
+            displayLoading(enable: false)
+        }
+        
+        if state.isSelected {
+            likeButton.isSelected = true
+        } else {
+            likeButton.isSelected = false
         }
     }
 }
