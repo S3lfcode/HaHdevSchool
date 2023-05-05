@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class ProductCell: UICollectionViewCell {
     
@@ -49,6 +50,7 @@ final class ProductCell: UICollectionViewCell {
     
     lazy var placeholderImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Catalog/ImagePlaceholder"))
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .center
         imageView.backgroundColor = UIColor(named: "Colors/Phone/background")
@@ -56,6 +58,26 @@ final class ProductCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalToConstant: 220).isActive = true
         return imageView
     }()
+    
+    private func updateProductImage(url: String?) {
+        guard let stringURL = url else {
+            return
+        }
+        
+        let url = URL(string: stringURL)
+
+        placeholderImageView.kf.indicatorType = .activity
+        placeholderImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Catalog/ImagePlaceholder"),
+            options: [
+                .transition(.fade(0.2)),
+                .processor(
+                    DownsamplingImageProcessor(
+                        size: CGSize(width: bounds.width, height: 220)))
+            ]
+        )
+    }
     
     //MARK: Image buttons block
     lazy var likeButton: UIButton = {
@@ -162,6 +184,9 @@ final class ProductCell: UICollectionViewCell {
     }
     
     private func fillRateStars(rating: Int) {
+        for element in rateStackView.arrangedSubviews {
+            element.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
+        }
         for index in 0..<rating {
             rateStackView.arrangedSubviews[index].tintColor = UIColor(named: "Colors/Primary/blue")
         }
@@ -270,12 +295,14 @@ extension ProductCell {
         return section
     }
     
+    //MARK: Update cell
     func update(with data: ProductCellData) {
-        titleLabel.text = data.title
-        fillRateStars(rating: data.rating)
-        rateNumLabel.text = " \(String(Double(data.rating)))"
-        priceLabel.text = data.price
-        
+        titleLabel.text = data.name ?? "Безымянный"
+        fillRateStars(rating: data.rating ?? 0)
+        rateNumLabel.text = " \(String(Double(data.rating ?? 0)))"
+        priceLabel.text = data.price ?? "0"
+        updateProductImage(url: data.image)
+
         data.onFavoriteSubscriber(self) { [weak self] state in
             
             self?.updateLikeButtonState(state: state)
@@ -301,7 +328,7 @@ private extension ProductCell {
     }
 }
 
-//MARK: display loading
+//MARK: Display loading
 private extension ProductCell {
     func displayLoading(enable: Bool) {
         

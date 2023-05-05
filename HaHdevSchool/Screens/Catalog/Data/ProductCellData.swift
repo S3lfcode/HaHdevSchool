@@ -1,9 +1,11 @@
 import Foundation
 
 struct ProductCellData {
-    let title: String
-    let rating: Int
-    let price: String
+    let id: Int?
+    let name: String?
+    let image: String?
+    let rating: Int?
+    let price: String?
     
     let onFavoriteSubscriber: (
         _ cell: AnyObject,

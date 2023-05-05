@@ -3,7 +3,6 @@ import UIKit
 
 //MARK: Navigations
 extension Assembly {
-    
     var navigationController: UINavigationController {
         let controller = UINavigationController()
         
@@ -13,16 +12,21 @@ extension Assembly {
         
         return controller
     }
-    
 }
 
-//MARK: Screens
+//MARK: Providers
 extension Assembly {
-    
     var authProvider: AuthProvider {
         AuthProviderImp()
     }
     
+    var catalogProvider: CatalogProvider {
+        CatalogProviderImp(apiClient: apiClient)
+    }
+}
+
+//MARK: Screens
+extension Assembly {
     func authController() -> AuthVC<AuthViewImp> {
         .init(authProvider: authProvider)
     }
@@ -32,16 +36,13 @@ extension Assembly {
     }
     
     func catalogController() -> CatalogVC<CatalogViewImp> {
-        .init(priceFormatter: priceFormatter)
+        .init(catalogProvider: catalogProvider, priceFormatter: priceFormatter)
     }
-    
 }
 
 //MARK: Components
 extension Assembly {
-    
     func phoneTextFieldController() -> PhoneTextFieldVC<PhoneTextFieldViewImp> {
         .init()
     }
-    
 }
