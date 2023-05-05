@@ -8,7 +8,8 @@ struct ButtonState {
 
 final class CatalogVC<View: CatalogView>: BaseViewController<View> {
     
-    init(priceFormatter: NumberFormatter){
+    init(catalogProvider: CatalogProvider, priceFormatter: NumberFormatter){
+        self.catalogProvider = catalogProvider
         self.priceFormatter = priceFormatter
         
         super.init(nibName: nil, bundle: nil)
@@ -18,6 +19,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
         fatalError("init(coder:) has not been implemented")
     }
     
+    let catalogProvider: CatalogProvider
     let priceFormatter: NumberFormatter
     
     var onDisplayProduct: ((_ id: Int) -> Void)?
@@ -31,20 +33,42 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
         
         congfigurateNavigationBar()
         
+        rootView.onRefresh = { [weak self] in
+            self?.loadData(force: true)
+        }
+        
+        rootView.willDisplayProduct = { [weak self] item in
+            self?.loadData(offset: item)
+        }
+        
         loadData()
     }
     
-    private func loadData() {
-        rootView.displayLoading(enable: true)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.rootView.displayLoading(enable: false)
+    private func loadData(offset: Int = 0, force: Bool = false) {
+        catalogProvider.products(
+            offset: offset,
+            force: force
+        ) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             
-            self.rootView.display(
-                cellData: self.makeProducts(ids: Array(0...20)),
-                titleData: self.makeTitle(),
-                animated: true
-            )
+            //            rootView.diplayLoadingErrorIndication()...
+            
+            if let result = result {
+                //Успех --> Показываем данные
+                self.rootView.display(
+                    cellData: makeProducts(products: result),
+                    titleData: self.makeTitle(),
+                    append: offset != 0,
+                    animated: true
+                )
+            } else {
+                //Ошибка --> Показываем какое-то состояние
+            }
+            
+            rootView.displayLoading(enable: false)
+            
         }
     }
     
@@ -53,64 +77,32 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
     }
 }
 
-//MARK: Configurate nav bar
-
-private extension CatalogVC {
-    func congfigurateNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        appearance.shadowColor = .clear
-        appearance.setBackIndicatorImage(
-            UIImage(named: "Auth/backButton"),
-            transitionMaskImage: UIImage(named: "Auth/backButton")
-        )
-        
-        if let navigationBar = navigationController?.navigationBar {
-            navigationBar.standardAppearance = appearance
-            //            navigationBar.isTranslucent = false
-            //            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-        }
-        
-        let settingsButton = UIBarButtonItem(
-            image: UIImage(named: "Catalog/AdvancedFilter"),
-            style: .done,
-            target: self,
-            action: #selector(toSettings(sender:))
-        )
-        
-        settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
-        navigationItem.rightBarButtonItem = settingsButton
-        
-        navigationItem.titleView = MaterialSearchView.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width, height: 36)))
-    }
-}
-
 //MARK: Make data
 
 private extension CatalogVC {
-    func makeProducts(ids: [Int]) -> [ProductCellData] {
+    func makeProducts(products: [Product]) -> [ProductCellData] {
         
-        return ids.enumerated().map { item in
-            let (item, _) = item
+        return products.enumerated().map { item in
+            let (item, value) = item
             
             return ProductCellData(
-                title: "Худи со скидкой №\(item)",
-                rating: 3,
-                price: priceFormatter.string(from: NSNumber(value: 993_324)) ?? "0",
+                id: value.id,
+                name: value.name,
+                image: value.image,
+                rating: value.rating,
+                price: priceFormatter.string(from: NSNumber(value: value.price ?? 0)) ?? "0",
                 onFavoriteSubscriber: { [weak self] cell, notify in
                     self?.subscribe(productID: item, cell: cell, notify: notify)
                 },
                 onFavoriteSelect: { [weak self] in
                     self?.setFavorite(productID: item)
+                },
+                onSelect: { [weak self] in
+                    print("Select \(item) item")
+
+                    self?.onDisplayProduct?(item)
                 }
-            ) { [weak self] in
-                
-                print("Select \(item) item")
-                
-                self?.onDisplayProduct?(item)
-            }
+            )
         }
     }
     
@@ -179,4 +171,38 @@ private extension CatalogVC {
         productFavoriteCache[productId] ?? .init(isSelected: false, isLoading: false)
     }
     
+}
+
+//MARK: Configurate nav bar
+
+private extension CatalogVC {
+    func congfigurateNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .clear
+        appearance.setBackIndicatorImage(
+            UIImage(named: "Auth/backButton"),
+            transitionMaskImage: UIImage(named: "Auth/backButton")
+        )
+        
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.standardAppearance = appearance
+//            navigationBar.isTranslucent = false
+//            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        }
+        
+        let settingsButton = UIBarButtonItem(
+            image: UIImage(named: "Catalog/AdvancedFilter"),
+            style: .done,
+            target: self,
+            action: #selector(toSettings(sender:))
+        )
+        
+        settingsButton.tintColor = UIColor(named: "Colors/Grayscale/black")
+        navigationItem.rightBarButtonItem = settingsButton
+        
+        navigationItem.titleView = MaterialSearchView.init(frame: .init(origin: .zero, size: .init(width: UIScreen.main.bounds.width, height: 36)))
+    }
 }

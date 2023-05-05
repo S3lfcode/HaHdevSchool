@@ -2,24 +2,30 @@ import UIKit
 
 final class CatalogViewImp: UIView, CatalogView {
     
-    private var cellData: [ProductCellData] = []
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         backgroundColor = UIColor(named: "Colors/white")
         
         setup()
+        
+        displayLoading(enable: true)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private var cellData: [ProductCellData] = []
+    
+    var willDisplayProduct: ((Int) -> Void)?
+    var onRefresh: (() -> Void)?
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
         catalogCollectionView.contentInset.top = headerStackView.frame.height
+        
     }
     
     //MARK: Setup subviews & constraints
@@ -49,6 +55,20 @@ final class CatalogViewImp: UIView, CatalogView {
     
     enum Constants {
         static let padding: CGFloat = 16
+    }
+    
+    //MARK: Refresh
+    
+    private lazy var RefreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.tintColor = UIColor(named: "Colors/Primary/blue")
+        refresh.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+        return refresh
+    }()
+    
+    @objc
+    private func refresh(sender: UIRefreshControl) {
+        onRefresh?()
     }
     
     //MARK: Product title block
@@ -238,7 +258,7 @@ final class CatalogViewImp: UIView, CatalogView {
         })
     }
     
-    //MARK: Products catalog block
+    //MARK: Catalog block
     
     private lazy var catalogCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewCompositionalLayout { _, _ in
@@ -252,22 +272,72 @@ final class CatalogViewImp: UIView, CatalogView {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        collectionView.refreshControl = RefreshControl
+        
+        collectionView.addSubview(errorLoadingView)
+        
         return collectionView
     }()
     
     //MARK: Display data
-    
     func display(
         cellData: [ProductCellData],
         titleData: ProductTitleData,
+        append: Bool,
         animated: Bool
     ) {
-        self.cellData = cellData
+        if append {
+            self.cellData.append(contentsOf: cellData)
+        } else {
+            self.cellData = cellData
+        }
         
         titleProducdsLabel.text = titleData.title
         numberProductsLabel.text = "\(String(titleData.quantity)) товаров"
         
+        catalogCollectionView.refreshControl?.endRefreshing()
         catalogCollectionView.reloadData()
+    }
+    
+    //MARK: Indicator
+    private lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.isHidden = true
+        indicator.color = UIColor(named: "Colors/Primary/blue")
+        indicator.style = .large
+        indicator.startAnimating()
+        return indicator
+    }()
+    
+    private lazy var errorLoadingView: UIView = {
+        let view = UIView()
+        view.isHidden = true
+        view.backgroundColor = .white
+        view.addSubview(indicator)
+        return view
+    }()
+    
+    private func loadingPageIndication(show: Bool) {
+        guard show else {
+            errorLoadingView.isHidden = true
+            indicator.isHidden = true
+            return
+        }
+        
+        errorLoadingView.isHidden = false
+        indicator.isHidden = false
+        
+        catalogCollectionView.contentInset.bottom = 50
+        errorLoadingView.frame = .init(
+            x: 0,
+            y: catalogCollectionView.contentSize.height,
+            width: catalogCollectionView.frame.width,
+            height: 100
+        )
+        indicator.frame.origin = .init(
+            x: bounds.width / 2,
+            y: errorLoadingView.frame.height / 3
+        )
     }
     
 }
@@ -308,7 +378,24 @@ extension CatalogViewImp: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let diff = scrollView.contentInset.top + scrollView.contentOffset.y
+
+        if scrollView.contentOffset.y > -headerStackView.frame.height {
+            headerStackView.transform = .init(translationX: 0, y: -min(diff, titleStackView.frame.height))
+        } else {
+            headerStackView.transform = .init(translationX: 0, y: 0)
+        }
         
-        headerStackView.transform = .init(translationX: 0, y: -min(diff, titleStackView.frame.height))
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        willDisplay cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        willDisplayProduct?(indexPath.item)
+        
+        if catalogCollectionView.contentSize.height > 0 {
+            loadingPageIndication(show: true)
+        }
     }
 }

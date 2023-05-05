@@ -1,0 +1,80 @@
+{
+    "data": {
+        "list": [
+            {
+                "id": 1,
+                "name": "Ветровка Outventure",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/876/768_1024_1/74780340299.jpg",
+                "rating": 5,
+                "price": 3235
+            },
+            {
+                "id": 2,
+                "name": "Куртка Northland",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/219/768_1024_1/74551650299.jpg",
+                "rating": 4,
+                "price": 15324
+            },
+            {
+                "id": 3,
+                "name": "Ветровка Reebok Running Woven Jacket",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/5e6/768_1024_1/80075040299.jpg",
+                "rating": 4,
+                "price": 5999
+            },
+            {
+                "id": 4,
+                "name": "Ветровка IcePeak Achin",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/a84/768_1024_1/80027970299.jpg",
+                "rating": 2,
+                "price": 8999
+            },
+            {
+                "id": 5,
+                "name": "Жилет женский adidas",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/1f2/768_1024_1/74548100299.jpg",
+                "rating": 5,
+                "price": 6579
+            },
+            {
+                "id": 6,
+                "name": "Жилет утепленный женский Luhta Heiska",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/0fa/768_1024_1/80028750299.jpg",
+                "rating": 4,
+                "price": 7999
+            },
+            {
+                "id": 7,
+                "name": "Жилет утепленный женский Outventure",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/1a4/768_1024_1/59174510299.jpg",
+                "rating": 3,
+                "price": 2349
+            },
+            {
+                "id": 8,
+                "name": "Толстовка женская Demix",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/a45/768_1024_1/77261100299.jpg",
+                "rating": 4,
+                "price": 2299
+            },
+            {
+                "id": 9,
+                "name": "Худи женская FILA",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/f6c/768_1024_1/74852710299.jpg",
+                "rating": 5,
+                "price": 3289
+            },
+            {
+                "id": 10,
+                "name": "Жилет утепленный женский Outventure",
+                "image": "https://cdn.sportmaster.ru/upload/resize_cache/iblock/1a4/768_1024_1/59174510299.jpg",
+                "rating": 3,
+                "price": 2349
+            }
+        ],
+        "count": 18
+    },
+    "error": {
+        "message": "Ошибка"
+    }
+}
