@@ -258,8 +258,6 @@ final class CatalogViewImp: UIView, CatalogView {
         })
     }
     
-    //MARK: Catalog block
-    
     private lazy var catalogCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewCompositionalLayout { _, _ in
             ProductCell.layout()
@@ -299,7 +297,7 @@ final class CatalogViewImp: UIView, CatalogView {
         catalogCollectionView.reloadData()
     }
     
-    //MARK: Indicator
+    //MARK: PageLoadingIndicator
     private lazy var indicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.isHidden = true

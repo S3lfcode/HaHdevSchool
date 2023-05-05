@@ -35,10 +35,12 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
         
         rootView.onRefresh = { [weak self] in
             self?.loadData(force: true)
+            return
         }
         
         rootView.willDisplayProduct = { [weak self] item in
             self?.loadData(offset: item)
+            return
         }
         
         loadData()
@@ -53,10 +55,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
                 return
             }
             
-            //            rootView.diplayLoadingErrorIndication()...
-            
             if let result = result {
-                //Успех --> Показываем данные
                 self.rootView.display(
                     cellData: makeProducts(products: result),
                     titleData: self.makeTitle(),
@@ -64,7 +63,6 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
                     animated: true
                 )
             } else {
-                //Ошибка --> Показываем какое-то состояние
             }
             
             rootView.displayLoading(enable: false)
