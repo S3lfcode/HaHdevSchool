@@ -57,7 +57,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
             
             if let result = result {
                 self.rootView.display(
-                    cellData: makeProducts(products: result),
+                    cellData: makeProducts(products: result, offset: offset),
                     titleData: self.makeTitle(),
                     append: offset != 0,
                     animated: true
@@ -78,7 +78,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
 //MARK: Make data
 
 private extension CatalogVC {
-    func makeProducts(products: [Product]) -> [ProductCellData] {
+    func makeProducts(products: [Product], offset: Int) -> [ProductCellData] {
         
         return products.enumerated().map { item in
             let (item, value) = item
@@ -90,7 +90,7 @@ private extension CatalogVC {
                 rating: value.rating,
                 price: priceFormatter.string(from: NSNumber(value: value.price ?? 0)) ?? "0",
                 onFavoriteSubscriber: { [weak self] cell, notify in
-                    self?.subscribe(productID: item, cell: cell, notify: notify)
+                    self?.subscribe(productID: item + offset, cell: cell, notify: notify)
                 },
                 onFavoriteSelect: { [weak self] in
                     self?.setFavorite(productID: item)
