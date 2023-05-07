@@ -49,7 +49,10 @@ extension KeybordableView where Self: UIView {
         else { return }
         
         UIViewPropertyAnimator(duration: duration, curve: curve) { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                return
+            }
+            
             self.apply(keyboardHeight: size.height, keyboardWillShow: willShow)
         }.startAnimation()
         

@@ -16,7 +16,6 @@ final class ProductCell: UICollectionViewCell {
     var onSelectLike: (() -> Void)?
     
     //MARK: Setup subviews & constraints
-    
     private func setup() {
         contentView.addSubview(productImageView)
         contentView.addSubview(imageButtonStackView)
@@ -46,16 +45,17 @@ final class ProductCell: UICollectionViewCell {
         )
     }
     
-    //MARK: Image placeholder
-    
+    //MARK: Product image block
     lazy var productImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Catalog/ImagePlaceholder"))
+        
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .center
         imageView.backgroundColor = UIColor(named: "Colors/Phone/background")
         imageView.layer.cornerRadius = 10
         imageView.heightAnchor.constraint(equalToConstant: 220).isActive = true
+        
         return imageView
     }()
     
@@ -81,40 +81,49 @@ final class ProductCell: UICollectionViewCell {
         )
     }
     
-    //MARK: Image buttons block
+    //MARK: Like&Scale buttons block
     lazy var likeButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(UIImage(named: "Catalog/LikeOff"), for: .normal)
         button.setImage(UIImage(named: "Catalog/LikeOn"), for: .selected)
         button.tintColor = UIColor(named: "Colors/Phone/placeholder")
         button.contentMode = .center
         button.addTarget(self, action: #selector(selectLike), for: .touchUpInside)
         button.addSubview(loadingImageView)
+        
         loadingImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
         loadingImageView.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
+        
         buttonSettings(button: button)
+        
         return button
     }()
     
     private lazy var loadingImageView: UIImageView = {
         let imageView = UIImageView()
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Auth/Loading")
         imageView.alpha = 0
         imageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        
         return imageView
     }()
     
     lazy var scalesButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(UIImage(named: "Catalog/ScalesOff"), for: .normal)
         button.setImage(UIImage(named: "Catalog/ScalesOn"), for: .selected)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
         button.addTarget(self, action: #selector(selectButton(sender:)), for: .touchUpInside)
+        
         buttonSettings(button: button)
+        
         return button
     }()
     
@@ -141,41 +150,44 @@ final class ProductCell: UICollectionViewCell {
         ).cgPath
     }
     
-    private var imageButtonContainer: [UIView] {
-        [
-            likeButton,
-            scalesButton
-        ]
-    }
-    
     lazy var imageButtonStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: imageButtonContainer)
+        let stackView = UIStackView(
+            arrangedSubviews:
+                [
+                    likeButton,
+                    scalesButton
+                ]
+        )
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.spacing = 8
+        
         return stackView
     }()
     
     //MARK: Description product block
-    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 2
+    
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.22
+        label.numberOfLines = 2
         label.attributedText = NSMutableAttributedString(
             string: "Без названия",
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
         label.lineBreakMode = .byTruncatingTail
         label.font = UIFont(name: "GothamSSm-Book", size: 13)
+        
         return label
     }()
     
     private func generationRateContainer() -> [UIView] {
         var container: [UIView] = []
+        
         for _ in 0..<5 {
             let imageView = UIImageView(image: UIImage(named: "Catalog/Rate"))
             imageView.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
@@ -221,31 +233,34 @@ final class ProductCell: UICollectionViewCell {
         return label
     }()
     
-    private var descProductContainer: [UIView] {
-        [
-            titleLabel,
-            rateStackView,
-        ]
-    }
-    
     lazy var descProductStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: descProductContainer)
+        let stackView = UIStackView(
+            arrangedSubviews:
+                [
+                    titleLabel,
+                    rateStackView,
+                ]
+        )
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .leading
         stackView.spacing = 10
+        
         return stackView
     }()
     
     lazy var cartButton: UIButton = {
         let button = UIButton()
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "Catalog/ShoppingCart"), for: .normal)
         button.setImage(UIImage(named: "Catalog/ShoppingCartAdded"), for: .selected)
         button.contentHorizontalAlignment = .right
         button.backgroundColor = UIColor(named: "Colors/white")
         button.addTarget(self, action: #selector(selectButton(sender:)), for: .touchUpInside)
+        
         return button
     }()
     
@@ -266,7 +281,6 @@ final class ProductCell: UICollectionViewCell {
 
 //MARK: Setup sectionLayout
 extension ProductCell {
-    
     static func layout() -> NSCollectionLayoutSection {
         let spacing: CGFloat = 16
         
@@ -297,7 +311,7 @@ extension ProductCell {
         return section
     }
     
-    //MARK: Update cell
+    //MARK: Update cell function
     func update(with data: ProductCellData) {
         titleLabel.text = data.name ?? "Безымянный"
         fillRateStars(rating: data.rating ?? 0)
@@ -330,10 +344,9 @@ private extension ProductCell {
     }
 }
 
-//MARK: Display loading
+//MARK: Display likeButton loading
 private extension ProductCell {
     func displayLoading(enable: Bool) {
-        
         if !enable {
             likeButton.isUserInteractionEnabled = true
             UIView.animate(withDuration: 0.2) {

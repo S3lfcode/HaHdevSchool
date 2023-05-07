@@ -14,22 +14,6 @@ extension BaseCoordinator {
     }
 }
 
-protocol RootableCoordinator: BaseCoordinator, AnyRootableCoordinator {
-    associatedtype Root
-    
-    var root: Root? { get set }
-}
-
-protocol AnyRootableCoordinator {
-    var anyRoot: Any? { get }
-}
-
-extension RootableCoordinator {
-    var anyRoot: Any? {
-        root
-    }
-}
-
 extension BaseCoordinator {
     func start<Coordinate: RootableCoordinator>(
         coordinator: Coordinate?,
@@ -51,25 +35,6 @@ extension BaseCoordinator {
         let animated = !navigationController.viewControllers.isEmpty && animated
         navigationController.pushViewController(controller, animated: animated)
     }
-    
-}
-
-extension RootableCoordinator where Root == UINavigationController {
-    func backTo(coordinator: BaseCoordinator?, animated: Bool) {
-        guard
-            let coordinator = coordinator,
-            let root = root
-        else {
-            return
-        }
-
-        let depth = coordinator.depth() {
-            ($0 as? AnyRootableCoordinator)?.anyRoot is UINavigationController
-        }
-        let newStack = root.viewControllers.prefix(max(root.viewControllers.count - depth, 1))
-        
-        root.setViewControllers(Array(newStack), animated: animated)
-    }
 }
 
 extension BaseCoordinator {
@@ -85,7 +50,6 @@ extension BaseCoordinator {
 }
 
 extension BaseCoordinator {
-    
     func setContent<ViewController: ContainerViewController> (
         coordinator: BaseCoordinator?,
         on containerController: ViewController,
@@ -125,18 +89,4 @@ extension BaseCoordinator {
 
         containerController.hostView.removeSubview(view: controller.view, by: containerId, animated: animated)
     }
-}
-
-protocol ContainerViewController: UIViewController  {
-    associatedtype View: ContainerView
-    
-    var hostView: View { get }
-}
-
-protocol ContainerView {
-    associatedtype ContainerID
-    
-    func addSubview(view: UIView, by id: ContainerID, animated: Bool)
-    
-    func removeSubview(view: UIView, by id: ContainerID, animated: Bool)
 }

@@ -24,9 +24,8 @@ class Coordinator<
     
     var root: NavigationControllerType?
     
-    
     func make() -> UIViewController? {
         return nil
     }
-
+    
 }

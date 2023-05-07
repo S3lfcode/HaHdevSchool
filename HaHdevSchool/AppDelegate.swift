@@ -3,12 +3,12 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    private let assembly = Assembly()
-    
-    private lazy var task2 = assembly.task2
-    private lazy var task3 = assembly.task3
-    private lazy var task4 = assembly.task4
-    private lazy var task5 = assembly.task5
+//    private let assembly = Assembly()
+//    
+//    private lazy var task2 = assembly.task2
+//    private lazy var task3 = assembly.task3
+//    private lazy var task4 = assembly.task4
+//    private lazy var task5 = assembly.task5
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         

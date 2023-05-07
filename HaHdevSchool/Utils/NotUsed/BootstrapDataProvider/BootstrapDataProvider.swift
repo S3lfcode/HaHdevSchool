@@ -6,11 +6,11 @@ class BootstrapDataProvider {
         case unknown
     }
     
-    private let apiClient: ApiClient
-    
     init(apiClient: ApiClient) {
         self.apiClient = apiClient
     }
+    
+    private let apiClient: ApiClient
     
     func doubleRequest (
         completion: @escaping (Result<(profile: Profile?, city: City?), Swift.Error>) -> Void
@@ -29,7 +29,6 @@ class BootstrapDataProvider {
             group.leave()
         }
         
-        
         group.enter()
         apiClient.request(
             url: Bundle.main.url(forResource: "City", withExtension: "json"),
@@ -38,7 +37,6 @@ class BootstrapDataProvider {
             cityResult = result
             group.leave()
         }
-        
         
         group.notify(queue: .main) {
             guard let profileResult = profileResult, let cityResult = cityResult else {

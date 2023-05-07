@@ -11,7 +11,6 @@ final class AppCoordinator: BaseCoordinator {
     weak var parentCoordinator: BaseCoordinator?
     var childs: [BaseCoordinator] = []
     
-    
     func make() -> UIViewController? {
         let navigationController = assembly.navigationController
         
@@ -23,7 +22,5 @@ final class AppCoordinator: BaseCoordinator {
         
         return navigationController
     }
-    
-
     
 }

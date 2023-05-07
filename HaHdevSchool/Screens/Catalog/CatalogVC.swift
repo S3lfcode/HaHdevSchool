@@ -63,6 +63,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
                     animated: true
                 )
             } else {
+                //Error output if result is nil
             }
             
             rootView.displayLoading(enable: false)
@@ -76,10 +77,8 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
 }
 
 //MARK: Make data
-
 private extension CatalogVC {
     func makeProducts(products: [Product], offset: Int) -> [ProductCellData] {
-        
         return products.enumerated().map { item in
             let (item, value) = item
             
@@ -110,7 +109,6 @@ private extension CatalogVC {
 }
 
 //MARK: Cell button logic
-
 private extension CatalogVC {
     func subscribe(
         productID: Int,
@@ -172,7 +170,6 @@ private extension CatalogVC {
 }
 
 //MARK: Configurate nav bar
-
 private extension CatalogVC {
     func congfigurateNavigationBar() {
         let appearance = UINavigationBarAppearance()

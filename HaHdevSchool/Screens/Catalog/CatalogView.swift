@@ -10,6 +10,5 @@ protocol CatalogView: UIView {
         append: Bool,
         animated: Bool
     )
-    
     func displayLoading(enable: Bool)
 }

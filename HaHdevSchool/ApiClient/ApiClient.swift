@@ -50,8 +50,7 @@ class ApiClient {
                 return
             }
             
-            guard let result = try? self.decoder.decode(ResponseBody<ResponseData>.self, from: data)
-            else {
+            guard let result = try? self.decoder.decode(ResponseBody<ResponseData>.self, from: data) else {
                 self.finish(result: .failure(.decodingFail), completion: completion)
                 return
             }

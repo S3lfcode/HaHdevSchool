@@ -11,11 +11,13 @@ extension Assembly {
     }
     
     var customDecoder: JSONDecoder {
-        let customDecoder = JSONDecoder()
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let customDecoder = JSONDecoder()
         customDecoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         return customDecoder
     }
     

@@ -12,7 +12,6 @@ class MaterialSearchView: UIControl {
     
     var textIsEditing: Bool = false
     
-    //MARK: Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -22,7 +21,6 @@ class MaterialSearchView: UIControl {
         addSubview(searchByPhotoButton)
         addSubview(clearButton)
 
-        
         backgroundColor = UIColor(named: "Colors/Phone/background")
         layer.cornerRadius = 18
         layer.borderWidth = 1
@@ -80,37 +78,46 @@ class MaterialSearchView: UIControl {
     //MARK: View hierarchy
     lazy var textField: UITextField = {
         let textField = UITextField()
+        
         textField.backgroundColor = UIColor(named: "Colors/Phone/background")
         textField.placeholder = "Поиск"
         textField.font = UIFont(name: "GothamSSm-Book", size: 14)
         textField.delegate = self
+        
         return textField
     }()
     
     lazy var searchImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "SearchComponent/Search"))
+        
         imageView.tintColor = UIColor(named: "Colors/Phone/placeholder")
+        
         return imageView
     }()
     
     lazy var scanImageButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(
             UIImage(named: "SearchComponent/ScanCode"), for: .normal)
         button.imageView?.tintColor = UIColor(named: "Colors/Grayscale/midGray")
+        
         return button
     }()
     
     lazy var searchByPhotoButton: UIButton = {
         let button = UIButton()
+        
         button.setImage(
             UIImage(named: "SearchComponent/SearchByPhoto"), for: .normal)
         button.imageView?.tintColor = UIColor(named: "Colors/Grayscale/midGray")
+        
         return button
     }()
     
     lazy var clearButton: UIButton = {
         let button = UIButton()
+        
         button.backgroundColor = UIColor(named: "Colors/Phone/placeholder")
         button.layer.cornerRadius = 7
         button.setImage(UIImage(named: "SearchComponent/ClearField"), for: .normal)
@@ -123,11 +130,11 @@ class MaterialSearchView: UIControl {
             action: #selector(clearText),
             for: .touchUpInside
         )
+        
         return button
     }()
     
-    //MARK: Button action
-    
+    //MARK: Clear button action
     @objc func clearText() {
         textField.text = ""
         scanImageButton.isHidden = false
@@ -141,7 +148,6 @@ class MaterialSearchView: UIControl {
 
 //MARK: Update state function
 extension MaterialSearchView {
-    
     func update(status: Status, animated: Bool) {
         UIView.animate(withDuration: animated ? 0.3 : 0) {
             self.update(status: status)
@@ -167,7 +173,6 @@ extension MaterialSearchView {
 
 //MARK: TextField interactive logic
 extension MaterialSearchView: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return textField.endEditing(true)
     }
@@ -180,7 +185,6 @@ extension MaterialSearchView: UITextFieldDelegate {
         if textField.text == "" {
             update(status: .default, animated: true)
         }
-       
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

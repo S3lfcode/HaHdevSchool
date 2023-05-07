@@ -25,11 +25,9 @@ final class CatalogViewImp: UIView, CatalogView {
         super.layoutSubviews()
         
         catalogCollectionView.contentInset.top = headerStackView.frame.height
-        
     }
     
     //MARK: Setup subviews & constraints
-    
     private func setup() {
         addSubview(catalogCollectionView)
         addSubview(headerStackView)
@@ -37,7 +35,6 @@ final class CatalogViewImp: UIView, CatalogView {
         
         NSLayoutConstraint.activate(
             [
-                
                 headerStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
                 headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
                 headerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
@@ -57,12 +54,13 @@ final class CatalogViewImp: UIView, CatalogView {
         static let padding: CGFloat = 16
     }
     
-    //MARK: Refresh
-    
+    //MARK: Refresh catalog
     private lazy var RefreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
+        
         refresh.tintColor = UIColor(named: "Colors/Primary/blue")
         refresh.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+        
         return refresh
     }()
     
@@ -72,7 +70,6 @@ final class CatalogViewImp: UIView, CatalogView {
     }
     
     //MARK: Product title block
-    
     private lazy var titleProducdsLabel: UILabel = {
         let label = UILabel()
         
@@ -116,7 +113,6 @@ final class CatalogViewImp: UIView, CatalogView {
     }()
     
     //MARK: Display settings block
-    
     private lazy var listFilterTitleButton: UIButton = {
         let button = UIButton()
         
@@ -187,7 +183,6 @@ final class CatalogViewImp: UIView, CatalogView {
     }()
     
     //MARK: Header stackView
-    
     private lazy var headerStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [
@@ -206,7 +201,6 @@ final class CatalogViewImp: UIView, CatalogView {
     }()
     
     //MARK: Loading status block
-    
     private lazy var loadingImageView: UIImageView = {
         let imageView = UIImageView()
         
@@ -341,7 +335,6 @@ final class CatalogViewImp: UIView, CatalogView {
 }
 
 //MARK: Calalog view settings
-
 extension CatalogViewImp: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -365,7 +358,6 @@ extension CatalogViewImp: UICollectionViewDataSource {
 }
 
 //MARK: Collection view logic
-
 extension CatalogViewImp: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -382,7 +374,6 @@ extension CatalogViewImp: UICollectionViewDelegate {
         } else {
             headerStackView.transform = .init(translationX: 0, y: 0)
         }
-        
     }
     
     func collectionView(
