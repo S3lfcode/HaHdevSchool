@@ -57,7 +57,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
             
             if let result = result {
                 self.rootView.display(
-                    cellData: makeProducts(products: result, offset: offset),
+                    cellData: self.makeProducts(products: result, offset: offset),
                     titleData: self.makeTitle(),
                     append: offset != 0,
                     animated: true
@@ -187,8 +187,6 @@ private extension CatalogVC {
         
         if let navigationBar = navigationController?.navigationBar {
             navigationBar.standardAppearance = appearance
-//            navigationBar.isTranslucent = false
-//            navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
         }
         
         let settingsButton = UIBarButtonItem(

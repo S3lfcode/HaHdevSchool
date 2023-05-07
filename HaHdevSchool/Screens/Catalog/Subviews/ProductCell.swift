@@ -18,7 +18,7 @@ final class ProductCell: UICollectionViewCell {
     //MARK: Setup subviews & constraints
     
     private func setup() {
-        contentView.addSubview(placeholderImageView)
+        contentView.addSubview(productImageView)
         contentView.addSubview(imageButtonStackView)
         contentView.addSubview(descProductStackView)
         contentView.addSubview(cartButton)
@@ -26,14 +26,14 @@ final class ProductCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate(
             [
-                placeholderImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-                placeholderImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                placeholderImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                productImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                productImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                productImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                 
                 imageButtonStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
                 imageButtonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
                 
-                descProductStackView.topAnchor.constraint(equalTo: placeholderImageView.bottomAnchor, constant: 12),
+                descProductStackView.topAnchor.constraint(equalTo: productImageView.bottomAnchor, constant: 12),
                 descProductStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 descProductStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                 
@@ -48,7 +48,7 @@ final class ProductCell: UICollectionViewCell {
     
     //MARK: Image placeholder
     
-    lazy var placeholderImageView: UIImageView = {
+    lazy var productImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "Catalog/ImagePlaceholder"))
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -66,15 +66,17 @@ final class ProductCell: UICollectionViewCell {
         
         let url = URL(string: stringURL)
 
-        placeholderImageView.kf.indicatorType = .activity
-        placeholderImageView.kf.setImage(
+        productImageView.kf.indicatorType = .activity
+        productImageView.kf.setImage(
             with: url,
             placeholder: UIImage(named: "Catalog/ImagePlaceholder"),
             options: [
                 .transition(.fade(0.2)),
                 .processor(
                     DownsamplingImageProcessor(
-                        size: CGSize(width: bounds.width, height: 220)))
+                        size: CGSize(width: bounds.width, height: 220)
+                    )
+                )
             ]
         )
     }
