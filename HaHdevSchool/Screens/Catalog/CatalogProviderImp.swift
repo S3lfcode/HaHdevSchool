@@ -33,7 +33,7 @@ class CatalogProviderImp: CatalogProvider {
                 self.isLoading = false
                 self.isEnding = false
                 
-                completion(data.list)
+                completion(data?.list)
             }
         } else {
             dataRequest(jsonFileName: "ProductSecondPage") { data in
@@ -41,7 +41,7 @@ class CatalogProviderImp: CatalogProvider {
                 self.isLoading = false
                 self.isEnding = true
                 
-                completion(data.list)
+                completion(data?.list)
             }
         }
     }
@@ -68,7 +68,7 @@ class CatalogProviderImp: CatalogProvider {
     
     private func dataRequest(
         jsonFileName: String,
-        completion: @escaping (_ data: ProductResponseData) -> Void
+        completion: @escaping (_ data: ProductResponseData?) -> Void
     ) {
         apiClient.request(
             url: Bundle.main.url(forResource: jsonFileName, withExtension: "json"),
@@ -87,6 +87,8 @@ class CatalogProviderImp: CatalogProvider {
                 
             case .failure(let error):
                 print("ApiError: \(error)")
+                
+                completion(nil)
             }
         }
     }
