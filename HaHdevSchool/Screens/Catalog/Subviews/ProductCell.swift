@@ -47,12 +47,12 @@ final class ProductCell: UICollectionViewCell {
     
     //MARK: Product image block
     lazy var productImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Catalog/ImagePlaceholder"))
+        let imageView = UIImageView(image: Asset.Catalog.imagePlaceholder.image)
         
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .center
-        imageView.backgroundColor = UIColor(named: "Colors/Phone/background")
+        imageView.backgroundColor = Asset.Colors.Phone.background.color
         imageView.layer.cornerRadius = 10
         imageView.heightAnchor.constraint(equalToConstant: 220).isActive = true
         
@@ -69,7 +69,7 @@ final class ProductCell: UICollectionViewCell {
         productImageView.kf.indicatorType = .activity
         productImageView.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "Catalog/ImagePlaceholder"),
+            placeholder: Asset.Catalog.imagePlaceholder.image,
             options: [
                 .transition(.fade(0.2)),
                 .processor(
@@ -85,9 +85,9 @@ final class ProductCell: UICollectionViewCell {
     lazy var likeButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(named: "Catalog/LikeOff"), for: .normal)
-        button.setImage(UIImage(named: "Catalog/LikeOn"), for: .selected)
-        button.tintColor = UIColor(named: "Colors/Phone/placeholder")
+        button.setImage(Asset.Catalog.likeOff.image, for: .normal)
+        button.setImage(Asset.Catalog.likeOn.image, for: .selected)
+        button.tintColor = Asset.Colors.Phone.placeholder.color
         button.contentMode = .center
         button.addTarget(self, action: #selector(selectLike), for: .touchUpInside)
         button.addSubview(loadingImageView)
@@ -104,7 +104,7 @@ final class ProductCell: UICollectionViewCell {
         let imageView = UIImageView()
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "Auth/Loading")
+        imageView.image = Asset.Auth.loading.image
         imageView.alpha = 0
         imageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
@@ -115,8 +115,8 @@ final class ProductCell: UICollectionViewCell {
     lazy var scalesButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(named: "Catalog/ScalesOff"), for: .normal)
-        button.setImage(UIImage(named: "Catalog/ScalesOn"), for: .selected)
+        button.setImage(Asset.Catalog.scalesOff.image, for: .normal)
+        button.setImage(Asset.Catalog.scalesOn.image, for: .selected)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
@@ -131,7 +131,7 @@ final class ProductCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: 28).isActive = true
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        button.backgroundColor = UIColor(named: "Colors/white")
+        button.backgroundColor = Asset.Colors.white.color
         button.layer.masksToBounds = false
         button.layer.cornerRadius = 14
         button.layer.shadowColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1/10)
@@ -176,7 +176,7 @@ final class ProductCell: UICollectionViewCell {
         paragraphStyle.lineHeightMultiple = 1.22
         label.numberOfLines = 2
         label.attributedText = NSMutableAttributedString(
-            string: "Без названия",
+            string: L10n.Catalog.ProductCell.unnamed,
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
         label.lineBreakMode = .byTruncatingTail
@@ -189,8 +189,8 @@ final class ProductCell: UICollectionViewCell {
         var container: [UIView] = []
         
         for _ in 0..<5 {
-            let imageView = UIImageView(image: UIImage(named: "Catalog/Rate"))
-            imageView.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
+            let imageView = UIImageView(image: Asset.Catalog.rate.image)
+            imageView.tintColor = Asset.Colors.Grayscale.lightGray.color
             container.append(imageView)
         }
         
@@ -199,16 +199,16 @@ final class ProductCell: UICollectionViewCell {
     
     private func fillRateStars(rating: Int) {
         for element in rateStackView.arrangedSubviews {
-            element.tintColor = UIColor(named: "Colors/Grayscale/lightGray")
+            element.tintColor = Asset.Colors.Grayscale.lightGray.color
         }
         for index in 0..<rating {
-            rateStackView.arrangedSubviews[index].tintColor = UIColor(named: "Colors/Primary/blue")
+            rateStackView.arrangedSubviews[index].tintColor = Asset.Colors.Primary.blue.color
         }
     }
     
     lazy var rateNumLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(named: "Colors/Grayscale/midGray")
+        label.textColor = Asset.Colors.Grayscale.midGray.color
         label.font = UIFont(name: "GothamSSm-Book", size: 12)
         label.text = "0.0"
         return label
@@ -227,9 +227,9 @@ final class ProductCell: UICollectionViewCell {
     lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor(named: "Colors/Grayscale/black")
+        label.textColor = Asset.Colors.Grayscale.black.color
         label.font = .systemFont(ofSize: 15, weight: .init(700))
-        label.text = "0 ₽"
+        label.text = L10n.Catalog.ProductCell.defaultPrice
         return label
     }()
     
@@ -255,10 +255,10 @@ final class ProductCell: UICollectionViewCell {
         let button = UIButton()
         
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "Catalog/ShoppingCart"), for: .normal)
-        button.setImage(UIImage(named: "Catalog/ShoppingCartAdded"), for: .selected)
+        button.setImage(Asset.Catalog.shoppingCart.image, for: .normal)
+        button.setImage(Asset.Catalog.shoppingCartAdded.image, for: .selected)
         button.contentHorizontalAlignment = .right
-        button.backgroundColor = UIColor(named: "Colors/white")
+        button.backgroundColor = Asset.Colors.white.color
         button.addTarget(self, action: #selector(selectButton(sender:)), for: .touchUpInside)
         
         return button
@@ -313,10 +313,10 @@ extension ProductCell {
     
     //MARK: Update cell function
     func update(with data: ProductCellData) {
-        titleLabel.text = data.name ?? "Безымянный"
+        titleLabel.text = data.name ?? L10n.Catalog.ProductCell.unnamed
         fillRateStars(rating: data.rating ?? 0)
         rateNumLabel.text = " \(String(Double(data.rating ?? 0)))"
-        priceLabel.text = data.price ?? "0"
+        priceLabel.text = data.price ?? L10n.Catalog.ProductCell.defaultPrice
         updateProductImage(url: data.image)
 
         data.onFavoriteSubscriber(self) { [weak self] state in

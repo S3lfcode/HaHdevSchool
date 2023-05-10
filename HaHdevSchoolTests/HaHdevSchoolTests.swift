@@ -1,19 +1,15 @@
-//
-//  HaHdevSchoolTests.swift
-//  HaHdevSchoolTests
-//
-//  Created by S3lfcode on 07.05.2023.
-//
- 
 import XCTest
 @testable import HaHdevSchool
 
 final class CatalogViewMock: UIView, CatalogView {
+    
     var onRefresh: (() -> Void)?
     
     var willDisplayProduct: ((Int) -> Void)?
     
     var cellData: [HaHdevSchool.ProductCellData] = []
+    
+    var isSelected: Bool = false
     
     func display(
         cellData: [HaHdevSchool.ProductCellData],
@@ -27,8 +23,6 @@ final class CatalogViewMock: UIView, CatalogView {
     func displayLoading(enable: Bool) {
         
     }
-    
-    
 }
 
 final class CatalogProviderMock: CatalogProvider {
@@ -43,13 +37,50 @@ final class CatalogProviderMock: CatalogProvider {
         completion(products)
     }
     
-    
 }
 
 final class CatalogVCTests: XCTestCase {
 
     func test_loading_success() {
-        //Дано
+        let products: [Product] = [
+            .init(id: 1, name: "229", image: nil, rating: 5, price: 100)
+        ]
+
+        let catalogProvider = CatalogProviderMock()
+        catalogProvider.products = products
+        
+        let formatter = NumberFormatter()
+        
+        let catalogVC = CatalogVC<CatalogViewMock>(
+            catalogProvider: catalogProvider,
+            priceFormatter: formatter
+        )
+        
+        let product = products[0]
+        let result = catalogVC.rootView.cellData[0]
+        
+        XCTAssertEqual(product.id, result.id)
+        XCTAssertEqual(product.image, result.image)
+        XCTAssertEqual(product.name, result.name)
+        XCTAssertEqual(formatter.string(from: NSNumber(value: product.price ?? 0)), result.price)
+        XCTAssertEqual(product.rating, result.rating)
+    }
+    
+    func test_loading_failture() {
+        let products: [Product]? = nil
+        
+        let catalogProvider = CatalogProviderMock()
+        catalogProvider.products = products
+        
+        let catalogVC = CatalogVC<CatalogViewMock>(
+            catalogProvider: catalogProvider,
+            priceFormatter: NumberFormatter()
+        )
+        
+        XCTAssertTrue(catalogVC.rootView.cellData.isEmpty)
+    }
+    
+    func test_selectFirstCell_success() {
         let products: [Product] = [
             .init(id: 1, name: "229", image: nil, rating: 5, price: 100)
         ]
@@ -62,16 +93,20 @@ final class CatalogVCTests: XCTestCase {
             priceFormatter: NumberFormatter()
         )
         
-        //Действие
-        catalogVC.viewDidLoad()
+        var firstCell = catalogVC.rootView.cellData[0]
         
-        //Проверка
-        XCTAssertEqual(products.count, catalogVC.rootView.cellData.count)
+        firstCell.onSelect = {
+            catalogVC.rootView.isSelected = true
+        }
+        
+        firstCell.onSelect()
+        
+        XCTAssertTrue(catalogVC.rootView.isSelected)
     }
-
+    
 }
 
-//Тут можно писать extension для кода, чтобы не менять основной код
+//Чтобы не менять основной код, можно писать extension для нужного класса
 
 //func exampleTest() {
     //Дано (инициализируем переменные, что-то настраиваем)

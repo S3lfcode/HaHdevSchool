@@ -65,6 +65,10 @@
 		C338062D2A084DFF0034EDAD /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338062C2A084DFF0034EDAD /* ContainerViewController.swift */; };
 		C338062F2A084E0B0034EDAD /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C338062E2A084E0B0034EDAD /* ContainerView.swift */; };
 		C34A40D029F92C8800E5895D /* MaterialSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */; };
+		C35C54872A0A626A00FBAFCA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C35C54862A0A626A00FBAFCA /* Localizable.strings */; };
+		C35C54892A0A654200FBAFCA /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35C54882A0A654200FBAFCA /* Strings+Generated.swift */; };
+		C35C548C2A0A702800FBAFCA /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = C35C548B2A0A702800FBAFCA /* Localizable.stringsdict */; };
+		C35C54902A0B918100FBAFCA /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35C548F2A0B918100FBAFCA /* XCAssets+Generated.swift */; };
 		C36541CB29FE55D200EAE5A8 /* PhoneTextFieldContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CA29FE55D200EAE5A8 /* PhoneTextFieldContext.swift */; };
 		C36541CD29FE564100EAE5A8 /* VerificationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CC29FE564100EAE5A8 /* VerificationContext.swift */; };
 		C36541CF29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36541CE29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift */; };
@@ -161,6 +165,10 @@
 		C338062C2A084DFF0034EDAD /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		C338062E2A084E0B0034EDAD /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		C34A40CF29F92C8800E5895D /* MaterialSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialSearchView.swift; sourceTree = "<group>"; };
+		C35C54862A0A626A00FBAFCA /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		C35C54882A0A654200FBAFCA /* Strings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
+		C35C548B2A0A702800FBAFCA /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
+		C35C548F2A0B918100FBAFCA /* XCAssets+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
 		C36541CA29FE55D200EAE5A8 /* PhoneTextFieldContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldContext.swift; sourceTree = "<group>"; };
 		C36541CC29FE564100EAE5A8 /* VerificationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationContext.swift; sourceTree = "<group>"; };
 		C36541CE29FE5A9B00EAE5A8 /* PhoneTextFieldOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextFieldOutput.swift; sourceTree = "<group>"; };
@@ -288,7 +296,6 @@
 		8479AF2629A0A7BC001EED09 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				849158BC2986E24100368BAE /* Assets.xcassets */,
 				849158BE2986E24100368BAE /* LaunchScreen.storyboard */,
 				849158C12986E24200368BAE /* Info.plist */,
 				C36541D229FFE31400EAE5A8 /* NotUsed */,
@@ -324,6 +331,7 @@
 				C3A358382A04E28600AE896B /* Entities */,
 				C3A358372A04E26500AE896B /* Resources */,
 				8412542C29CCD1BC00664879 /* Font */,
+				C35C548A2A0A6D0100FBAFCA /* SwiftGen */,
 				8479AF2629A0A7BC001EED09 /* Utils */,
 				849158B32986E24000368BAE /* AppDelegate.swift */,
 				849158B52986E24000368BAE /* SceneDelegate.swift */,
@@ -409,6 +417,34 @@
 				C338062E2A084E0B0034EDAD /* ContainerView.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C35C548A2A0A6D0100FBAFCA /* SwiftGen */ = {
+			isa = PBXGroup;
+			children = (
+				C35C548E2A0B8D2900FBAFCA /* Assets */,
+				C35C548D2A0B8D1600FBAFCA /* Localization */,
+			);
+			path = SwiftGen;
+			sourceTree = "<group>";
+		};
+		C35C548D2A0B8D1600FBAFCA /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				C35C54882A0A654200FBAFCA /* Strings+Generated.swift */,
+				C35C54862A0A626A00FBAFCA /* Localizable.strings */,
+				C35C548B2A0A702800FBAFCA /* Localizable.stringsdict */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		C35C548E2A0B8D2900FBAFCA /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				849158BC2986E24100368BAE /* Assets.xcassets */,
+				C35C548F2A0B918100FBAFCA /* XCAssets+Generated.swift */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		C36541D229FFE31400EAE5A8 /* NotUsed */ = {
@@ -588,8 +624,10 @@
 			files = (
 				8402ED092992D9530099FBB7 /* Profile.json in Resources */,
 				84342A8729CD8DCF00E104E3 /* GothamSSm-Book.ttf in Resources */,
+				C35C54872A0A626A00FBAFCA /* Localizable.strings in Resources */,
 				C3A358422A04E6A800AE896B /* ProductFirstPage.json in Resources */,
 				C3E13AFF29F6990100DB9E30 /* GothamSSm-Bold.otf in Resources */,
+				C35C548C2A0A702800FBAFCA /* Localizable.stringsdict in Resources */,
 				8412543029CCD5CF00664879 /* GothamSSm-Medium.ttf in Resources */,
 				849158C02986E24200368BAE /* LaunchScreen.storyboard in Resources */,
 				8412542E29CCD22500664879 /* GothamSSm-BlackItalic.ttf in Resources */,
@@ -618,6 +656,7 @@
 				845F3A4029D827220085F892 /* AuthProvider.swift in Sources */,
 				844C1A4C299649610094F412 /* ApiClient.swift in Sources */,
 				84A57FE6298AC2CA00A8B201 /* DataStorage.swift in Sources */,
+				C35C54902A0B918100FBAFCA /* XCAssets+Generated.swift in Sources */,
 				C36541D129FFB73700EAE5A8 /* PhoneTextFieldError.swift in Sources */,
 				8412543229CD6B5C00664879 /* AuthSocialMediaButton.swift in Sources */,
 				84A57FEA298AC60800A8B201 /* Assembly+DataStrorage.swift in Sources */,
@@ -639,6 +678,7 @@
 				C36541CD29FE564100EAE5A8 /* VerificationContext.swift in Sources */,
 				C3A3583A2A04E34F00AE896B /* ResponseBody.swift in Sources */,
 				8458113529AC735E00870870 /* BootstrapDataProvider.swift in Sources */,
+				C35C54892A0A654200FBAFCA /* Strings+Generated.swift in Sources */,
 				C338062F2A084E0B0034EDAD /* ContainerView.swift in Sources */,
 				845F3A6D29E6749C0085F892 /* VerificationView.swift in Sources */,
 				844C1A5F2997A25C0094F412 /* Task4.swift in Sources */,

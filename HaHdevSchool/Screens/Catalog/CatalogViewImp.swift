@@ -5,7 +5,7 @@ final class CatalogViewImp: UIView, CatalogView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor(named: "Colors/white")
+        backgroundColor = Asset.Colors.white.color
         
         setup()
         
@@ -58,7 +58,7 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var RefreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         
-        refresh.tintColor = UIColor(named: "Colors/Primary/blue")
+        refresh.tintColor = Asset.Colors.Primary.blue.color
         refresh.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
         
         return refresh
@@ -73,10 +73,9 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var titleProducdsLabel: UILabel = {
         let label = UILabel()
         
-        label.text = ""
         label.numberOfLines = 2
         label.font = UIFont(name: "GothamSSm-Medium", size: 20)
-        label.textColor = UIColor(named: "Colors/Grayscale/black")
+        label.textColor = Asset.Colors.Grayscale.black.color
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
         return label
@@ -85,9 +84,8 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var numberProductsLabel: UILabel = {
         let label = UILabel()
         
-        label.text = ""
         label.font = UIFont(name: "GothamSSm-Book", size: 12)
-        label.textColor = UIColor(named: "Colors/Grayscale/midGray")
+        label.textColor = Asset.Colors.Grayscale.midGray.color
         label.textAlignment = .right
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
@@ -116,24 +114,23 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var listFilterTitleButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(named: "Catalog/ListFilter"), for: .normal)
-        button.setTitle("  По популярности", for: .normal)
-        button.setTitleColor(UIColor(named: "Colors/Grayscale/black"), for: .normal)
-        button.backgroundColor = UIColor(named: "Colors/white")
+        button.setImage(Asset.Catalog.listFilter.image, for: .normal)
+        button.setTitle("  \(L10n.Catalog.ProductCell.sequenceFilter)", for: .normal)
+        button.setTitleColor(Asset.Colors.Grayscale.black.color, for: .normal)
+        button.backgroundColor = Asset.Colors.white.color
         button.contentHorizontalAlignment = .left
         button.titleLabel?.font = UIFont(name: "GothamSSm-Medium", size: 14)
         button.setContentHuggingPriority(.defaultLow, for: .horizontal)
         button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        
         return button
     }()
     
     private lazy var scalesButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(named: "Catalog/Scales"), for: .normal)
-        button.tintColor = UIColor(named: "Colors/Grayscale/black")
-        button.backgroundColor = UIColor(named: "Colors/white")
+        button.setImage(Asset.Catalog.scales.image, for: .normal)
+        button.tintColor = Asset.Colors.Grayscale.black.color
+        button.backgroundColor = Asset.Colors.white.color
         
         return button
     }()
@@ -141,8 +138,8 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var mappingModeButton: UIButton = {
         let button = UIButton()
         
-        button.setImage(UIImage(named: "Catalog/MappingMode"), for: .normal)
-        button.backgroundColor = UIColor(named: "Colors/white")
+        button.setImage(Asset.Catalog.mappingMode.image, for: .normal)
+        button.backgroundColor = Asset.Colors.white.color
         
         return button
     }()
@@ -192,7 +189,7 @@ final class CatalogViewImp: UIView, CatalogView {
         )
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.backgroundColor = UIColor(named: "Colors/white")
+        stackView.backgroundColor = Asset.Colors.white.color
         stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.axis = .vertical
@@ -205,7 +202,7 @@ final class CatalogViewImp: UIView, CatalogView {
         let imageView = UIImageView()
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "Auth/Loading")
+        imageView.image = Asset.Auth.loading.image
         imageView.alpha = 0
         imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -285,17 +282,23 @@ final class CatalogViewImp: UIView, CatalogView {
         }
         
         titleProducdsLabel.text = titleData.title
-        numberProductsLabel.text = "\(String(titleData.quantity)) товаров"
+        
+        numberProductsLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString(
+                "catalog products number label",
+                comment: "catalog products number label string format to be found in Localized.stringsdict"),
+            titleData.quantity
+        )
         
         catalogCollectionView.refreshControl?.endRefreshing()
         catalogCollectionView.reloadData()
     }
     
-    //MARK: PageLoadingIndicator
+    //MARK: Next page indicator
     private lazy var indicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.isHidden = true
-        indicator.color = UIColor(named: "Colors/Primary/blue")
+        indicator.color = Asset.Colors.Primary.blue.color
         indicator.style = .large
         indicator.startAnimating()
         return indicator
@@ -304,7 +307,7 @@ final class CatalogViewImp: UIView, CatalogView {
     private lazy var errorLoadingView: UIView = {
         let view = UIView()
         view.isHidden = true
-        view.backgroundColor = .white
+        view.backgroundColor = Asset.Colors.white.color
         view.addSubview(indicator)
         return view
     }()

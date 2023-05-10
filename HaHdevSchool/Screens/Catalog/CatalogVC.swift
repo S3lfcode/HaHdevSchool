@@ -19,14 +19,14 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let catalogProvider: CatalogProvider
-    let priceFormatter: NumberFormatter
+    private let catalogProvider: CatalogProvider
+    private let priceFormatter: NumberFormatter
     
     var onDisplayProduct: ((_ id: Int) -> Void)?
     
-    var favoriteState: [ButtonState] = []
+    private var favoriteState: [ButtonState] = []
     
-    var productFavoriteCache: [Int: CellButtonState] = [:]
+    private var productFavoriteCache: [Int: CellButtonState] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +46,7 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
         loadData()
     }
     
+    //MARK: Load data
     private func loadData(offset: Int = 0, force: Bool = false) {
         catalogProvider.products(
             offset: offset,
@@ -64,14 +65,15 @@ final class CatalogVC<View: CatalogView>: BaseViewController<View> {
                 )
             } else {
                 //Error output if result is nil
+                print("CatalogVC(loadData) - Возникла ошибка при получении данных")
             }
             
             rootView.displayLoading(enable: false)
-            
         }
     }
     
-    @objc func toSettings(sender: UIBarButtonItem) {
+    @objc
+    private func toSettings(sender: UIBarButtonItem) {
         //toSettings button action...
     }
 }
